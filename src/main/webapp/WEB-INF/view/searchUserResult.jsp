@@ -1,43 +1,35 @@
 <%@ include file="include.jsp"%>
-<div class="panel-heading">
-			<h4>Search Results : ${search}</h4>
-		</div>
-		<div class="panel-body">
-			<table class="table table-striped">
-				<thead>
+<c:if test="${users !=null}">
+	<div class="panel-heading">
+		<h4>Search Results </h4>
+	</div>
+	<div class="panel-body">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>Email Id</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${users}" varStatus="loop" var="user">
 					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Address</th>
-						<th>Email Id</th>
-						<th>Action</th>
+						<td>${loop.index+1 }</td>
+						<td>${user.firstName} ${user.lastName}</td>
+						<td>${user.apartmentNumber},${user.street},${user.city},
+							${user.state} ${user.zipcode}</td>
+						<td>${user.emailId}</td>
+						<td><input type="button" class="btn btn-warning"
+							onclick="executeSelectUser('${user.emailId}')" value="Select"></td>
 					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>John Smith</td>
-						<td>121, crest avenue, Dallas, Texas 75251</td>
-						<td>John@gmail.com</td>
-						<td><input type="submit" class="btn btn-warning"
-							value="Select"></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>John Smith</td>
-						<td>122, crest avenue, Dallas, Texas 75251</td>
-						<td>John2@gmail.com</td>
-						<td><input type="submit" class="btn btn-warning"
-							value="Select"></td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>John Smith</td>
-						<td>123, crest avenue, Dallas, Texas 75251</td>
-						<td>John3@gmail.com</td>
-						<td><input type="submit" class="btn btn-warning"
-							value="Select"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+				</c:forEach>
+
+			</tbody>
+		</table>
+	</div>
+
+</c:if>
+<c:if test="${users==null}">No Search Results were found. Please change Search parameters and try again.</c:if>

@@ -26,6 +26,7 @@ $("#loginBtn").click(function(e) {
 });
 });
 </script>
+
 <script>
 function executeSearch() {
 
@@ -36,13 +37,23 @@ function executeSearch() {
            success: function(data)
            {  
            $("#searchResults").html(data);
-           },
-           error: function(error)
-           {  
-        		alert(error);
            }
          });
+    
+    
 };
+function executeSelectUser(userId)
+{
+    $.ajax({
+        type: "GET",
+        url: "selectUser",
+        data: "userId="+userId,  
+        success: function(data)
+        {  
+        $("#container").html(data);
+        }
+      });
+	}
 </script>
 
 
