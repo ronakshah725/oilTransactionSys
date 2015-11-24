@@ -17,7 +17,7 @@
 				</div>
 				<div class="col-xs-4 left bottom"></div>
 			</div>
-
+<!-- 
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-4 left bottom">Credit Card Number</div>
 
@@ -120,6 +120,19 @@
 				</div>
 			</div>
 		</form>
+
+-->
+<form action="" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
+    data-amount="2000"
+    data-name="Demo Site"
+    data-description="2 widgets ($20.00)"
+    data-image="/128x128.png"
+    data-locale="auto">
+  </script>
+</form>
 	</div>
 
 

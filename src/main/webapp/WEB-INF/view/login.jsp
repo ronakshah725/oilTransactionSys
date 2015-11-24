@@ -11,22 +11,41 @@
 <script	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script>
 $(function() {
-$("#submitBtn").click(function(e) {
+$("#loginBtn").click(function(e) {
 
     $.ajax({
            type: "POST",
            url: "login",
            data: $("#loginForm").serialize(),  
            success: function(data)
-           {   alert(data);  
+           {  
         	   $("#container").html(data);
            }
          });
-
     e.preventDefault(); // avoid to execute the actual submit of the form.
 });
 });
 </script>
+<script>
+$(function() {
+$("#searchUserBtn").click(function(e) {
+
+    $.ajax({
+           type: "POST",
+           url: "searchUser",
+           data: $("#searchUserForm").serialize(),  
+           success: function(data)
+           {  
+        		alert(data);
+        	   $("#searchResults").html(data);
+           }
+         });
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+});
+</script>
+
+
 <head>
 <body>
 	<div class="container" id="container">
@@ -57,7 +76,7 @@ $("#submitBtn").click(function(e) {
 
 					<div class="row" style="padding: 10px">
 						<div class="col-xs-12" style="text-align: right">
-							<button  id= "submitBtn" name= "submitBtn" class="btn btn-info" >Login!</button>  
+							<button  id= "loginBtn" name= "loginBtn" class="btn btn-info" >Login!</button>  
 						</div>
 					</div>
 				</form>
