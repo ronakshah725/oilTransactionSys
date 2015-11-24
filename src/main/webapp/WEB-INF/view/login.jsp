@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 <link rel="stylesheet" href="resources/css/style.css">
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script	src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script>
 $(function() {
@@ -27,8 +27,7 @@ $("#loginBtn").click(function(e) {
 });
 </script>
 <script>
-$(function() {
-$("#searchUserBtn").click(function(e) {
+function executeSearch() {
 
     $.ajax({
            type: "POST",
@@ -36,13 +35,14 @@ $("#searchUserBtn").click(function(e) {
            data: $("#searchUserForm").serialize(),  
            success: function(data)
            {  
-        		alert(data);
-        	   $("#searchResults").html(data);
+           $("#searchResults").html(data);
+           },
+           error: function(error)
+           {  
+        		alert(error);
            }
          });
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-});
-});
+};
 </script>
 
 
@@ -61,7 +61,7 @@ $("#searchUserBtn").click(function(e) {
 						<div class="col-xs-6">Email</div>
 						<div class="col-xs-6">
 							<input type="text" required class="form-control"
-								name="userName" id="userName"  />
+								name="userName" id="userName" value="1"  />
 						</div>
 					</div>
 
@@ -70,7 +70,7 @@ $("#searchUserBtn").click(function(e) {
 						<div class="col-xs-6">Password</div>
 						<div class="col-xs-6">
 							<input type="password" class="form-control" required
-							id="password" 	name="password" />
+							id="password" 	name="password"  value="1" />
 						</div>
 					</div>
 

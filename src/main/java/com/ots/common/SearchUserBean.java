@@ -131,4 +131,14 @@ public class SearchUserBean {
 		this.zipCode = zipCode;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SearchUserBean [name=" + name + ", aptNo=" + aptNo + ", street=" + street + ", city=" + city
+				+ ", zipCode=" + zipCode + ", phonenumber=" + phonenumber + ", cellphone=" + cellphone + ", email="
+				+ email + "]";
+	}
+
 }

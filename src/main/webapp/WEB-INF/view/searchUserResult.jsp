@@ -1,7 +1,6 @@
 <%@ include file="include.jsp"%>
-
 <div class="panel-heading">
-			<h4>Search Results</h4>
+			<h4>Search Results : ${search}</h4>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped">

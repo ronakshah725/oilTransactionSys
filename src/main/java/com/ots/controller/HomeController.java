@@ -28,18 +28,14 @@ public class HomeController {
 		return new ModelAndView("searchUser");
 	}
 	
-	
-	
-	
-	
-	
+	 
 	
 	@RequestMapping(value = "/searchUser", method = RequestMethod.POST)
-	public ModelAndView  searchUserResult( ModelMap model, @ModelAttribute  SearchUserBean searchUserBean ) 
+	public String  searchUserResult( ModelMap model, @ModelAttribute  SearchUserBean searchUserBean ) 
 	{
 		System.out.println("searchUserBean= "+searchUserBean);
 		 model.addAttribute("search",searchUserBean.getZipCode());
-		return new ModelAndView("searchUserResult");
+		return ("searchUserResult");
 	}
 	
 	
