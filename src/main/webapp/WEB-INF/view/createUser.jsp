@@ -41,14 +41,25 @@
 			<hr />
 
 			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-3 left bottom">Address Prefix</div>
+				<div class="col-xs-3 left bottom">Apartment Number</div>
 				<div class="col-xs-6 left">
 					<input type="text" class="form-control" required
-						ng-model="addressLine1" />
+						ng-model="apartmentnumber" />
 				</div>
 				<div class="col-xs-3 left bottom"></div>
 
 			</div>
+
+			<div class="row" style="padding-top: 10px">
+				<div class="col-xs-3 left bottom">Street</div>
+				<div class="col-xs-6 left">
+					<input type="text" class="form-control" required ng-model="street" />
+				</div>
+				<div class="col-xs-3 left bottom"></div>
+
+			</div>
+
+
 
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">City</div>
@@ -56,60 +67,66 @@
 					<input type="text" class="form-control" required ng-model="city" />
 				</div>
 
-				<div class="col-xs-3 left bottom">zipcode</div>
-				<div class="col-xs-3 left">
-					<input type="number" class="form-control" required
-						ng-model="zipcode" />
-				</div>
-			</div>
+				<div class="row" style="padding-top: 10px">
+					<div class="col-xs-3 left bottom">State</div>
+					<div class="col-xs-3 left">
+						<input type="text" class="form-control" required ng-model="state" />
+					</div>
 
-			<hr />
-
-
-			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-3 left bottom">Phone number</div>
-				<div class="col-xs-3 left">
-					<input type="number" class="form-control" required
-						ng-model="phonenumber" />
+					<div class="col-xs-3 left bottom">zipcode</div>
+					<div class="col-xs-3 left">
+						<input type="number" class="form-control" required
+							ng-model="zipcode" />
+					</div>
 				</div>
 
-				<div class="col-xs-3 left bottom">Cell phone number</div>
-				<div class="col-xs-3 left">
-					<input type="number" class="form-control" required
-						ng-model="cellphone" />
+				<hr />
+
+
+				<div class="row" style="padding-top: 10px">
+					<div class="col-xs-3 left bottom">Phone number</div>
+					<div class="col-xs-3 left">
+						<input type="number" class="form-control" required
+							ng-model="phonenumber" />
+					</div>
+
+					<div class="col-xs-3 left bottom">Cell phone number</div>
+					<div class="col-xs-3 left">
+						<input type="number" class="form-control" required
+							ng-model="cellphone" />
+					</div>
 				</div>
-			</div>
 
-			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-3 left bottom">Email Id</div>
-				<div class="col-xs-9 left">
-					<input type="email" class="form-control" required
-						ng-model="password" />
+				<div class="row" style="padding-top: 10px">
+					<div class="col-xs-3 left bottom">Email Id</div>
+					<div class="col-xs-9 left">
+						<input type="email" class="form-control" required
+							ng-model="password" />
+					</div>
 				</div>
-			</div>
-			<hr />
+				<hr />
 
-			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-3 left bottom">Password</div>
-				<div class="col-xs-3 left">
-					<input type="password" class="form-control" required
-						ng-model="password1" value="Test123" />
+				<div class="row" style="padding-top: 10px">
+					<div class="col-xs-3 left bottom">Password</div>
+					<div class="col-xs-3 left">
+						<input type="password" class="form-control" required
+							ng-model="password1" value="Test123" />
+					</div>
+					<div class="col-xs-3 left bottom">Repeat Password</div>
+					<div class="col-xs-3 left">
+						<input type="password" class="form-control" required
+							ng-model="password2" value="Test123" />
+					</div>
 				</div>
-				<div class="col-xs-3 left bottom">Repeat Password</div>
-				<div class="col-xs-3 left">
-					<input type="password" class="form-control" required
-						ng-model="password2" value="Test123" />
+
+
+
+
+				<div class="row top" style="padding-top: 10px">
+					<div class="col-xs-12" style="text-align: right">
+						<input type="submit" class="btn btn-info" ng-submit="submit()" />
+					</div>
 				</div>
-			</div>
-
-
-
-
-			<div class="row top" style="padding-top: 10px">
-				<div class="col-xs-12" style="text-align: right">
-					<input type="submit" class="btn btn-info" ng-submit="submit()" />
-				</div>
-			</div>
 		</form>
 	</div>
 

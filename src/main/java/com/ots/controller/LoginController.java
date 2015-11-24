@@ -25,6 +25,6 @@ public class LoginController {
 	{
 		System.out.println("loginBean= "+loginBean);
 		 model.addAttribute("a", "b");
-		return new ModelAndView("searchUser");
+		return new ModelAndView("createUser");
 	}
  }
