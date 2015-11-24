@@ -39,7 +39,7 @@ $("#submitBtn").click(function(e) {
 				<form name="loginForm" id="loginForm">
 					<div class="row" style="padding-top: 10px">
 
-						<div class="col-xs-6">Username</div>
+						<div class="col-xs-6">Email</div>
 						<div class="col-xs-6">
 							<input type="text" required class="form-control"
 								name="userName" id="userName"  />

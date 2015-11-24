@@ -1,67 +1,54 @@
-  <%@ include file="include.jsp" %>
+<%@ include file="include.jsp"%>
 <div class="panel panel-info center"
 	style="width: 900px; text-align: center; margin-top: 50px">
-
 	<div class="panel-heading">
 		<h3>Select User : ${a}</h3>
 	</div>
-
 	<div class="panel-body">
 		<form name="searchUserForm">
-
 			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-2 left bottom">First Name/Last name</div>
+				<div class="col-xs-2 left bottom">Last name</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" required
-						ng-model="firstname" />
+					<input type="text" class="form-control" required id="name"
+						name="name" />
 				</div>
-
-				<div class="col-xs-1 left bottom">Address Prefix</div>
+				<div class="col-xs-1 left bottom">Address line 1</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" required
-						ng-model="addressLine1" />
+					<input type="text" class="form-control" required id="addressLine1"
+						name="addressLine1" />
 				</div>
 
 				<div class="col-xs-1 left bottom">City</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" required ng-model="city" />
+					<input type="text" class="form-control" required name="city"
+						id="city" />
 				</div>
-
 				<div class="col-xs-1 left bottom">zip</div>
 				<div class="col-xs-1 left">
-					<input type="number" class="form-control" required
-						ng-model="zipcode" />
+					<input type="number" class="form-control" required name="zipcode"
+						id="zipcode" />
 				</div>
 			</div>
-
 			<hr />
-
-
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Phone number</div>
 				<div class="col-xs-3 left">
 					<input type="number" class="form-control" required
-						ng-model="phonenumber" />
+						name="phonenumber" id="phonenumber" />
 				</div>
-
 				<div class="col-xs-3 left bottom">Cell phone number</div>
 				<div class="col-xs-3 left">
-					<input type="number" class="form-control" required
-						ng-model="cellphone" />
+					<input type="number" class="form-control" required name="cellphone" id="cellphone" />
 				</div>
 			</div>
 			<hr />
-
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Email Id</div>
 				<div class="col-xs-4 left">
-					<input type="email" class="form-control" required
-						ng-model="password" />
+					<input type="email" class="form-control" required name="email" id="email" />
 				</div>
 				<div class="col-xs-5 left bottom"></div>
-
 			</div>
-
 			<div class="row top" style="padding-top: 10px">
 				<div class="col-xs-12" style="text-align: center">
 					<input type="submit" class="btn btn-info " value="Search"
@@ -72,11 +59,9 @@
 	</div>
 	<hr />
 	<div class="panel panel-info center">
-
 		<div class="panel-heading">
 			<h4>Search Results</h4>
 		</div>
-
 		<div class="panel-body">
 			<table class="table table-striped">
 				<thead>

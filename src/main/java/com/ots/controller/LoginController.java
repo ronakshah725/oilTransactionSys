@@ -16,9 +16,10 @@ public class LoginController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String listEmployees(ModelMap map) 
 	{
-		
 		return "login";
 	}
+	
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView  login( ModelMap model, @ModelAttribute  LoginBean loginBean ) 
 	{
