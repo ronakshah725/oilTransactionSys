@@ -1,5 +1,9 @@
 package com.ots.common;
 
+import java.util.UUID;
+
+import org.hibernate.id.UUIDGenerator;
+
 /**
  * Bean for User Name
  * 
@@ -8,16 +12,16 @@ package com.ots.common;
  */
 public class UserBean {
 
-	private String id;
+ 	private String id;
 	private String firstName;
 	private String lastName;
 	private String apartmentNumber;
 	private String street;
 	private String city;
 	private String state;
-	private int zipcode;
-	private int phoneNumber;
-	private int cellPhoneNumber;
+	private Integer zipcode;
+	private Integer phoneNumber;
+	private Integer cellPhoneNumber;
 	private String emailId;
 	private String password;
 	private String password1;
@@ -161,7 +165,7 @@ public class UserBean {
 	/**
 	 * @return the zipcode
 	 */
-	public int getZipcode() {
+	public Integer getZipcode() {
 		return zipcode;
 	}
 
@@ -169,14 +173,14 @@ public class UserBean {
 	 * @param zipcode
 	 *            the zipcode to set
 	 */
-	public void setZipcode(int zipcode) {
+	public void setZipcode(Integer zipcode) {
 		this.zipcode = zipcode;
 	}
 
 	/**
 	 * @return the phoneNumber
 	 */
-	public int getPhoneNumber() {
+	public Integer getPhoneNumber() {
 		return phoneNumber;
 	}
 
@@ -184,14 +188,14 @@ public class UserBean {
 	 * @param phoneNumber
 	 *            the phoneNumber to set
 	 */
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(Integer phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
 	/**
 	 * @return the cellPhoneNumber
 	 */
-	public int getCellPhoneNumber() {
+	public Integer getCellPhoneNumber() {
 		return cellPhoneNumber;
 	}
 
@@ -199,7 +203,7 @@ public class UserBean {
 	 * @param cellPhoneNumber
 	 *            the cellPhoneNumber to set
 	 */
-	public void setCellPhoneNumber(int cellPhoneNumber) {
+	public void setCellPhoneNumber(Integer cellPhoneNumber) {
 		this.cellPhoneNumber = cellPhoneNumber;
 	}
 

@@ -34,6 +34,8 @@ public class UserDaoImpl {
 	public static final String INSERT_USER = "INSERT INTO users(id,first_name,last_name,apt_no,street,city,state,zip_code,phone_no,cell_no,email,password,company_id)"
 			+ " VALUES (uuid(),?,?,?,?,?,?,?,?,?,?,aes_encrypt(?,'password'),'4fb19e50-9314-11e5-b673-5820b1762284');";
 
+	public static final String SEARCH_USER = "SELECT * FROM users WHERE (last_name=? OR apt_no=? OR street=? OR city=? OR zip_code=? OR phone_no=? OR cell_no=? OR email= ?) and id in(select client_id from client) order by email asc";
+
 	private JdbcTemplate adminJdbcConnectionTemplate;
 	private JdbcTemplate traderJdbcConnectionTemplate;
 	private JdbcTemplate clientJdbcConnectionTemplate;
@@ -47,6 +49,7 @@ public class UserDaoImpl {
 
 	/**
 	 * Method for fetching details based on userName and password
+	 * 
 	 * @param userName
 	 * @param password
 	 * @return
@@ -68,11 +71,41 @@ public class UserDaoImpl {
 		}
 	}
 
-	public UserBean getUserDetails(final String userName) {
+	/**
+	 * This method searches user based on OR search.
+	 * 
+	 * @param userBean
+	 * @return
+	 */
+	public List<UserBean> searchUser(final UserBean userBean) {
+		List<UserBean> userBeans = adminJdbcConnectionTemplate.query(SEARCH_USER, new PreparedStatementSetter() {
+			public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+				ps.setString(1, userBean.getLastName()==null|| userBean.getLastName().length()==0?"__":userBean.getLastName());
+				ps.setString(2, userBean.getApartmentNumber()==null|| userBean.getApartmentNumber().length()==0?"__":userBean.getApartmentNumber());
+				ps.setString(3, userBean.getStreet()==null|| userBean.getStreet().length()==0?"___":userBean.getStreet());
+				ps.setString(4, userBean.getCity()==null || userBean.getCity().length()==0?"___":userBean.getCity());
+				ps.setInt(5, userBean.getZipcode()==null ? -999:userBean.getZipcode());
+				ps.setInt(6, userBean.getPhoneNumber()==null?-999:userBean.getPhoneNumber());
+				ps.setInt(7, userBean.getCellPhoneNumber()==null?-999:userBean.getCellPhoneNumber());
+				ps.setString(8, userBean.getEmailId()==null || userBean.getEmailId().length()==0?"___":userBean.getEmailId());
+			}
+		}, new UserRowMapper());
+
+		System.out.println(userBeans);
+		return userBeans;
+	}
+
+	/**
+	 * This method does lookup based on email
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public UserBean getUserDetails(final String email) {
 		List<UserBean> userBean = adminJdbcConnectionTemplate.query(SELECT_USER_BY_EMAIL,
 				new PreparedStatementSetter() {
 					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
-						ps.setString(1, userName);
+						ps.setString(1, email);
 					}
 				}, new UserRowMapper());
 
@@ -84,8 +117,13 @@ public class UserDaoImpl {
 		}
 	}
 
-
-	
+	/**
+	 * This method inserts entry into user table.
+	 * 
+	 * @param userBean
+	 * @return
+	 * @throws MySQLIntegrityConstraintViolationException
+	 */
 	public Boolean insertUserDetails(final UserBean userBean) throws MySQLIntegrityConstraintViolationException {
 
 		return adminJdbcConnectionTemplate.execute(INSERT_USER, new PreparedStatementCallback<Boolean>() {

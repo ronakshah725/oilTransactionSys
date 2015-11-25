@@ -134,4 +134,14 @@ public class UserManagementServiceImpl {
 		}
 		return null;
 	}
+	
+
+	/**
+	 * This method accepts search criteria and performs an OR search on users table.
+	 * @param userBean
+	 * @return
+	 */
+	public List<UserBean> searchUser(final UserBean userBean) {
+		return userDao.searchUser(userBean);
+	}
 }

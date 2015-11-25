@@ -2,38 +2,38 @@
 <div class="panel panel-info center"
 	style="width: 900px; text-align: center; margin-top: 50px">
 	<div class="panel-heading">
-		<h3>Select User : ${userName}</h3>
+		<h3>Search User</h3> (Please note that it performs OR search on all fields)
 	</div>
 	<div class="panel-body">
 		<form name="searchUserForm" id="searchUserForm">
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-2 left bottom">Last name</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1"   id="name"
-						name="name" />
+					<input type="text" class="form-control"   
+						name="lastName" id="lastName" />
 				</div>
 				
 				<div class="col-xs-1 left bottom">Apt No:</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1"   id="aptNo"
-						name="aptNo" />
+					<input type="text" class="form-control"    id="apartmentNumber"
+						name="apartmentNumber" />
 				</div>
 				
 				<div class="col-xs-1 left bottom">Street:</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1"   id="street"
+					<input type="text" class="form-control"   id="street"
 						name="street" />
 				</div>
 
 				<div class="col-xs-1 left bottom">City</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1"   name="city"
+					<input type="text" class="form-control"    name="city"
 						id="city" />
 				</div>
 				<div class="col-xs-1 left bottom">zip</div>
 				<div class="col-xs-1 left">
-					<input type="number" class="form-control" value="1"   name="zipCode"
-						id="zipCode" />
+					<input type="number" class="form-control"     name="zipcode"
+						id="zipcode" />
 				</div>
 			</div>
 			<hr />
@@ -41,18 +41,18 @@
 				<div class="col-xs-3 left bottom">Phone number</div>
 				<div class="col-xs-3 left">
 					<input type="number" class="form-control"  
-						name="phonenumber" id="phonenumber" value="1" />
+						name="phoneNumber" id="phoneNumber"   />
 				</div>
 				<div class="col-xs-3 left bottom">Cell phone number</div>
 				<div class="col-xs-3 left">
-					<input type="number" class="form-control"  value="1"   name="cellphone" id="cellphone" />
+					<input type="number" class="form-control"   name="cellPhoneNumber" id="cellPhoneNumber" />
 				</div>
 			</div>
 			<hr />
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Email Id</div>
 				<div class="col-xs-4 left">
-					<input type="email" class="form-control" value="a@b.com"   name="email" id="email" />
+					<input type="email" class="form-control" name="emailId" id="emailId" />
 				</div>
 				<div class="col-xs-5 left bottom"></div>
 			</div>

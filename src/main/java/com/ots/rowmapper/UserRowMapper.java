@@ -14,6 +14,7 @@ public class UserRowMapper implements RowMapper<UserBean> {
 		UserBean user = new UserBean();
 		user.setFirstName(rs.getString("first_name"));
 		user.setId(rs.getString("id"));
+		user.setEmailId(rs.getString("email"));
 		
 		// set all parameters of users row in the bean
 		return user;

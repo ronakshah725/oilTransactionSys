@@ -1,5 +1,5 @@
 <%@ include file="include.jsp"%>
-<c:if test="${users !=null}">
+<c:if test="${not empty searchResult}">
 	<div class="panel-heading">
 		<h4>Search Results </h4>
 	</div>
@@ -15,7 +15,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${users}" varStatus="loop" var="user">
+				<c:forEach items="${searchResult}" varStatus="loop" var="user">
 					<tr>
 						<td>${loop.index+1 }</td>
 						<td>${user.firstName} ${user.lastName}</td>
@@ -32,4 +32,4 @@
 	</div>
 
 </c:if>
-<c:if test="${users==null}">No Search Results were found. Please change Search parameters and try again.</c:if>
+<c:if test="${empty searchResult}">No Search Results were found. Please change Search parameters and try again.</c:if>

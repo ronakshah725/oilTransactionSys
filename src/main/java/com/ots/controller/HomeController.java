@@ -1,8 +1,6 @@
 package com.ots.controller;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
 import com.ots.common.PaymentBean;
-import com.ots.common.SearchUserBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.dao.PaymentDaoImpl;
@@ -125,21 +122,12 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/searchUser", method = RequestMethod.POST)
-	public String searchUserResult(ModelMap model, @ModelAttribute SearchUserBean searchUserBean) {
+	public String searchUserResult(ModelMap model, @ModelAttribute UserBean searchUserBean) {
 		logger.debug("searchUserBean= " + searchUserBean);
-		model.addAttribute("search", searchUserBean.getZipCode());
-		List<UserBean> usersFromDb = new ArrayList<UserBean>();
-		UserBean usb = new UserBean();
-		usb.setFirstName("foo");
-		usb.setLastName("bar");
-		usersFromDb.add(usb);
 
-		UserBean usb2 = new UserBean();
-		usb2.setFirstName("foo1");
-		usb2.setLastName("bar2");
-		usersFromDb.add(usb2);
-
-		model.addAttribute("users", usersFromDb);
+		List<UserBean> usersFromDb = userManagementServiceImpl.searchUser(searchUserBean);
+		logger.debug("usersFromDb" + usersFromDb);
+		model.addAttribute("searchResult", usersFromDb);
 		return ("searchUserResult");
 	}
 
@@ -176,14 +164,15 @@ public class HomeController {
 		/*
 		 * if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(
 		 * userToBeInsertedOrUpdated.getEmailId())) { // this means its an
-		 * update case } else {
+		 * 
+		 * --> Edit profile to be implemented later. update case } else {
 		 */
 		model.addAttribute("userToBeEdited", userToBeInsertedOrUpdated);
 		if (!userToBeInsertedOrUpdated.getPassword1().equals(userToBeInsertedOrUpdated.getPassword2())) {
 			model.addAttribute("message", " Please make sure both the passwords match");
 			return new ModelAndView("createUser");
 		}
-		
+
 		userToBeInsertedOrUpdated.setPassword(userToBeInsertedOrUpdated.getPassword1());
 		Boolean result = userManagementServiceImpl.insertUser(userToBeInsertedOrUpdated);
 		logger.debug("result" + result);
@@ -228,15 +217,15 @@ public class HomeController {
 	public String makePayment(ModelMap model, HttpServletRequest request,
 			@RequestParam(required = false) List<String> orderIds) {
 		logger.debug("orderIds= " + orderIds);
-		
+
 		request.getSession().setAttribute("orderIds", orderIds);
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
 		model.addAttribute("amountDue", "40000");
 		model.addAttribute("balAmount", "100$");
-		PaymentBean paymentBean= new PaymentBean();
-		paymentBean.setClientId((String)request.getSession().getAttribute("clientId"));
-		UserBean user=(UserBean)request.getSession().getAttribute("user");
+		PaymentBean paymentBean = new PaymentBean();
+		paymentBean.setClientId((String) request.getSession().getAttribute("clientId"));
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
 		paymentBean.setTraderId(user.getId());
 		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
 		paymentBean.setAmount(Float.parseFloat("40000"));
@@ -259,7 +248,7 @@ public class HomeController {
 
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
-		
+
 		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
 		logger.debug("Stripe type= " + request.getSession().getAttribute("stripeTokenType"));
 		model.addAttribute("message", "Congratulations! Payment  was successful");
