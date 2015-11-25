@@ -62,6 +62,7 @@ public class UserManagementServiceImpl {
 	public TraderBean getTraderDetails(String userId) {
 		TraderBean bean = null;
 		// bean = return result of ClientDaoImpl.getClientDeatils(userId);
+		
 		return bean;
 	}
 
