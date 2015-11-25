@@ -24,6 +24,8 @@ CREATE TABLE users (id VARCHAR(36) PRIMARY KEY ,
                            phone_no      INT  not null,
                            cell_no              INT  not null,
                      email         VARCHAR(50) unique not null,
-                           password      VARCHAR(50) not null,
+                           password      VARBINARY(500) not null,
                 company_id VARCHAR(36) not null,
 FOREIGN KEY(company_id) references company(id)  );
+
+insert into users values(uuid(),'John','doe','1','Gandhiji Boulevard','new york','NY','15252','98989898','98989898','abc@def.com',aes_encrypt('123','password'),'4fb19e50-9314-11e5-b673-5820b1762284');

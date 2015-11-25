@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,35 +17,43 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ots.common.LoginBean;
 import com.ots.common.SearchUserBean;
 import com.ots.common.UserBean;
+import com.ots.service.UserManagementServiceImpl;
 
 @Controller
 public class HomeController {
+
+	@Autowired
+	private UserManagementServiceImpl userManagementServiceImpl;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(HttpServletRequest request, ModelMap map) {
 		return "home";
 	}
 
-
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest request) {
-	if (request.getSession().getAttribute("userName")!=null) {
-		if (request.getSession().getAttribute("isCustomer") != null) {
-			return "orderSummary";
+		if (request.getSession().getAttribute("userName") != null) {
+			if (request.getSession().getAttribute("isCustomer") != null) {
+				return "orderSummary";
+			} else {
+				return "searchUser";
+			}
 		} else {
-			return "searchUser";
+			return "loginInput";
 		}
-	} else {
-	return "loginInput";
 	}
-	}
-	
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(ModelMap model, HttpServletRequest request, @ModelAttribute LoginBean loginBean) {
 		System.out.println("loginBean= " + loginBean);
 		model.addAttribute("userName", loginBean.getUserName());
-		request.getSession().setAttribute("userName", loginBean.getUserName());
+		UserBean user = userManagementServiceImpl.validateAndFetchUserDetails(loginBean.getUserName(),
+				loginBean.getPassword());
+		System.out.println("userObject found "+user);
+		if (user != null) {
+			request.getSession().setAttribute("userName", loginBean.getUserName());
+		}
+
 		return new ModelAndView("searchUser");
 	}
 

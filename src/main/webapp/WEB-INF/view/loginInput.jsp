@@ -10,7 +10,7 @@
 								<div class="col-xs-6">Email</div>
 								<div class="col-xs-6">
 									<input type="text" required class="form-control"
-										name="userName" id="userName" value="1" />
+										name="userName" id="userName" value="abc@def.com" />
 								</div>
 							</div>
 
@@ -19,7 +19,7 @@
 								<div class="col-xs-6">Password</div>
 								<div class="col-xs-6">
 									<input type="password" class="form-control" required
-										id="password" name="password" value="1" />
+										id="password" name="password" value="123" />
 								</div>
 							</div>
 
