@@ -116,6 +116,7 @@
 			url : "insertOrUpdateUser",
 			data : $("#createUserForm").serialize(),
 			success : function(data) {
+				
 				$("#container").html(data);
 			}
 		});

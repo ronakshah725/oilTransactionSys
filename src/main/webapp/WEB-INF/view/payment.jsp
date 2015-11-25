@@ -7,7 +7,7 @@
 	</div>
 
 	<div class="panel-body">
-		<form name="paymentForm">
+		<form id="paymentForm" name="paymentForm">
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-4 left bottom">Balance Amount Used:</div>
 

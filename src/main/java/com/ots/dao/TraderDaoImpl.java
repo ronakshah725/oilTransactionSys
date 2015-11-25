@@ -21,7 +21,7 @@ import com.ots.rowmapper.TraderRowMapper;
 @Repository
 public class TraderDaoImpl {
 
-	 	public static final String QUERY_INSERT_TRADER = "INSERT INTO trader(trader_id,role_id) VALUES (?,?)";
+	 	public static final String QUERY_INSERT_TRADER = "INSERT INTO trader(trader_id,role_id) VALUES (?,(select id from role where role_code=?))";
 	 	public static final String SELECT_TRADER_BY_TRADER_ID = "SELECT * FROM trader WHERE trader_id=?";
 		private JdbcTemplate adminJdbcConnectionTemplate;
 		private JdbcTemplate traderJdbcConnectionTemplate;
@@ -63,7 +63,7 @@ public class TraderDaoImpl {
 			return adminJdbcConnectionTemplate.execute(QUERY_INSERT_TRADER, new PreparedStatementCallback<Boolean>() {
 				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
 					ps.setString(1, userBean.getId());
-					ps.setString(1, userBean.getUserType().name());
+					ps.setString(2, userBean.getUserType().name());
 					return ps.execute();
 				}
 			});

@@ -65,7 +65,7 @@ public class HomeController {
 			// List<Feature.name>); -use these features in order to decide what
 			// to display in the top menu on heading.jsp
 
-			request.getSession().setAttribute("FEATURE_INSERT_USER","true");
+			request.getSession().setAttribute("FEATURE_INSERT_USER", "true");
 			// @Ronak to implement DAO
 			ClientBean clientBean = userManagementServiceImpl.getClientDetails(user.getId());
 			if (clientBean != null) {
@@ -162,26 +162,36 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/insertOrUpdateUser", method = RequestMethod.POST)
-	public String insertOrUpdateUser(ModelMap model, HttpServletRequest request,
-			@ModelAttribute  UserBean userToBeInsertedOrUpdated) {
+	public ModelAndView insertOrUpdateUser(ModelMap model, HttpServletRequest request,
+			@ModelAttribute UserBean userToBeInsertedOrUpdated) {
 		logger.debug("userToBeInsertedOrUpdated= " + userToBeInsertedOrUpdated);
 
 		UserBean userToBeEdited = (UserBean) request.getSession().getAttribute("user");
-/*
-		if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(userToBeInsertedOrUpdated.getEmailId())) {
-			// this means its an update case
-		} else {*/
-	
-			Boolean result = userManagementServiceImpl.insertUser(userToBeInsertedOrUpdated);
-			if (result == null || !result) {
-				model.addAttribute("message", " Error occured while saving details. Please relogin");
-			} else {
-				model.addAttribute("message", " User Created successfully.");
-			}
-		/*}*/
+		/*
+		 * if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(
+		 * userToBeInsertedOrUpdated.getEmailId())) { // this means its an
+		 * update case } else {
+		 */
+		model.addAttribute("userToBeEdited", userToBeInsertedOrUpdated);
+		if (!userToBeInsertedOrUpdated.getPassword1().equals(userToBeInsertedOrUpdated.getPassword2())) {
+			model.addAttribute("message", " Please make sure both the passwords match");
+			return new ModelAndView("createUser");
+		}
+		
+		userToBeInsertedOrUpdated.setPassword(userToBeInsertedOrUpdated.getPassword1());
+		Boolean result = userManagementServiceImpl.insertUser(userToBeInsertedOrUpdated);
+		logger.debug("result" + result);
+		if (result == null || !result) {
+			model.addAttribute("message", " Error occured while saving details. Please relogin");
+
+			return new ModelAndView("createUser");
+		} else {
+			model.addAttribute("message", " User Created successfully.");
+		}
+		/* } */
 
 		model.addAttribute("message", " User Added/Updated Successfully");
-		return ("orderSummary");
+		return new ModelAndView("orderSummary");
 	}
 
 	/**

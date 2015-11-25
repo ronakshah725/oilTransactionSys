@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.ClientBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
@@ -112,15 +113,23 @@ public class UserManagementServiceImpl {
 	 * @param userBean
 	 */
 	public Boolean insertUser(UserBean userBean) {
+		
+		try{
 		userDao.insertUserDetails(userBean);
+		}catch(MySQLIntegrityConstraintViolationException mse)
+		{
+		return null;
+		}
 		UserBean bean = userDao.getUserDetails(userBean.getEmailId());
+		System.out.println(bean);
+		bean.setUserType(userBean.getUserType());
 		if (bean != null) {
 			switch (userBean.getUserType()) {
 			case CLIENT:
 				return clientDao.insertClientDetails(bean);
 			case TRADER:
 			case ADMIN:
-				return traderDao.insertTraderDetails(userBean);
+				return traderDao.insertTraderDetails(bean);
 			}
 		}
 		return null;

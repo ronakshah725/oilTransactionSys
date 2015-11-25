@@ -8,15 +8,14 @@
 	</div>
 
 	<div class="panel-body">
-		<form name="createUserForm">
+		<div style="text-color:#ff0000">${message}</div>
+		<form name="createUserForm" id="createUserForm">
 			<div class="row" style="padding-top: 10px">
 
 				<div class="col-xs-3 left bottom">User Type:</div>
 				<div class="col-xs-5 left bottom">
-					<select name="singleSelect" class="form-control" required
-					name="userType" 	id="userType" >
+					<select  class="form-control" required	name="userType" 	id="userType" >
 						<option value="ADMIN">Administrator</option>
-						<!-- interpolation -->
 						<option value="TRADER">Trader</option>
 						<option value="CLIENT">customer</option>
 					</select>
@@ -29,13 +28,13 @@
 				<div class="col-xs-3 left bottom">First Name</div>
 				<div class="col-xs-3 left">
 					<input type="text" class="form-control" required
-					name="firstname"	id="firstname" value="${userToBeEdited.firstName}" />
+					name="firstName"	id="firstName" value="${userToBeEdited.firstName}" />
 				</div>
 
 				<div class="col-xs-3 left bottom">Last Name</div>
 				<div class="col-xs-3 left">
 					<input type="text" class="form-control" required
-					value="${userToBeEdited.lastName}" name="lastname" 	id="lastname" />
+					value="${userToBeEdited.lastName}" name="lastName" 	id="lastName" />
 				</div>
 			</div>
 			<hr />
@@ -44,7 +43,7 @@
 				<div class="col-xs-3 left bottom">Apartment Number</div>
 				<div class="col-xs-6 left">
 					<input type="text" class="form-control" required
-				value="${userToBeEdited.apartmentNumber}"	name="apartmentnumber"	id="apartmentnumber" />
+				value="${userToBeEdited.apartmentNumber}"	name="apartmentNumber"	id="apartmentNumber" />
 				</div>
 				<div class="col-xs-3 left bottom"></div>
 
@@ -87,13 +86,13 @@
 					<div class="col-xs-3 left bottom">Phone number</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-					value="${userToBeEdited.phonenumber}"		name="phonenumber" 	id="phonenumber" />
+					value="${userToBeEdited.phoneNumber}"		name="phoneNumber" 	id="phoneNumber" />
 					</div>
 
 					<div class="col-xs-3 left bottom">Cell phone number</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-					value="${userToBeEdited.cellphonenumber}"	name="cellphone"	id="cellphone" />
+					value="${userToBeEdited.cellPhoneNumber}"	name="cellPhoneNumber"	id="cellPhoneNumber" />
 					</div>
 				</div>
 
@@ -110,12 +109,12 @@
 					<div class="col-xs-3 left bottom">Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-							 name="password1" id="password1" value="Test123"  />
+							 name="password1" id="password1" value=""  />
 					</div>
 					<div class="col-xs-3 left bottom">Repeat Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-						name="password2" 	id="password2"  value="Test123" />
+						name="password2" 	id="password2"  value="" />
 					</div>
 				</div>
 				<div class="row top" style="padding-top: 10px">

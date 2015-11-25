@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.UserBean;
 import com.ots.rowmapper.UserRowMapper;
 
@@ -85,7 +86,7 @@ public class UserDaoImpl {
 
 
 	
-	public Boolean insertUserDetails(final UserBean userBean) {
+	public Boolean insertUserDetails(final UserBean userBean) throws MySQLIntegrityConstraintViolationException {
 
 		return adminJdbcConnectionTemplate.execute(INSERT_USER, new PreparedStatementCallback<Boolean>() {
 			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -95,11 +96,11 @@ public class UserDaoImpl {
 				ps.setString(4, userBean.getStreet());
 				ps.setString(5, userBean.getCity());
 				ps.setString(6, userBean.getState());
-				ps.setInt(6, userBean.getZipcode());
-				ps.setInt(7, userBean.getPhoneNumber());
-				ps.setInt(8, userBean.getCellPhoneNumber());
-				ps.setString(9, userBean.getEmailId());
-				ps.setString(10, userBean.getPassword1());
+				ps.setInt(7, userBean.getZipcode());
+				ps.setInt(8, userBean.getPhoneNumber());
+				ps.setInt(9, userBean.getCellPhoneNumber());
+				ps.setString(10, userBean.getEmailId());
+				ps.setString(11, userBean.getPassword());
 				return ps.execute();
 			}
 		});
