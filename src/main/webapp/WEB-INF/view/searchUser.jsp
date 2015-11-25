@@ -9,30 +9,30 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-2 left bottom">Last name</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1" required id="name"
+					<input type="text" class="form-control" value="1"   id="name"
 						name="name" />
 				</div>
 				
 				<div class="col-xs-1 left bottom">Apt No:</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1" required id="aptNo"
+					<input type="text" class="form-control" value="1"   id="aptNo"
 						name="aptNo" />
 				</div>
 				
 				<div class="col-xs-1 left bottom">Street:</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1" required id="street"
+					<input type="text" class="form-control" value="1"   id="street"
 						name="street" />
 				</div>
 
 				<div class="col-xs-1 left bottom">City</div>
 				<div class="col-xs-2 left">
-					<input type="text" class="form-control" value="1" required name="city"
+					<input type="text" class="form-control" value="1"   name="city"
 						id="city" />
 				</div>
 				<div class="col-xs-1 left bottom">zip</div>
 				<div class="col-xs-1 left">
-					<input type="number" class="form-control" value="1" required name="zipCode"
+					<input type="number" class="form-control" value="1"   name="zipCode"
 						id="zipCode" />
 				</div>
 			</div>
@@ -40,19 +40,19 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Phone number</div>
 				<div class="col-xs-3 left">
-					<input type="number" class="form-control" required
+					<input type="number" class="form-control"  
 						name="phonenumber" id="phonenumber" value="1" />
 				</div>
 				<div class="col-xs-3 left bottom">Cell phone number</div>
 				<div class="col-xs-3 left">
-					<input type="number" class="form-control"  value="1" required name="cellphone" id="cellphone" />
+					<input type="number" class="form-control"  value="1"   name="cellphone" id="cellphone" />
 				</div>
 			</div>
 			<hr />
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Email Id</div>
 				<div class="col-xs-4 left">
-					<input type="email" class="form-control" value="a@b.com" required name="email" id="email" />
+					<input type="email" class="form-control" value="a@b.com"   name="email" id="email" />
 				</div>
 				<div class="col-xs-5 left bottom"></div>
 			</div>

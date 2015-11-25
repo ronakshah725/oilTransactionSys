@@ -31,8 +31,15 @@
 		<property name="basename" value="classpath:messages" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	<bean id="adminDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
-		p:url="${jdbc.databaseurl}" p:username="${jdbc.username}" p:password="${jdbc.password}" />
-
-</beans>
+		p:url="${jdbc.databaseurl}" p:username="${jdbc.adminUsername}" p:password="${jdbc.adminPassword}" />
+	
+	<bean id="traderDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
+		p:url="${jdbc.databaseurl}" p:username="${jdbc.traderUsername}" p:password="${jdbc.traderPassword}" />
+	
+	<bean id="clientDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
+		p:url="${jdbc.databaseurl}" p:username="${jdbc.clientUsername}"   p:password="${jdbc.clientPassword}" />
+	</beans>

@@ -3,11 +3,19 @@ CREATE DATABASE `ots` CHARACTER SET utf8 COLLATE utf8_general_ci;
 use ots;
 
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
+CREATE USER 'client'@'localhost' IDENTIFIED BY 'client@123';
+CREATE USER 'trader'@'localhost' IDENTIFIED BY 'trader@123';
+CREATE USER 'oil_price_uploader'@'localhost' IDENTIFIED BY 'loadOilPrices@123';
+
 GRANT ALL PRIVILEGES ON ots.* TO 'admin'@'localhost'  WITH GRANT OPTION;
 
-CREATE USER 'trader'@'localhost' IDENTIFIED BY 'trader@123';
+GRANT ALL PRIVILEGES ON ots.oil_prices TO 'oil_price_uploader'@'localhost';
 
-CREATE USER 'client'@'localhost' IDENTIFIED BY 'client@123';
+
+
+GRANT select privileges on ots.oil_prices to 'trader'@'localhost' ;
+GRANT select privileges on ots.oil_prices to 'client'@'localhost' ;
+
 
 
 CREATE TABLE company (id VARCHAR(36) primary key,

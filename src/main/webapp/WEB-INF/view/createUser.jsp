@@ -29,13 +29,13 @@
 				<div class="col-xs-3 left bottom">First Name</div>
 				<div class="col-xs-3 left">
 					<input type="text" class="form-control" required
-						ng-model="firstname" />
+						id="firstname" value="${userToBeEdited.firstName}" />
 				</div>
 
 				<div class="col-xs-3 left bottom">Last Name</div>
 				<div class="col-xs-3 left">
 					<input type="text" class="form-control" required
-						ng-model="lastname" />
+					value="${userToBeEdited.lastName}"	id="lastname" />
 				</div>
 			</div>
 			<hr />
@@ -44,7 +44,7 @@
 				<div class="col-xs-3 left bottom">Apartment Number</div>
 				<div class="col-xs-6 left">
 					<input type="text" class="form-control" required
-						ng-model="apartmentnumber" />
+				value="${userToBeEdited.apartmentNumber}"		id="apartmentnumber" />
 				</div>
 				<div class="col-xs-3 left bottom"></div>
 
@@ -53,7 +53,7 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Street</div>
 				<div class="col-xs-6 left">
-					<input type="text" class="form-control" required ng-model="street" />
+					<input type="text" class="form-control" required value="${userToBeEdited.street}" id="street" />
 				</div>
 				<div class="col-xs-3 left bottom"></div>
 
@@ -64,19 +64,19 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">City</div>
 				<div class="col-xs-3 left">
-					<input type="text" class="form-control" required ng-model="city" />
+					<input type="text" class="form-control" required id="city" value="${userToBeEdited.city}" />
 				</div>
 
 				<div class="row" style="padding-top: 10px">
 					<div class="col-xs-3 left bottom">State</div>
 					<div class="col-xs-3 left">
-						<input type="text" class="form-control" required ng-model="state" />
+						<input type="text" class="form-control" required id="state" value="${userToBeEdited.state}" />
 					</div>
 
 					<div class="col-xs-3 left bottom">zipcode</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-							ng-model="zipcode" />
+							id="zipcode" value="${userToBeEdited.zipcode}" />
 					</div>
 				</div>
 
@@ -87,20 +87,20 @@
 					<div class="col-xs-3 left bottom">Phone number</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-							ng-model="phonenumber" />
+					value="${userToBeEdited.phonenumber}"		id="phonenumber" />
 					</div>
 
 					<div class="col-xs-3 left bottom">Cell phone number</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-							ng-model="cellphone" />
+					value="${userToBeEdited.cellphonenumber}"		id="cellphone" />
 					</div>
 				</div>
 
 				<div class="row" style="padding-top: 10px">
 					<div class="col-xs-3 left bottom">Email Id</div>
 					<div class="col-xs-9 left">
-						<input type="email" class="form-control" required
+						<input type="email" class="form-control" required id="emailId" value="${userToBeEdited.emailId}"
 							  />
 					</div>
 				</div>
@@ -110,7 +110,7 @@
 					<div class="col-xs-3 left bottom">Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-							 id="password1" value="Test123" />
+							 id="password1" value="Test123"  />
 					</div>
 					<div class="col-xs-3 left bottom">Repeat Password</div>
 					<div class="col-xs-3 left">
@@ -118,10 +118,6 @@
 							id="password2"  value="Test123" />
 					</div>
 				</div>
-
-
-
-
 				<div class="row top" style="padding-top: 10px">
 					<div class="col-xs-12" style="text-align: right">
 						<input type="submit" class="btn btn-info" onclick="insertOrUpdateUser()" />

@@ -1,7 +1,8 @@
 <div class="panel panel-info center"
 					style="width: 400px; text-align: center; margin-top: 50px">
 					<div class="panel-heading">
-						<h3>Login</h3>
+					<div>	<h3>Login</h3></div>
+					<div style="color:#ff0000">${message}</div>
 					</div>
 					<div class="panel-body">
 						<form name="loginForm" id="loginForm">

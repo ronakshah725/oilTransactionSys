@@ -28,25 +28,37 @@ public class UserDaoImpl {
 	public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email= ? ";
 
 	public static final String QUERY_INSERT_TASK = "INSERT INTO users(id,first_name,last_name) VALUES (?,?,?)";
-	private JdbcTemplate jdbcTemplate;
+
+	private JdbcTemplate adminJdbcConnectionTemplate;
+	private JdbcTemplate traderJdbcConnectionTemplate;
+	private JdbcTemplate clientJdbcConnectionTemplate;
 
 	@Autowired
-	public void setDataSource(DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	public void setDataSource(DataSource adminDataSource, DataSource traderDataSource, DataSource clientDataSource) {
+		this.adminJdbcConnectionTemplate = new JdbcTemplate(adminDataSource);
+		this.traderJdbcConnectionTemplate = new JdbcTemplate(traderDataSource);
+		this.clientJdbcConnectionTemplate = new JdbcTemplate(clientDataSource);
 	}
 
 	public UserBean getUserDetails(final String userName, final String password) {
 
-		List<UserBean> userBean = jdbcTemplate.query(SELECT_USER_BY_CREDS,
+		List<UserBean> userBean = adminJdbcConnectionTemplate.query(SELECT_USER_BY_CREDS,
 				new PreparedStatementSetter() {
 					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
 						ps.setString(1, userName);
 						ps.setString(2, password);
 					}
 				}, new UserRowMapper());
+
+		try {
+			adminJdbcConnectionTemplate.getDataSource().getConnection().setAutoCommit(false); // doesnt work! -set it in datasource definition in ots-servlet.xml
+		//	adminJdbcConnectionTemplate.getDataSource().getConnection().commit();
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		}
 		
 		System.out.println(userBean);
-		if (/*CollectionUtils.isNotEmpty(*/userBean!=null && userBean.size()!=0) {
+		if (/* CollectionUtils.isNotEmpty( */userBean != null && userBean.size() != 0) {
 			return userBean.get(0);
 		} else {
 			return null;
