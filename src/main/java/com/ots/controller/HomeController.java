@@ -200,6 +200,45 @@ public class HomeController {
 	}
 
 	/**
+	 * This rest API accepts list of Order ids and makes the payment
+	 * @param model
+	 * @param orderIds
+	 * @return
+	 */
+	@RequestMapping(value = "/payment", method = RequestMethod.GET)
+	public String makePayment(ModelMap model,  HttpServletRequest request,@RequestParam(required = false) List<String> orderIds) {
+		logger.debug("orderIds= " + orderIds);
+		// Check if user has appropriate role or not if user does not has CANCEL_ORDER feature access, reject and log user out
+		model.addAttribute("amountDue", "40000");
+		model.addAttribute("balAmount", "100$");
+		
+		model.addAttribute("message", "Congratulations! Payment  was successful");
+		return ("payment");
+	}
+	
+	
+	
+	/**
+	 * This rest API accepts the payment
+	 * @param model
+	 * @param orderIds
+	 * @return
+	 */
+	@RequestMapping(value = "/paymentAccepted", method = RequestMethod.POST)
+	public String paymentAccepted(ModelMap model, HttpServletRequest request) {
+		
+		// Check if user has appropriate role or not if user does not has CANCEL_ORDER feature access, reject and log user out
+		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
+		logger.debug("Stripe type= " + request.getSession().getAttribute("stripeTokenType"));
+		model.addAttribute("message", "Congratulations! Payment  was successful");
+		return ("orderSummary");
+	}
+	
+	
+	
+	
+	
+	/**
 	 * Rest API for returning the home page.
 	 * 
 	 * @param request

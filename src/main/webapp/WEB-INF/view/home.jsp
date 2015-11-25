@@ -11,41 +11,39 @@
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
- 
+
 <script>
-function populateTopMenu()
-{
-	$.ajax({
-		type : "GET",
-		url : "topMenu",
-		success : function(data) {
-			$("#heading").html(data);
-		}
-	});
+	function populateTopMenu() {
+		$.ajax({
+			type : "GET",
+			url : "topMenu",
+			success : function(data) {
+				$("#heading").html(data);
+			}
+		});
 	}
-	
-function login() {
-	$.ajax({
-		type : "POST",
-		url : "login",
-		data : $("#loginForm").serialize(),
-		success : function(data) {
-			$("#container").html(data);
-			populateTopMenu();
-		}
-	});
-}
-function home()
-{
-	$.ajax({
-		type : "GET",
-		url : "home",
-		success : function(data) {
-			$("#container").html(data);
-			populateTopMenu();
-		}
-	});
-}
+
+	function login() {
+		$.ajax({
+			type : "POST",
+			url : "login",
+			data : $("#loginForm").serialize(),
+			success : function(data) {
+				$("#container").html(data);
+				populateTopMenu();
+			}
+		});
+	}
+	function home() {
+		$.ajax({
+			type : "GET",
+			url : "home",
+			success : function(data) {
+				$("#container").html(data);
+				populateTopMenu();
+			}
+		});
+	}
 	function executeSearch() {
 		$.ajax({
 			type : "POST",
@@ -73,6 +71,21 @@ function home()
 			type : "GET",
 			url : "cancelOrder",
 			data : "orderIds=" + orderIds,
+			success : function(data) {
+				$("#container").html(data);
+			}
+		});
+	}
+
+	function makePayment() {
+		var orderIds;
+		/* $('input[type="Checkbox"]:checked').each(function() {
+			   console.log(this.value); }); */
+		//Read all checked checkboxes
+		$.ajax({
+			type : "GET",
+			url : "payment",
+			//data : "orderIds=" + orderIds,
 			success : function(data) {
 				$("#container").html(data);
 			}
@@ -109,8 +122,8 @@ function home()
 	function viewReports() {
 		//add code here for displaying reports which managers can see.
 	}
-	$( document ).ready(function() {
-	   home();
+	$(document).ready(function() {
+		home();
 	});
 </script>
 <head>
