@@ -2,6 +2,7 @@ package com.ots.controller;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -224,12 +225,14 @@ public class HomeController {
 		model.addAttribute("amountDue", "40000");
 		model.addAttribute("balAmount", "100$");
 		PaymentBean paymentBean = new PaymentBean();
-		paymentBean.setClientId((String) request.getSession().getAttribute("clientId"));
-		UserBean user = (UserBean) request.getSession().getAttribute("user");
+ 		
+		paymentBean.setPaymentId(UUID.randomUUID().toString());
+		paymentBean.setClientId((String)request.getSession().getAttribute("clientId"));
+		UserBean user=(UserBean)request.getSession().getAttribute("user");
 		paymentBean.setTraderId(user.getId());
 		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
 		paymentBean.setAmount(Float.parseFloat("40000"));
-		paymentBean.setBalance(Float.parseFloat("100$"));
+		paymentBean.setBalance(Float.parseFloat("100"));
 		paymentDaoImpl.insertPaymentDetails(paymentBean);
 
 		model.addAttribute("message", "Congratulations! Payment  was successful");

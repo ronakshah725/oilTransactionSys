@@ -54,7 +54,7 @@ public class PaymentDaoImpl {
 				ps.setString(1, paymentBean.getPaymentId());
 				ps.setString(2, paymentBean.getClientId());
 				ps.setString(3, paymentBean.getTraderId());
-				ps.setDate(4, (Date) paymentBean.getDateAccepted());
+				ps.setDate(4,   new java.sql.Date(paymentBean.getDateAccepted().getTime()));
 				ps.setFloat(5, paymentBean.getAmount());
 				return ps.execute();
 			}

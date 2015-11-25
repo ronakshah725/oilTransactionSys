@@ -9,7 +9,7 @@ import java.util.Date;
  *
  */
 public class PaymentBean {
-
+	
 	private String paymentId;
 	private String clientId;
 	private Date dateAccepted;
