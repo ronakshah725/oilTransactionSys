@@ -2,22 +2,12 @@ CREATE DATABASE ots CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 use ots;
 
-CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
-CREATE USER 'client'@'localhost' IDENTIFIED BY 'client@123';
-CREATE USER 'trader'@'localhost' IDENTIFIED BY 'trader@123';
-CREATE USER 'oil_price_loader'@'localhost' IDENTIFIED BY 'loadOilPrices@123';
-
-GRANT ALL PRIVILEGES ON ots.* TO 'admin'@'localhost'  WITH GRANT OPTION;
-GRANT ALL PRIVILEGES ON ots.oil_prices TO 'oil_price_loader'@'localhost';
-GRANT SELECT ON ots.oil_prices TO 'trader'@'localhost' ;
-GRANT SELECT  ON ots.oil_prices TO 'client'@'localhost' ;
-
- CREATE TABLE company (
+CREATE TABLE company (
   id varchar(36) NOT NULL,
   level1_comm varchar(30) NOT NULL,
   level2_comm varchar(30) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
  CREATE TABLE users (
   id varchar(36) NOT NULL,
@@ -37,28 +27,22 @@ GRANT SELECT  ON ots.oil_prices TO 'client'@'localhost' ;
   UNIQUE KEY email (email),
   KEY company_id (company_id),
   CONSTRAINT users_ibfk_1 FOREIGN KEY (company_id) REFERENCES company (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
-GRANT select,update ON ots.users to 'client@localhost' identified by 'client@123';
-GRANT select,update ON ots.users to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE feature (
   id varchar(36) NOT NULL,
   feature_code varchar(30) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
-GRANT select ON ots.feature to 'client@localhost' identified by 'client@123';
-GRANT select ON ots.feature to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE role (
   id varchar(36) NOT NULL,
   role_code varchar(30) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
-GRANT select ON ots.role to 'client@localhost' identified by 'client@123';
-GRANT select ON ots.role to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE role_has_features (
   role_id varchar(36) NOT NULL DEFAULT '',
@@ -67,10 +51,8 @@ CREATE TABLE role_has_features (
   KEY feature_id (feature_id),
   CONSTRAINT role_has_features_ibfk_1 FOREIGN KEY (role_id) REFERENCES role (id),
   CONSTRAINT role_has_features_ibfk_2 FOREIGN KEY (feature_id) REFERENCES feature (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
-GRANT select ON ots.role_has_features to 'client@localhost' identified by 'client@123';
-GRANT select ON ots.role_has_features to 'trader@localhost' identified by 'trader@123';
 
 
 CREATE TABLE oil_prices (
@@ -79,7 +61,7 @@ CREATE TABLE oil_prices (
   price float NOT NULL,
   PRIMARY KEY (company_id,date),
   CONSTRAINT oil_prices_ibfk_1 FOREIGN KEY (company_id) REFERENCES company (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
 
 
@@ -91,8 +73,6 @@ total_oil_quantity FLOAT not null default 0,
 balance_amount  FLOAT  not  null  default  0,
 FOREIGN KEY (client_id) REFERENCES users(id));
 
-GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
-GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
 
 
 CREATE TABLE account_info (	
@@ -102,8 +82,11 @@ oil_reserve 	FLOAT not null default 0,
 oil_shipped 	FLOAT not null default 0,
 FOREIGN KEY  	(client_id)	REFERENCES client(client_id));
 
+GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
+GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
 GRANT select,update ON ots.account_info to 'client@localhost' identified by 'client@123';
 GRANT select,update ON ots.account_info to 'trader@localhost' identified by 'trader@123';
+GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE trader (	 
 trader_id VARCHAR(36) primary key,
@@ -111,7 +94,6 @@ role_id    VARCHAR(36) not null,
 FOREIGN KEY (role_id) REFERENCES role(id),
 FOREIGN KEY(trader_id)	 REFERENCES users(id));
 
-GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE payments (payment_id	 VARCHAR(36) primary key,
 client_id VARCHAR(36),
@@ -120,8 +102,6 @@ client_id VARCHAR(36),
 FOREIGN KEY(trader_id)	 REFERENCES users(id),
  FOREIGN KEY  	 (client_id)	 REFERENCES client(client_id));
 
-GRANT select ON ots.payments to 'client@localhost' identified by 'client@123';
-GRANT select,update,insert ON ots.payments to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE orders (
   id varchar(36) NOT NULL,
@@ -139,10 +119,8 @@ CREATE TABLE orders (
   PRIMARY KEY (id),
   KEY payment_id (payment_id),
   CONSTRAINT orders_ibfk_1 FOREIGN KEY (payment_id) REFERENCES payments (payment_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
-GRANT SELECT,INSERT ON ots.orders to 'client@localhost' identified by 'client@123';
-GRANT select,INSERT,UPDATE ON ots.orders to 'trader@localhost' identified by 'trader@123';
 
  CREATE TABLE places (
   user_id varchar(36) NOT NULL DEFAULT '',
@@ -154,10 +132,9 @@ GRANT select,INSERT,UPDATE ON ots.orders to 'trader@localhost' identified by 'tr
   CONSTRAINT places_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT places_ibfk_2 FOREIGN KEY (client_id) REFERENCES client (client_id),
   CONSTRAINT places_ibfk_3 FOREIGN KEY (order_id) REFERENCES orders (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+);
 
-GRANT select,INSERT ON ots.places to 'client@localhost' identified by 'client@123';
-GRANT select,INSERT,UPDATE ON ots.places to 'trader@localhost' identified by 'trader@123';
+
 
 
 CREATE TABLE cancels (
@@ -170,8 +147,33 @@ CREATE TABLE cancels (
   CONSTRAINT cancels_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT cancels_ibfk_2 FOREIGN KEY (client_id) REFERENCES client (client_id),
   CONSTRAINT cancels_ibfk_3 FOREIGN KEY (order_id) REFERENCES orders (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-                 
+);
+
+
+
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
+CREATE USER 'client'@'localhost' IDENTIFIED BY 'client@123';
+CREATE USER 'trader'@'localhost' IDENTIFIED BY 'trader@123';
+CREATE USER 'oil_price_loader'@'localhost' IDENTIFIED BY 'loadOilPrices@123';
+
+GRANT ALL PRIVILEGES ON ots.* TO 'admin'@'localhost'  WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON ots.oil_prices TO 'oil_price_loader'@'localhost';
+GRANT SELECT ON ots.oil_prices TO 'trader'@'localhost' ;
+GRANT SELECT  ON ots.oil_prices TO 'client'@'localhost' ;
+GRANT select,update ON ots.users to 'client@localhost' identified by 'client@123';
+GRANT select,update ON ots.users to 'trader@localhost' identified by 'trader@123';
+GRANT select ON ots.feature to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.feature to 'trader@localhost' identified by 'trader@123';
+GRANT select ON ots.role to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.role to 'trader@localhost' identified by 'trader@123';
+GRANT select ON ots.role_has_features to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.role_has_features to 'trader@localhost' identified by 'trader@123';
+GRANT select ON ots.payments to 'client@localhost' identified by 'client@123';
+GRANT select,update,insert ON ots.payments to 'trader@localhost' identified by 'trader@123';
+GRANT SELECT,INSERT ON ots.orders to 'client@localhost' identified by 'client@123';
+GRANT select,INSERT,UPDATE ON ots.orders to 'trader@localhost' identified by 'trader@123';
+GRANT select,INSERT ON ots.places to 'client@localhost' identified by 'client@123';
+GRANT select,INSERT,UPDATE ON ots.places to 'trader@localhost' identified by 'trader@123';
 GRANT select,INSERT,UPDATE ON ots.cancels to 'trader@localhost' identified by 'trader@123';
 
 
