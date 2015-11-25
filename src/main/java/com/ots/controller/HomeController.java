@@ -1,6 +1,8 @@
 package com.ots.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
+import com.ots.common.PaymentBean;
 import com.ots.common.SearchUserBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
+import com.ots.dao.PaymentDaoImpl;
 import com.ots.service.UserManagementServiceImpl;
 
 @Controller
@@ -29,6 +33,8 @@ public class HomeController {
 
 	@Autowired
 	private UserManagementServiceImpl userManagementServiceImpl;
+	@Autowired
+	private PaymentDaoImpl paymentDaoImpl;
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest request) {
@@ -222,10 +228,20 @@ public class HomeController {
 	public String makePayment(ModelMap model, HttpServletRequest request,
 			@RequestParam(required = false) List<String> orderIds) {
 		logger.debug("orderIds= " + orderIds);
+		
+		request.getSession().setAttribute("orderIds", orderIds);
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
 		model.addAttribute("amountDue", "40000");
 		model.addAttribute("balAmount", "100$");
+		PaymentBean paymentBean= new PaymentBean();
+		paymentBean.setClientId((String)request.getSession().getAttribute("clientId"));
+		UserBean user=(UserBean)request.getSession().getAttribute("user");
+		paymentBean.setTraderId(user.getId());
+		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
+		paymentBean.setAmount(Float.parseFloat("40000"));
+		paymentBean.setBalance(Float.parseFloat("100$"));
+		paymentDaoImpl.insertPaymentDetails(paymentBean);
 
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 		return ("payment");
@@ -243,6 +259,7 @@ public class HomeController {
 
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
+		
 		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
 		logger.debug("Stripe type= " + request.getSession().getAttribute("stripeTokenType"));
 		model.addAttribute("message", "Congratulations! Payment  was successful");
