@@ -23,7 +23,7 @@ public class UserBean {
 	private String password1;
 	private String password2;
 
-	private String userType;
+	private UserType  userType;
 
 	/**
 	 * @return the password1
@@ -56,7 +56,7 @@ public class UserBean {
 	/**
 	 * @return the userType
 	 */
-	public String getUserType() {
+	public UserType getUserType() {
 		return userType;
 	}
 
@@ -64,7 +64,7 @@ public class UserBean {
 	 * @param userType
 	 *            the userType to set
 	 */
-	public void setUserType(String userType) {
+	public void setUserType(UserType  userType) {
 		this.userType = userType;
 	}
 

@@ -15,10 +15,10 @@
 				<div class="col-xs-5 left bottom">
 					<select name="singleSelect" class="form-control" required
 						id="singleSelect" ng-model="commissionType">
-						<option value="admin">Administrator</option>
+						<option value="ADMIN">Administrator</option>
 						<!-- interpolation -->
-						<option value="trader">Trader</option>
-						<option value="customer">customer</option>
+						<option value="TRADER">Trader</option>
+						<option value="CLIENT">customer</option>
 					</select>
 				</div>
 				<div class="col-xs-4 left bottom"></div>

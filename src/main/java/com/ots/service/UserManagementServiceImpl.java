@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.ots.common.ClientBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
+import com.ots.dao.ClientDaoImpl;
+import com.ots.dao.TraderDaoImpl;
 import com.ots.dao.UserDaoImpl;
 
 /**
@@ -21,6 +23,12 @@ public class UserManagementServiceImpl {
 
 	@Autowired
 	private UserDaoImpl userDao;
+
+	@Autowired
+	private ClientDaoImpl clientDao;
+
+	@Autowired
+	private TraderDaoImpl traderDao;
 
 	/**
 	 * This method validates whether user's credentials are correct or not and
@@ -47,7 +55,7 @@ public class UserManagementServiceImpl {
 	 */
 	public ClientBean getClientDetails(String userId) {
 		ClientBean bean = null;
-		
+
 		// bean = return result of ClientDaoImpl.getClientDeatils(userId);
 		return bean;
 	}
@@ -74,9 +82,12 @@ public class UserManagementServiceImpl {
 	 */
 	public List<String> getClientFeatureCodes() {
 		List<String> listOfFeatures = null;
-		
-		// Following query can be directly written in featureDaoImpl - no need to create a separate role_daoimpl/role_has_user_daoimpl
-		// select f.feature_code from feature f,role_has_features rhf where rhf.feature_id=f.id and rhf.role_id= ( select id from role where role_code='CLIENT');
+
+		// Following query can be directly written in featureDaoImpl - no need
+		// to create a separate role_daoimpl/role_has_user_daoimpl
+		// select f.feature_code from feature f,role_has_features rhf where
+		// rhf.feature_id=f.id and rhf.role_id= ( select id from role where
+		// role_code='CLIENT');
 
 		return listOfFeatures;
 	}
@@ -89,9 +100,35 @@ public class UserManagementServiceImpl {
 	 */
 	public List<String> getTraderFeatureCodes(String roleId) {
 		List<String> listOfFeatures = null;
-		
-		// Following query can be directly written in featureDaoImpl - no need to create a separate role_daoimpl/role_has_user_daoimpl
-		// select f.feature_code from feature f,role_has_features rhf where rhf.feature_id=f.id and rhf.role_id= ?
+
+		// Following query can be directly written in featureDaoImpl - no need
+		// to create a separate role_daoimpl/role_has_user_daoimpl
+		// select f.feature_code from feature f,role_has_features rhf where
+		// rhf.feature_id=f.id and rhf.role_id= ?
 		return listOfFeatures;
 	}
+
+	/**
+	 * This method accepts UserBean and creates corresponding users in database.
+	 * @param userBean
+	 */
+	public void insertUser(UserBean userBean)
+	{
+		userDao.insertUserDetails(userBean);
+		UserBean bean = userDao.getUserDetails(userBean.getEmailId());
+		if(bean!=null)
+		{
+			switch(userBean.getUserType())
+			{
+			case CLIENT:
+				clientDao.insertClientDetails(bean);
+				break;
+			case TRADER:
+				break;
+			case ADMIN:
+				break;
+			}
+	
+		}
+			}
 }
