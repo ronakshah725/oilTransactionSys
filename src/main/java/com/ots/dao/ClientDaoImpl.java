@@ -45,14 +45,13 @@ public class ClientDaoImpl {
 		this.traderJdbcConnectionTemplate = new JdbcTemplate(traderDataSource);
 		this.clientJdbcConnectionTemplate = new JdbcTemplate(clientDataSource);
 	}
-
+	
 	public ClientBean getClientDetails(final String clientID) {
 
 		List<ClientBean> clientBean = adminJdbcConnectionTemplate.query(SELECT_CLIENT_BY_CLIENT_ID,
 				new PreparedStatementSetter() {
 					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
 						ps.setString(1, clientID);
-
 					}
 				}, new ClientRowMapper());
 		if ( clientBean != null && clientBean.size() != 0) {
@@ -70,12 +69,6 @@ public class ClientDaoImpl {
 				return ps.execute();
 			}
 		});
-
 	}
 }
-
-//
-
-// placeOrder.html
-// insert orderDao
-// select * from order orderid
+ 
