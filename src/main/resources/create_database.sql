@@ -75,18 +75,7 @@ FOREIGN KEY (client_id) REFERENCES users(id));
 
 
 
-CREATE TABLE account_info (	
-client_id 		VARCHAR(36) primary key,
-amount_due 	FLOAT not null default 0,
-oil_reserve 	FLOAT not null default 0,
-oil_shipped 	FLOAT not null default 0,
-FOREIGN KEY  	(client_id)	REFERENCES client(client_id));
 
-GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
-GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
-GRANT select,update ON ots.account_info to 'client@localhost' identified by 'client@123';
-GRANT select,update ON ots.account_info to 'trader@localhost' identified by 'trader@123';
-GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
 CREATE TABLE trader (	 
 trader_id VARCHAR(36) primary key,
@@ -183,6 +172,9 @@ GRANT select ON ots.payments to 'client@localhost' identified by 'client@123';
 GRANT SELECT,INSERT ON ots.orders to 'client@localhost' identified by 'client@123';
 GRANT select,INSERT ON ots.places to 'client@localhost' identified by 'client@123';
 GRANT select,update ON ots.users to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
+GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
+GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
 
 
