@@ -50,28 +50,26 @@ public class UserManagementServiceImpl {
 	 * This method executes a select query on Client table by id and returns the
 	 * bean as output
 	 * 
-	 * @param userId
+	 * @param clientID
 	 * @return
 	 */
-	public ClientBean getClientDetails(String userId) {
-		ClientBean bean = null;
-
-		// bean = return result of ClientDaoImpl.getClientDeatils(userId);
-		return bean;
+	public ClientBean getClientDetails(String clientID) {
+		ClientBean cbean = clientDao.getClientDetails(clientID);
+		return cbean;
 	}
 
 	/**
 	 * This method executes a select query on Trader table by id and returns the
 	 * bean as output
 	 * 
-	 * @param userId
-	 * @return
+	 * @param traderID
+	 * @return traderBean
 	 */
-	public TraderBean getTraderDetails(String userId) {
-		TraderBean bean = null;
-		// bean = return result of ClientDaoImpl.getClientDeatils(userId);
 
-		return bean;
+	public TraderBean getTraderDetails(String traderID) {
+		TraderBean tbean = traderDao.getTraderDetails(traderID);		
+		return tbean;
+
 	}
 
 	/**

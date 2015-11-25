@@ -3,14 +3,22 @@ package com.ots.rowmapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
-public class ClientRowMapper implements ResultSetExtractor {
+import com.ots.common.ClientBean;
+import com.ots.common.UserBean;
 
-	public Object extractData(ResultSet arg0) throws SQLException, DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+
+public class ClientRowMapper implements RowMapper<ClientBean> {
+
+
+
+	public ClientBean mapRow(ResultSet rs, int rowNum) throws SQLException {
+		ClientBean client = new ClientBean();
+		client.setClientId(rs.getString("client_id"));
+		
+		// set all parameters of users row in the bean
+		return client;
 	}
 
 }
