@@ -3,7 +3,13 @@
 <div class="panel panel-info center">
 
 	<div class="panel-heading" style="text-align: center">
-		<h3>Transaction Summary</h3>
+
+		<div>
+			<h3>Transaction Summary</h3>
+		</div>
+		<c:if test="${message!=null}">
+		<div>${message}</div>
+		</c:if>
 	</div>
 
 	<div class="panel-body">
@@ -62,7 +68,7 @@
 				<input type="submit" class="btn btn-danger btn-lg" value="Pay">
 			</div>
 			<div class="col-xs-6" style="text-align: center">
-				<input type="submit" class="btn btn-warning btn-lg" value="Cancel">
+				<input type="submit" class="btn btn-warning btn-lg" onclick="cancelOrder()" value="Cancel">
 			</div>
 		</div>
 	</div>

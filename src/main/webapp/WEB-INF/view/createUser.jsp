@@ -101,7 +101,7 @@
 					<div class="col-xs-3 left bottom">Email Id</div>
 					<div class="col-xs-9 left">
 						<input type="email" class="form-control" required
-							ng-model="password" />
+							  />
 					</div>
 				</div>
 				<hr />
@@ -110,12 +110,12 @@
 					<div class="col-xs-3 left bottom">Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-							ng-model="password1" value="Test123" />
+							 id="password1" value="Test123" />
 					</div>
 					<div class="col-xs-3 left bottom">Repeat Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-							ng-model="password2" value="Test123" />
+							id="password2"  value="Test123" />
 					</div>
 				</div>
 
@@ -124,7 +124,7 @@
 
 				<div class="row top" style="padding-top: 10px">
 					<div class="col-xs-12" style="text-align: right">
-						<input type="submit" class="btn btn-info" ng-submit="submit()" />
+						<input type="submit" class="btn btn-info" onclick="insertOrUpdateUser()" />
 					</div>
 				</div>
 		</form>
