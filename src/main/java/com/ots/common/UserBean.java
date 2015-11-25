@@ -8,6 +8,7 @@ package com.ots.common;
  */
 public class UserBean {
 
+	private String id;
 	private String firstName;
 	private String lastName;
 	private String apartmentNumber;
@@ -230,6 +231,20 @@ public class UserBean {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }
