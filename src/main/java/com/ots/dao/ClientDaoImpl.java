@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.stereotype.Repository;
 
 import com.ots.common.ClientBean;
 import com.ots.common.UserBean;
@@ -29,11 +30,12 @@ import com.ots.common.UserBean;
  * @author kanchan
  *
  */
+@Repository
 public class ClientDaoImpl {
 
 	public static final String SELECT_CLIENT_BY_CLIENT_ID = "SELECT * FROM clients WHERE client_id=?";
 
-	public static final String INSERT_CLIENT = "INSERT INTO client(client_id) VALUES (?)";
+	public static final String INSERT_CLIENT = "INSERT INTO trader(trader_id,role_id) VALUES (?,select id from role where role_code=?))";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
 	private JdbcTemplate traderJdbcConnectionTemplate;
@@ -61,6 +63,11 @@ public class ClientDaoImpl {
 		}
 	}
 
+	/**
+	 * This method inserts an entry into Client table.
+	 * @param userBean
+	 * @return
+	 */
 	public Boolean insertClientDetails(final UserBean userBean) {
 
 		return adminJdbcConnectionTemplate.execute(INSERT_CLIENT, new PreparedStatementCallback<Boolean>() {

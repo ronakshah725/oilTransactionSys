@@ -70,7 +70,7 @@ public class UserManagementServiceImpl {
 	public TraderBean getTraderDetails(String userId) {
 		TraderBean bean = null;
 		// bean = return result of ClientDaoImpl.getClientDeatils(userId);
-		
+
 		return bean;
 	}
 
@@ -110,25 +110,21 @@ public class UserManagementServiceImpl {
 
 	/**
 	 * This method accepts UserBean and creates corresponding users in database.
+	 * 
 	 * @param userBean
 	 */
-	public void insertUser(UserBean userBean)
-	{
+	public Boolean insertUser(UserBean userBean) {
 		userDao.insertUserDetails(userBean);
 		UserBean bean = userDao.getUserDetails(userBean.getEmailId());
-		if(bean!=null)
-		{
-			switch(userBean.getUserType())
-			{
+		if (bean != null) {
+			switch (userBean.getUserType()) {
 			case CLIENT:
-				clientDao.insertClientDetails(bean);
-				break;
+				return clientDao.insertClientDetails(bean);
 			case TRADER:
-				break;
 			case ADMIN:
-				break;
+				return traderDao.insertTraderDetails(userBean);
 			}
-	
 		}
-			}
+		return null;
+	}
 }

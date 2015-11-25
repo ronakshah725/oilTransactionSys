@@ -3,10 +3,14 @@
  */
 package com.ots.dao;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * @author kanchan
  *
  */
+
+@Repository
 public class OrderDaoImpl {
 
 	 	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,trans_fee,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?,?)";

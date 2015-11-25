@@ -74,8 +74,9 @@ public class HomeController {
 				if (traderBean == null) {
 					model.addAttribute("message",
 							"User has not been properly set up yet. Please contact administrator");
-					//Needs to be enabled by Ronak after DB is in place and trader entry has been made for abc@def.com useremail.
-					//return new ModelAndView( "loginInput");
+					// Needs to be enabled by Ronak after DB is in place and
+					// trader entry has been made for abc@def.com useremail.
+					// return new ModelAndView( "loginInput");
 				} else {
 					features = userManagementServiceImpl.getTraderFeatureCodes(traderBean.getRoleId());
 				}
@@ -169,13 +170,13 @@ public class HomeController {
 		if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(userToBeInsertedOrUpdated.getEmailId())) {
 			// this means its an update case
 		} else {
-			// this means its a create case.
-			// Check if user has role of trader/admin, if not, log user out
-
-			// create entry in users table, if client, create entry in client
-			// table, account_info table
-			// if trader/admin, create entry in trader table, assign appropriate
-			// role.
+	
+			Boolean result = userManagementServiceImpl.insertUser(userToBeInsertedOrUpdated);
+			if (result == null || !result) {
+				model.addAttribute("message", " Error occured while saving details. Please relogin");
+			} else {
+				model.addAttribute("message", " User Created successfully.");
+			}
 		}
 
 		model.addAttribute("message", " User Added/Updated Successfully");
@@ -201,43 +202,42 @@ public class HomeController {
 
 	/**
 	 * This rest API accepts list of Order ids and makes the payment
+	 * 
 	 * @param model
 	 * @param orderIds
 	 * @return
 	 */
 	@RequestMapping(value = "/payment", method = RequestMethod.GET)
-	public String makePayment(ModelMap model,  HttpServletRequest request,@RequestParam(required = false) List<String> orderIds) {
+	public String makePayment(ModelMap model, HttpServletRequest request,
+			@RequestParam(required = false) List<String> orderIds) {
 		logger.debug("orderIds= " + orderIds);
-		// Check if user has appropriate role or not if user does not has CANCEL_ORDER feature access, reject and log user out
+		// Check if user has appropriate role or not if user does not has
+		// CANCEL_ORDER feature access, reject and log user out
 		model.addAttribute("amountDue", "40000");
 		model.addAttribute("balAmount", "100$");
-		
+
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 		return ("payment");
 	}
-	
-	
-	
+
 	/**
 	 * This rest API accepts the payment
+	 * 
 	 * @param model
 	 * @param orderIds
 	 * @return
 	 */
 	@RequestMapping(value = "/paymentAccepted", method = RequestMethod.POST)
 	public String paymentAccepted(ModelMap model, HttpServletRequest request) {
-		
-		// Check if user has appropriate role or not if user does not has CANCEL_ORDER feature access, reject and log user out
+
+		// Check if user has appropriate role or not if user does not has
+		// CANCEL_ORDER feature access, reject and log user out
 		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
 		logger.debug("Stripe type= " + request.getSession().getAttribute("stripeTokenType"));
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 		return ("orderSummary");
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * Rest API for returning the home page.
 	 * 

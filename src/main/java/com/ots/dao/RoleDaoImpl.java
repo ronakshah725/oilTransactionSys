@@ -3,10 +3,14 @@
  */
 package com.ots.dao;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * @author kanchan
  *
  */
+
+@Repository
 public class RoleDaoImpl {
 
 	 	public static final String QUERY_INSERT_TASK = "INSERT INTO role(id,role_code) VALUES (?,?)";
