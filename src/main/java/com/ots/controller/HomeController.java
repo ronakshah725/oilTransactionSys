@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.criteria.Order;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,10 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
+import com.ots.common.OrderSummaryBean;
 import com.ots.common.PaymentBean;
 import com.ots.common.SearchUserBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
+import com.ots.dao.OrderDaoImpl;
 import com.ots.dao.PaymentDaoImpl;
 import com.ots.service.UserManagementServiceImpl;
 
@@ -234,10 +238,10 @@ public class HomeController {
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
 		model.addAttribute("amountDue", "40000");
-		model.addAttribute("balAmount", "100$");
+		model.addAttribute("balAmount", "100");
 		PaymentBean paymentBean= new PaymentBean();
-		
-		paymentBean.setPaymentId(UUID.randomUUID().toString());
+		String payId=UUID.randomUUID().toString();
+		paymentBean.setPaymentId(payId);
 		paymentBean.setClientId((String)request.getSession().getAttribute("clientId"));
 		UserBean user=(UserBean)request.getSession().getAttribute("user");
 		paymentBean.setTraderId(user.getId());
@@ -245,6 +249,16 @@ public class HomeController {
 		paymentBean.setAmount(Float.parseFloat("40000"));
 		paymentBean.setBalance(Float.parseFloat("100"));
 		paymentDaoImpl.insertPaymentDetails(paymentBean);
+		OrderDaoImpl orderDaoImpl= new OrderDaoImpl();
+		OrderSummaryBean orderSummaryBean= new OrderSummaryBean();
+	   for(String ord:orderIds)
+	   {
+		   orderSummaryBean.setOrderId(ord);
+		   orderSummaryBean.setPaymentId(payId);
+		   orderDaoImpl.updateOrderDetails(orderSummaryBean);
+	   }
+		
+		
 
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 		return ("payment");
