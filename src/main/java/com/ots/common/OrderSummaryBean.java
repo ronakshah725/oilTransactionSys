@@ -9,7 +9,8 @@ import java.util.Date;
  *
  */
 public class OrderSummaryBean {
-
+	
+	private String orderId;
 	private Date date;
 	private String type;
 	private float quantity;
@@ -17,6 +18,21 @@ public class OrderSummaryBean {
 	private float amount;
 	private float commissionindollar;
 	private float commisisioninoil;
+	private String paymentId;
+	
+	
+	/**
+	 * @return the paymentId
+	 */
+	public String getPaymentId() {
+		return paymentId;
+	}
+	/**
+	 * @param paymentId the paymentId to set
+	 */
+	public void setPaymentId(String paymentId) {
+		this.paymentId = paymentId;
+	}
 	/**
 	 * @return the date
 	 */
@@ -100,6 +116,18 @@ public class OrderSummaryBean {
 	 */
 	public void setCommisisioninoil(float commisisioninoil) {
 		this.commisisioninoil = commisisioninoil;
+	}
+	/**
+	 * @return the orderId
+	 */
+	public String getOrderId() {
+		return orderId;
+	}
+	/**
+	 * @param orderId the orderId to set
+	 */
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 	
 	
