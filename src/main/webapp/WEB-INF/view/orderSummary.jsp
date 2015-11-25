@@ -29,7 +29,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><input type="Checkbox" class="checkbox"/></td>
+						<td><input type="Checkbox" id="checkbox1"/></td>
 						<td>1</td>
 						<td>11/11/2015 12:11:00</td>
 						<td>Sale</td>
@@ -40,7 +40,7 @@
 					</tr>
 
 					<tr style="color: #dd0000">
-						<td></td>
+						<td><input type="Checkbox" id="checkbox2"/></td>
 						<td>2</td>
 						<td>11/11/2015 12:10:00</td>
 						<td>Sale</td>
@@ -50,7 +50,7 @@
 						<td>153.00 $</td>
 					</tr>
 					<tr style="color: #00B050">
-						<td><input type="Checkbox" class="checkbox" /></td>
+						<td><input type="Checkbox" id="checkbox3"/></td>
 						<td>3</td>
 						<td>11/10/2015 12:11:00</td>
 						<td>Buy</td>

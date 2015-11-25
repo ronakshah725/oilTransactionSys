@@ -78,14 +78,15 @@
 	}
 
 	function makePayment() {
-		var orderIds;
-		/* $('input[type="Checkbox"]:checked').each(function() {
-			   console.log(this.value); }); */
+		var orderIds="";
+		$('input[type="Checkbox"]:checked').each(function() {
+			orderIds+=this.id+',';
+		});
 		//Read all checked checkboxes
 		$.ajax({
 			type : "GET",
 			url : "payment",
-			//data : "orderIds=" + orderIds,
+			data : "orderIds=" + orderIds,
 			success : function(data) {
 				$("#container").html(data);
 			}
