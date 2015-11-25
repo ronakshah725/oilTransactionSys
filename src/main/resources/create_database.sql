@@ -139,6 +139,7 @@ insert into role values('0be218c5-9394-11e5-b673-5820b1762284','TRADER');
 insert into role values('0be218c5-9394-11e5-b673-5820b1762285','ADMIN'); 
 insert into role values('0be218c5-9394-11e5-b673-5820b1762286','CLIENT');
 
+
 insert into feature values('0be218c5-9394-11e5-b673-5820b1762211','FEATURE_INSERT_USER');
 insert into feature values('0be218c5-9394-11e5-b673-5820b1762212','FEATURE_EDIT_PROFILE');
 insert into feature values('0be218c5-9394-11e5-b673-5820b1762213','FEATURE_CANCEL_ORDER');
@@ -176,8 +177,22 @@ GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
 GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
 GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
-
-
-
 insert into company values('4fb19e50-9314-11e5-b673-5820b1762284',100,120);
 insert into users values(uuid(),'John','doe','1','Gandhiji Boulevard','new york','NY','15252','98989898','98989898','abc@def.com',aes_encrypt('123','password'),'4fb19e50-9314-11e5-b673-5820b1762284');
+
+
+--//Trader and client and edit profiles
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762284','0be218c5-9394-11e5-b673-5820b1762212');
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762286','0be218c5-9394-11e5-b673-5820b1762212');
+
+-- Trader can cancel order and can accept payment
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762284','0be218c5-9394-11e5-b673-5820b1762213');
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762284','0be218c5-9394-11e5-b673-5820b1762214');
+
+
+--Admin has all features
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762211');
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762212');
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762213');
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762214');
+insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762215'); 

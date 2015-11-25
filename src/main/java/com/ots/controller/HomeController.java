@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
 import com.ots.common.SearchUserBean;
+import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.service.UserManagementServiceImpl;
 
@@ -28,7 +30,6 @@ public class HomeController {
 	@Autowired
 	private UserManagementServiceImpl userManagementServiceImpl;
 
-	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") != null) {
@@ -48,40 +49,69 @@ public class HomeController {
 		model.addAttribute("userName", loginBean.getUserName());
 		UserBean user = userManagementServiceImpl.validateAndFetchUserDetails(loginBean.getUserName(),
 				loginBean.getPassword());
-		logger.debug("userObject found "+user);
+		logger.debug("userObject found " + user);
 		if (user != null) {
+			List<String> features = null;
 			request.getSession().setAttribute("user", user);
-			//Do select * from client, trader, get role_id.. based on role_id, fetch list of features user has
-			
-			// set List of features in session request.getSession().setAttribute("features", List<Feature.name>); -use these features in order to decide what to display in the top menu on heading.jsp
+
+			// else execute select * from trader = the one we got from userBean
+			// -read role_id
+			// select FEATURE_CODE from role_has_features-joinfeatures where
+			// role_id= the role from trader bean
+			// Loop through feature_codes and execute
+			// request.getSession().setAttribute(FEATURE_CODE,"true");
+			// set List of features in session
+			// request.getSession().setAttribute("features",
+			// List<Feature.name>); -use these features in order to decide what
+			// to display in the top menu on heading.jsp
+
+			// @Ronak to implement DAO
+			ClientBean clientBean = userManagementServiceImpl.getClientDetails(user.getId());
+			if (clientBean != null) {
+				features = userManagementServiceImpl.getClientFeatureCodes();
+			} else {
+				TraderBean traderBean = userManagementServiceImpl.getTraderDetails(user.getId());
+				if (traderBean == null) {
+					model.addAttribute("message",
+							"User has not been properly set up yet. Please contact administrator");
+					//Needs to be enabled by Ronak after DB is in place and trader entry has been made for abc@def.com useremail.
+					//return new ModelAndView( "loginInput");
+				} else {
+					features = userManagementServiceImpl.getTraderFeatureCodes(traderBean.getRoleId());
+				}
+			}
+			if (features != null && features.size() != 0) {
+				for (String feature : features) {
+					request.getSession().setAttribute(feature, "true");
+				}
+			}
 			return new ModelAndView("searchUser");
-		}
-		else
-		{
+		} else {
 			model.addAttribute("message", "Please check username/password");
-			return new ModelAndView( "loginInput");
+			return new ModelAndView("loginInput");
 		}
 
 	}
 
 	/**
 	 * This Rest resource returns the user's profile that can be edited.
+	 * 
 	 * @param model
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping(value = "/editProfile", method = RequestMethod.GET)
-	public ModelAndView editProfile(ModelMap model,HttpServletRequest request) {
-		UserBean userToBeEdited= (UserBean)request.getSession().getAttribute("user");
+	public ModelAndView editProfile(ModelMap model, HttpServletRequest request) {
+		UserBean userToBeEdited = (UserBean) request.getSession().getAttribute("user");
 		userToBeEdited.setPassword(null);
 		model.addAttribute("userToBeEdited", userToBeEdited);
 		return new ModelAndView("createUser");
 	}
 
-
-	
 	/**
-	 * This method accepts all search parameters and returns the list of users that match search criteria.
+	 * This method accepts all search parameters and returns the list of users
+	 * that match search criteria.
+	 * 
 	 * @param model
 	 * @param searchUserBean
 	 * @return
@@ -106,7 +136,9 @@ public class HomeController {
 	}
 
 	/**
-	 * This method will be called when trader/administrator needs to select the user for whom he/she needs to do transactions
+	 * This method will be called when trader/administrator needs to select the
+	 * user for whom he/she needs to do transactions
+	 * 
 	 * @param model
 	 * @param userId
 	 * @return
@@ -119,40 +151,40 @@ public class HomeController {
 	}
 
 	/**
-	 * Common Rest API to be used for updating user's profile details or creating a new user.
+	 * Common Rest API to be used for updating user's profile details or
+	 * creating a new user.
+	 * 
 	 * @param model
 	 * @param request
 	 * @param userToBeInsertedOrUpdated
 	 * @return
 	 */
 	@RequestMapping(value = "/insertOrUpdateUser", method = RequestMethod.POST)
-	public String insertOrUpdateUser(ModelMap model, HttpServletRequest request, 
+	public String insertOrUpdateUser(ModelMap model, HttpServletRequest request,
 			@RequestParam(required = false) UserBean userToBeInsertedOrUpdated) {
 		logger.debug("userToBeInsertedOrUpdated= " + userToBeInsertedOrUpdated);
-		
-		
-		UserBean userToBeEdited= (UserBean)request.getSession().getAttribute("user");
 
-		
-		if(userToBeEdited.getEmailId().trim().equalsIgnoreCase(userToBeInsertedOrUpdated.getEmailId()))
-		{
+		UserBean userToBeEdited = (UserBean) request.getSession().getAttribute("user");
+
+		if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(userToBeInsertedOrUpdated.getEmailId())) {
 			// this means its an update case
-		}
-		else
-		{
+		} else {
 			// this means its a create case.
 			// Check if user has role of trader/admin, if not, log user out
-			
-			// create entry in users table, if client, create entry in client table, account_info table
-			// if trader/admin, create entry in trader table, assign appropriate role.
+
+			// create entry in users table, if client, create entry in client
+			// table, account_info table
+			// if trader/admin, create entry in trader table, assign appropriate
+			// role.
 		}
-		
+
 		model.addAttribute("message", " User Added/Updated Successfully");
 		return ("orderSummary");
 	}
 
 	/**
 	 * This rest API accepts list of Order ids and cancels the same
+	 * 
 	 * @param model
 	 * @param orderIds
 	 * @return
@@ -160,8 +192,9 @@ public class HomeController {
 	@RequestMapping(value = "/cancelOrder", method = RequestMethod.GET)
 	public String cancelOrder(ModelMap model, @RequestParam(required = false) List<String> orderIds) {
 		logger.debug("searchUserBean= " + orderIds);
-		// Check if user has appropriate role or not if user does not has CANCEL_ORDER feature access, reject and log user out
-		
+		// Check if user has appropriate role or not if user does not has
+		// CANCEL_ORDER feature access, reject and log user out
+
 		model.addAttribute("message", "Congratulations! Payment cancellation was successful");
 		return ("orderSummary");
 	}
@@ -207,6 +240,7 @@ public class HomeController {
 	
 	/**
 	 * Rest API for returning the home page.
+	 * 
 	 * @param request
 	 * @param map
 	 * @return
@@ -215,9 +249,10 @@ public class HomeController {
 	public String index(HttpServletRequest request, ModelMap map) {
 		return "home";
 	}
-	
+
 	/**
 	 * This Rest API returns the Top menu jsp
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -227,19 +262,21 @@ public class HomeController {
 	}
 
 	/**
-	 * This Api will be used for returning the page that displays the empty "create new User" form
+	 * This Api will be used for returning the page that displays the empty
+	 * "create new User" form
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/createUser", method = RequestMethod.GET)
 	public String createUser(ModelMap model) {
 		// Return empty create new user page
-		// Do request.getsession().getAttribute - getFEATURES and see if the there is a FEATURE called INSERT_USER, if it is, return the createUser page 
-		// otherwise log user out - call 	return logUserOut(request);
-		return  "createUser";
-	
-	
-	
+		// Do request.getsession().getAttribute - getFEATURES and see if the
+		// there is a FEATURE called INSERT_USER, if it is, return the
+		// createUser page
+		// otherwise log user out - call return logUserOut(request);
+		return "createUser";
+
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
