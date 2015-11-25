@@ -31,7 +31,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest request) {
-		if (request.getSession().getAttribute("userName") != null) {
+		if (request.getSession().getAttribute("user") != null) {
 			if (request.getSession().getAttribute("isCustomer") != null) {
 				return "orderSummary";
 			} else {

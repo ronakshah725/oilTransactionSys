@@ -49,14 +49,12 @@ public class UserDaoImpl {
 						ps.setString(2, password);
 					}
 				}, new UserRowMapper());
-
 		try {
 			adminJdbcConnectionTemplate.getDataSource().getConnection().setAutoCommit(false); // doesnt work! -set it in datasource definition in ots-servlet.xml
 		//	adminJdbcConnectionTemplate.getDataSource().getConnection().commit();
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 		}
-		
 		System.out.println(userBean);
 		if (/* CollectionUtils.isNotEmpty( */userBean != null && userBean.size() != 0) {
 			return userBean.get(0);

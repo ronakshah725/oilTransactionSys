@@ -134,9 +134,6 @@ CREATE TABLE orders (
   CONSTRAINT places_ibfk_3 FOREIGN KEY (order_id) REFERENCES orders (id)
 );
 
-
-
-
 CREATE TABLE cancels (
   user_id varchar(36) NOT NULL DEFAULT '',
   client_id varchar(36) NOT NULL DEFAULT '',
@@ -149,32 +146,46 @@ CREATE TABLE cancels (
   CONSTRAINT cancels_ibfk_3 FOREIGN KEY (order_id) REFERENCES orders (id)
 );
 
+insert into role values('0be218c5-9394-11e5-b673-5820b1762284','TRADER');
+insert into role values('0be218c5-9394-11e5-b673-5820b1762285','ADMIN'); 
+insert into role values('0be218c5-9394-11e5-b673-5820b1762286','CLIENT');
+
+insert into feature values('0be218c5-9394-11e5-b673-5820b1762211','FEATURE_INSERT_USER');
+insert into feature values('0be218c5-9394-11e5-b673-5820b1762212','FEATURE_EDIT_PROFILE');
+insert into feature values('0be218c5-9394-11e5-b673-5820b1762213','FEATURE_CANCEL_ORDER');
+insert into feature values('0be218c5-9394-11e5-b673-5820b1762214','FEATURE_ACCEPT_PAYMENT');
+insert into feature values('0be218c5-9394-11e5-b673-5820b1762215','FEATURE_VIEW_REPORTS');
+
 
 
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin123';
 CREATE USER 'client'@'localhost' IDENTIFIED BY 'client@123';
 CREATE USER 'trader'@'localhost' IDENTIFIED BY 'trader@123';
 CREATE USER 'oil_price_loader'@'localhost' IDENTIFIED BY 'loadOilPrices@123';
-
 GRANT ALL PRIVILEGES ON ots.* TO 'admin'@'localhost'  WITH GRANT OPTION;
+
 GRANT ALL PRIVILEGES ON ots.oil_prices TO 'oil_price_loader'@'localhost';
+
 GRANT SELECT ON ots.oil_prices TO 'trader'@'localhost' ;
-GRANT SELECT  ON ots.oil_prices TO 'client'@'localhost' ;
-GRANT select,update ON ots.users to 'client@localhost' identified by 'client@123';
 GRANT select,update ON ots.users to 'trader@localhost' identified by 'trader@123';
-GRANT select ON ots.feature to 'client@localhost' identified by 'client@123';
 GRANT select ON ots.feature to 'trader@localhost' identified by 'trader@123';
-GRANT select ON ots.role to 'client@localhost' identified by 'client@123';
 GRANT select ON ots.role to 'trader@localhost' identified by 'trader@123';
-GRANT select ON ots.role_has_features to 'client@localhost' identified by 'client@123';
 GRANT select ON ots.role_has_features to 'trader@localhost' identified by 'trader@123';
-GRANT select ON ots.payments to 'client@localhost' identified by 'client@123';
 GRANT select,update,insert ON ots.payments to 'trader@localhost' identified by 'trader@123';
-GRANT SELECT,INSERT ON ots.orders to 'client@localhost' identified by 'client@123';
 GRANT select,INSERT,UPDATE ON ots.orders to 'trader@localhost' identified by 'trader@123';
-GRANT select,INSERT ON ots.places to 'client@localhost' identified by 'client@123';
 GRANT select,INSERT,UPDATE ON ots.places to 'trader@localhost' identified by 'trader@123';
 GRANT select,INSERT,UPDATE ON ots.cancels to 'trader@localhost' identified by 'trader@123';
+GRANT SELECT  ON ots.oil_prices TO 'client'@'localhost' ;
+GRANT select ON ots.role to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.feature to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.role_has_features to 'client@localhost' identified by 'client@123';
+GRANT select ON ots.payments to 'client@localhost' identified by 'client@123';
+GRANT SELECT,INSERT ON ots.orders to 'client@localhost' identified by 'client@123';
+GRANT select,INSERT ON ots.places to 'client@localhost' identified by 'client@123';
+GRANT select,update ON ots.users to 'client@localhost' identified by 'client@123';
 
 
+
+
+insert into company values('4fb19e50-9314-11e5-b673-5820b1762284',100,120);
 insert into users values(uuid(),'John','doe','1','Gandhiji Boulevard','new york','NY','15252','98989898','98989898','abc@def.com',aes_encrypt('123','password'),'4fb19e50-9314-11e5-b673-5820b1762284');
