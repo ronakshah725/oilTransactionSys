@@ -33,9 +33,9 @@ import com.ots.common.UserBean;
 @Repository
 public class ClientDaoImpl {
 
-	public static final String SELECT_CLIENT_BY_CLIENT_ID = "SELECT * FROM clients WHERE client_id=?";
+	public static final String SELECT_CLIENT_BY_CLIENT_ID = "SELECT * FROM client WHERE client_id=?";
 
-	public static final String INSERT_CLIENT = "INSERT INTO trader(trader_id,role_id) VALUES (?,select id from role where role_code=?))";
+	public static final String INSERT_CLIENT = "INSERT INTO client(client_id) VALUES (?)";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
 	private JdbcTemplate traderJdbcConnectionTemplate;

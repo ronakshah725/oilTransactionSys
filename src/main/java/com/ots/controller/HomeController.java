@@ -65,6 +65,7 @@ public class HomeController {
 			// List<Feature.name>); -use these features in order to decide what
 			// to display in the top menu on heading.jsp
 
+			request.getSession().setAttribute("FEATURE_INSERT_USER","true");
 			// @Ronak to implement DAO
 			ClientBean clientBean = userManagementServiceImpl.getClientDetails(user.getId());
 			if (clientBean != null) {
@@ -162,14 +163,14 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/insertOrUpdateUser", method = RequestMethod.POST)
 	public String insertOrUpdateUser(ModelMap model, HttpServletRequest request,
-			@RequestParam(required = false) UserBean userToBeInsertedOrUpdated) {
+			@ModelAttribute  UserBean userToBeInsertedOrUpdated) {
 		logger.debug("userToBeInsertedOrUpdated= " + userToBeInsertedOrUpdated);
 
 		UserBean userToBeEdited = (UserBean) request.getSession().getAttribute("user");
-
+/*
 		if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(userToBeInsertedOrUpdated.getEmailId())) {
 			// this means its an update case
-		} else {
+		} else {*/
 	
 			Boolean result = userManagementServiceImpl.insertUser(userToBeInsertedOrUpdated);
 			if (result == null || !result) {
@@ -177,7 +178,7 @@ public class HomeController {
 			} else {
 				model.addAttribute("message", " User Created successfully.");
 			}
-		}
+		/*}*/
 
 		model.addAttribute("message", " User Added/Updated Successfully");
 		return ("orderSummary");

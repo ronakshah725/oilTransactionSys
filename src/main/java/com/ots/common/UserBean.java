@@ -247,4 +247,16 @@ public class UserBean {
 		this.id = id;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "UserBean [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", apartmentNumber="
+				+ apartmentNumber + ", street=" + street + ", city=" + city + ", state=" + state + ", zipcode="
+				+ zipcode + ", phoneNumber=" + phoneNumber + ", cellPhoneNumber=" + cellPhoneNumber + ", emailId="
+				+ emailId + ", password=" + password + ", password1=" + password1 + ", password2=" + password2
+				+ ", userType=" + userType + "]";
+	}
+
 }

@@ -14,7 +14,7 @@
 				<div class="col-xs-3 left bottom">User Type:</div>
 				<div class="col-xs-5 left bottom">
 					<select name="singleSelect" class="form-control" required
-						id="singleSelect" ng-model="commissionType">
+					name="userType" 	id="userType" >
 						<option value="ADMIN">Administrator</option>
 						<!-- interpolation -->
 						<option value="TRADER">Trader</option>
@@ -29,13 +29,13 @@
 				<div class="col-xs-3 left bottom">First Name</div>
 				<div class="col-xs-3 left">
 					<input type="text" class="form-control" required
-						id="firstname" value="${userToBeEdited.firstName}" />
+					name="firstname"	id="firstname" value="${userToBeEdited.firstName}" />
 				</div>
 
 				<div class="col-xs-3 left bottom">Last Name</div>
 				<div class="col-xs-3 left">
 					<input type="text" class="form-control" required
-					value="${userToBeEdited.lastName}"	id="lastname" />
+					value="${userToBeEdited.lastName}" name="lastname" 	id="lastname" />
 				</div>
 			</div>
 			<hr />
@@ -44,7 +44,7 @@
 				<div class="col-xs-3 left bottom">Apartment Number</div>
 				<div class="col-xs-6 left">
 					<input type="text" class="form-control" required
-				value="${userToBeEdited.apartmentNumber}"		id="apartmentnumber" />
+				value="${userToBeEdited.apartmentNumber}"	name="apartmentnumber"	id="apartmentnumber" />
 				</div>
 				<div class="col-xs-3 left bottom"></div>
 
@@ -53,7 +53,7 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">Street</div>
 				<div class="col-xs-6 left">
-					<input type="text" class="form-control" required value="${userToBeEdited.street}" id="street" />
+					<input type="text" class="form-control" required value="${userToBeEdited.street}" id="street"  name="street" />
 				</div>
 				<div class="col-xs-3 left bottom"></div>
 
@@ -64,19 +64,19 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-3 left bottom">City</div>
 				<div class="col-xs-3 left">
-					<input type="text" class="form-control" required id="city" value="${userToBeEdited.city}" />
+					<input type="text" class="form-control" required name="city" id="city" value="${userToBeEdited.city}" />
 				</div>
 
 				<div class="row" style="padding-top: 10px">
 					<div class="col-xs-3 left bottom">State</div>
 					<div class="col-xs-3 left">
-						<input type="text" class="form-control" required id="state" value="${userToBeEdited.state}" />
+						<input type="text" class="form-control" required id="state"  name="state" value="${userToBeEdited.state}" />
 					</div>
 
 					<div class="col-xs-3 left bottom">zipcode</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-							id="zipcode" value="${userToBeEdited.zipcode}" />
+							name="zipcode"  id="zipcode" value="${userToBeEdited.zipcode}" />
 					</div>
 				</div>
 
@@ -87,20 +87,20 @@
 					<div class="col-xs-3 left bottom">Phone number</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-					value="${userToBeEdited.phonenumber}"		id="phonenumber" />
+					value="${userToBeEdited.phonenumber}"		name="phonenumber" 	id="phonenumber" />
 					</div>
 
 					<div class="col-xs-3 left bottom">Cell phone number</div>
 					<div class="col-xs-3 left">
 						<input type="number" class="form-control" required
-					value="${userToBeEdited.cellphonenumber}"		id="cellphone" />
+					value="${userToBeEdited.cellphonenumber}"	name="cellphone"	id="cellphone" />
 					</div>
 				</div>
 
 				<div class="row" style="padding-top: 10px">
 					<div class="col-xs-3 left bottom">Email Id</div>
 					<div class="col-xs-9 left">
-						<input type="email" class="form-control" required id="emailId" value="${userToBeEdited.emailId}"
+						<input type="email" class="form-control" required id="emailId"  name="emailId"  value="${userToBeEdited.emailId}"
 							  />
 					</div>
 				</div>
@@ -110,12 +110,12 @@
 					<div class="col-xs-3 left bottom">Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-							 id="password1" value="Test123"  />
+							 name="password1" id="password1" value="Test123"  />
 					</div>
 					<div class="col-xs-3 left bottom">Repeat Password</div>
 					<div class="col-xs-3 left">
 						<input type="password" class="form-control" required
-							id="password2"  value="Test123" />
+						name="password2" 	id="password2"  value="Test123" />
 					</div>
 				</div>
 				<div class="row top" style="padding-top: 10px">

@@ -84,10 +84,11 @@ FOREIGN KEY (role_id) REFERENCES role(id),
 FOREIGN KEY(trader_id)	 REFERENCES users(id));
 
 
-CREATE TABLE payments (payment_id	 VARCHAR(36) primary key,
+CREATE TABLE payments (
+payment_id	 VARCHAR(36) primary key,
 client_id VARCHAR(36),
- date_accepted	 DATE not null,
- trader_id varchar(36) not null,
+date_accepted	 DATE not null,
+trader_id varchar(36) not null,
 FOREIGN KEY(trader_id)	 REFERENCES users(id),
  FOREIGN KEY  	 (client_id)	 REFERENCES client(client_id));
 
