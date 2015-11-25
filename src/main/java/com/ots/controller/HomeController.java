@@ -51,8 +51,9 @@ public class HomeController {
 		logger.debug("userObject found "+user);
 		if (user != null) {
 			request.getSession().setAttribute("user", user);
-			// set Role in session request.getSession().setAttribute("role", user); -use this role in order to decide what to display in the top menu on heading.jsp
 			//Do select * from client, trader, get role_id.. based on role_id, fetch list of features user has
+			
+			// set List of features in session request.getSession().setAttribute("features", List<Feature.name>); -use these features in order to decide what to display in the top menu on heading.jsp
 			return new ModelAndView("searchUser");
 		}
 		else
@@ -71,8 +72,6 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/editProfile", method = RequestMethod.GET)
 	public ModelAndView editProfile(ModelMap model,HttpServletRequest request) {
-		// Populate entire data in the bean here, display the same on
-		// editprofile page.
 		UserBean userToBeEdited= (UserBean)request.getSession().getAttribute("user");
 		userToBeEdited.setPassword(null);
 		model.addAttribute("userToBeEdited", userToBeEdited);
@@ -142,6 +141,10 @@ public class HomeController {
 		else
 		{
 			// this means its a create case.
+			// Check if user has role of trader/admin, if not, log user out
+			
+			// create entry in users table, if client, create entry in client table, account_info table
+			// if trader/admin, create entry in trader table, assign appropriate role.
 		}
 		
 		model.addAttribute("message", " User Added/Updated Successfully");
@@ -157,6 +160,8 @@ public class HomeController {
 	@RequestMapping(value = "/cancelOrder", method = RequestMethod.GET)
 	public String cancelOrder(ModelMap model, @RequestParam(required = false) List<String> orderIds) {
 		logger.debug("searchUserBean= " + orderIds);
+		// Check if user has appropriate role or not if user does not has CANCEL_ORDER feature access, reject and log user out
+		
 		model.addAttribute("message", "Congratulations! Payment cancellation was successful");
 		return ("orderSummary");
 	}
@@ -190,7 +195,7 @@ public class HomeController {
 	@RequestMapping(value = "/createUser", method = RequestMethod.GET)
 	public String createUser(ModelMap model) {
 		// Return empty create new user page
-		// Do request.getsession().getAttribute - role and see if the role is admin, if it is, return the createUser page 
+		// Do request.getsession().getAttribute - getFEATURES and see if the there is a FEATURE called INSERT_USER, if it is, return the createUser page 
 		// otherwise log user out - call 	return logUserOut(request);
 		return  "createUser";
 	
