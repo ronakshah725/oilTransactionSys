@@ -141,8 +141,9 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectUser", method = RequestMethod.GET)
-	public String selectUser(ModelMap model, @RequestParam(required = false) String userId) {
+	public String selectUser(ModelMap model, HttpServletRequest request, @RequestParam(required = false) String userId) {
 		logger.debug("searchUserBean= " + userId);
+		request.getSession().setAttribute("selectedClient", userId);
 		model.addAttribute("userId", userId);
 		return ("orderSummary");
 	}
