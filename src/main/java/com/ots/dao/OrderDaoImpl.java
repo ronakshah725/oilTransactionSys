@@ -73,8 +73,6 @@ public class OrderDaoImpl {
 			}
 		});
 	}
-	
-	
 
 	/**
 	 * This method updates the payment into Order table.
@@ -86,20 +84,19 @@ public class OrderDaoImpl {
 
 		return adminJdbcConnectionTemplate.execute(QUERY_INSERT_TASK, new PreparedStatementCallback<Boolean>() {
 			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-			 
-				
-				
+
 				ps.setString(1, orderSummaryBean.getOrderId());
 				ps.setString(2, orderSummaryBean.getType());
-				
-				
+				ps.setFloat(3, orderSummaryBean.getQuantity());
+				ps.setFloat(4, orderSummaryBean.getCommissionindollar());
+				ps.setString(5, orderSummaryBean.getCommissionType());
+				ps.setFloat(6, orderSummaryBean.getAmount());
+				ps.setFloat(7, orderSummaryBean.getCommisisioninoil());
+				ps.setDate(8,new java.sql.Date(orderSummaryBean.getDate().getTime()));
+
 				return ps.execute();
 			}
 		});
 	}
-	
-	
-	
-	
 
 }
