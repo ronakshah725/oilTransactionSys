@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.ClientBean;
+import com.ots.common.OrderSummaryBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.dao.ClientDaoImpl;
+import com.ots.dao.OrderDaoImpl;
 import com.ots.dao.TraderDaoImpl;
 import com.ots.dao.UserDaoImpl;
 
@@ -23,28 +25,15 @@ import com.ots.dao.UserDaoImpl;
 public class OrderServiceImpl {
 
 	@Autowired
-	private UserDaoImpl userDao;
-
-	@Autowired
-	private ClientDaoImpl clientDao;
-
-	@Autowired
-	private TraderDaoImpl traderDao;
-
+	private OrderDaoImpl orderDaoImpl;
+	 
 	/**
-	 * This method validates whether user's credentials are correct or not and
-	 * if not, it returns the null object.
-	 * 
-	 * @param userName
-	 * @param password
+	 * This method returns All Orders applicable for selected client
+	 * @param clientId
 	 * @return
 	 */
-	public UserBean validateAndFetchUserDetails(String userName, String password) {
-		UserBean user = userDao.getUserDetails(userName, password);
-		if (user != null) {
-			user.setPassword(null);
-		}
-		return user;
+	public List<OrderSummaryBean> fetchAllOrders(String clientId) {
+	return orderDaoImpl.getOrders(clientId);
 	}
  
  }

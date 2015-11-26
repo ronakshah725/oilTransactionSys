@@ -65,6 +65,18 @@
 		});
 	}
 
+	function loadOrders() {
+		$.ajax({
+			type : "GET",
+			url : "loadOrders",
+			data : "userId=" + userId,
+			success : function(data) {
+				$("#container").html(data);
+			}
+		});
+	}
+
+	
 	function cancelOrder() {
 		var orderIds = "";
 		$('input[type="Checkbox"]:checked').each(function() {
