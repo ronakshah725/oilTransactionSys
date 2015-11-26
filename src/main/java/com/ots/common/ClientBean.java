@@ -15,6 +15,8 @@ public class ClientBean {
 	private Double totalOilQuantity;
 	private Double balanceAmount;
 	private String level;
+	UserBean userBean ;
+	
 
 	/**
 	 * @return the dateOfLevelUpgrade
@@ -90,14 +92,30 @@ public class ClientBean {
 		this.clientId = clientId;
 	}
 
+	/**
+	 * @return the userBean
+	 */
+	public UserBean getUserBean() {
+		return userBean;
+	}
+
+	/**
+	 * @param userBean the userBean to set
+	 */
+	public void setUserBean(UserBean userBean) {
+		this.userBean = userBean;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "ClientBean [clientId=" + clientId + ", dateOfLevelUpgrade=" + dateOfLevelUpgrade + ", totalOilQuantity="
-				+ totalOilQuantity + ", balanceAmount=" + balanceAmount + ", level=" + level + "]";
+				+ totalOilQuantity + ", balanceAmount=" + balanceAmount + ", level=" + level + ", userBean=" + userBean
+				+ "]";
 	}
+ 
 
  
 }

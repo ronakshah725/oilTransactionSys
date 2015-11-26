@@ -51,11 +51,14 @@ public class UserManagementServiceImpl {
 	 * This method executes a select query on Client table by id and returns the
 	 * bean as output
 	 * 
-	 * @param clientID
+	 * @param email
 	 * @return
 	 */
-	public ClientBean getClientDetails(String clientID) {
-		ClientBean cbean = clientDao.getClientDetails(clientID);
+	public ClientBean getClientDetails(String email) {
+		ClientBean cbean = clientDao.getClientDetails(email);
+		if (cbean != null) {
+			cbean.setUserBean(userDao.getUserDetails(email));
+		}
 		return cbean;
 	}
 
@@ -68,7 +71,7 @@ public class UserManagementServiceImpl {
 	 */
 
 	public TraderBean getTraderDetails(String traderID) {
-		TraderBean tbean = traderDao.getTraderDetails(traderID);		
+		TraderBean tbean = traderDao.getTraderDetails(traderID);
 		return tbean;
 
 	}
@@ -113,12 +116,11 @@ public class UserManagementServiceImpl {
 	 * @param userBean
 	 */
 	public Boolean insertUser(UserBean userBean) {
-		
-		try{
-		userDao.insertUserDetails(userBean);
-		}catch(MySQLIntegrityConstraintViolationException mse)
-		{
-		return null;
+
+		try {
+			userDao.insertUserDetails(userBean);
+		} catch (MySQLIntegrityConstraintViolationException mse) {
+			return null;
 		}
 		UserBean bean = userDao.getUserDetails(userBean.getEmailId());
 		System.out.println(bean);
@@ -134,10 +136,11 @@ public class UserManagementServiceImpl {
 		}
 		return null;
 	}
-	
 
 	/**
-	 * This method accepts search criteria and performs an OR search on users table.
+	 * This method accepts search criteria and performs an OR search on users
+	 * table.
+	 * 
 	 * @param userBean
 	 * @return
 	 */

@@ -37,14 +37,10 @@ public class UserDaoImpl {
 	public static final String SEARCH_USER = "SELECT * FROM users WHERE (last_name=? OR apt_no=? OR street=? OR city=? OR zip_code=? OR phone_no=? OR cell_no=? OR email= ?) and id in(select client_id from client) order by email asc";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
-	private JdbcTemplate traderJdbcConnectionTemplate;
-	private JdbcTemplate clientJdbcConnectionTemplate;
 
 	@Autowired
 	public void setDataSource(DataSource adminDataSource, DataSource traderDataSource, DataSource clientDataSource) {
 		this.adminJdbcConnectionTemplate = new JdbcTemplate(adminDataSource);
-		this.traderJdbcConnectionTemplate = new JdbcTemplate(traderDataSource);
-		this.clientJdbcConnectionTemplate = new JdbcTemplate(clientDataSource);
 	}
 
 	/**
