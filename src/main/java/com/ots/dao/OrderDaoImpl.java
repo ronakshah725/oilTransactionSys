@@ -5,6 +5,7 @@ package com.ots.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -12,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
 import com.ots.common.OrderSummaryBean;
+import com.ots.rowmapper.OrderRowMapper;
 
 /**
  * @author madhuri
@@ -37,6 +40,25 @@ public class OrderDaoImpl {
 	}
 
 	/**
+	 * Method for fetching details based on userName and password
+	 * 
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	public List<OrderSummaryBean> getOrders(final String clientId) {
+		List<OrderSummaryBean> orders = adminJdbcConnectionTemplate.query(SELECT_ORDER_BY_USER_ID,
+				new PreparedStatementSetter() {
+					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+						ps.setString(1, clientId);
+					}
+				}, new OrderRowMapper());
+
+	}
+
+	
+	
+	/**
 	 * This method updates the payment into Order table.
 	 * 
 	 * @param orderBean
@@ -52,5 +74,8 @@ public class OrderDaoImpl {
 			}
 		});
 	}
+	
+	
+	
 
 }

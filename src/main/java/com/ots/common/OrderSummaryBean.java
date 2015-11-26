@@ -19,8 +19,34 @@ public class OrderSummaryBean {
 	private float commissionindollar;
 	private float commisisioninoil;
 	private String paymentId;
+	private boolean isCancelled;
+	private String commissionType;
 	
 	
+	/**
+	 * @return the isCancelled
+	 */
+	public boolean isCancelled() {
+		return isCancelled;
+	}
+	/**
+	 * @param isCancelled the isCancelled to set
+	 */
+	public void setCancelled(boolean isCancelled) {
+		this.isCancelled = isCancelled;
+	}
+	/**
+	 * @return the commissionType
+	 */
+	public String getCommissionType() {
+		return commissionType;
+	}
+	/**
+	 * @param commissionType the commissionType to set
+	 */
+	public void setCommissionType(String commissionType) {
+		this.commissionType = commissionType;
+	}
 	/**
 	 * @return the paymentId
 	 */
