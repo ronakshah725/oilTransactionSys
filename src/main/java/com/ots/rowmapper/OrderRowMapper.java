@@ -29,6 +29,8 @@ public class OrderRowMapper implements RowMapper<OrderSummaryBean> {
 		user.setAmount(rs.getFloat("total_amt"));
 		user.setDate(rs.getDate("date_placed"));
 		user.setPaymentId(rs.getString("payment_id"));
+		user.setCancelled((rs.getInt("is_not_cancelled")!=1));
+		user.setOrderId(rs.getString("id"));
 		return user;
 	}
 }

@@ -23,6 +23,17 @@ public class OrderSummaryBean {
 	private String commissionType;
 	
 	
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "OrderSummaryBean [orderId=" + orderId + ", date=" + date + ", type=" + type + ", quantity=" + quantity
+				+ ", status=" + status + ", amount=" + amount + ", commissionindollar=" + commissionindollar
+				+ ", commisisioninoil=" + commisisioninoil + ", paymentId=" + paymentId + ", isCancelled=" + isCancelled
+				+ ", commissionType=" + commissionType  + "]";
+	}
 	/**
 	 * @return the isCancelled
 	 */

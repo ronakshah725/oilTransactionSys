@@ -15,7 +15,7 @@
 			</div>
 			<div>
 				<form id="paymentForm1"
-					action="/paymentAccepted"
+					action="${pageContext.request.contextPath}/paymentAccepted"
 					method="POST">
 					<script src="https://checkout.stripe.com/checkout.js"
 						class="stripe-button" data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"

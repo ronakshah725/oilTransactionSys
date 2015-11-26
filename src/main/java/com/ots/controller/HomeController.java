@@ -1,16 +1,15 @@
 package com.ots.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.criteria.Order;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
 import com.ots.common.OrderSummaryBean;
@@ -26,8 +26,6 @@ import com.ots.common.PaymentBean;
 import com.ots.common.PlaceOrderBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
-import com.ots.dao.OrderDaoImpl;
-import com.ots.dao.PaymentDaoImpl;
 import com.ots.service.OrderServiceImpl;
 import com.ots.service.UserManagementServiceImpl;
 
@@ -38,25 +36,20 @@ public class HomeController {
 
 	@Autowired
 	private UserManagementServiceImpl userManagementServiceImpl;
-	@Autowired
-	private PaymentDaoImpl paymentDaoImpl;
-	@Autowired
-	private OrderDaoImpl orderDaoImpl;
-	
+
 	@Autowired
 	private OrderServiceImpl orderSerivceImpl;
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
-	public String home(ModelMap model, HttpServletRequest request) {
+	public ModelAndView home(ModelMap model, HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") != null) {
 			if (request.getSession().getAttribute("selectedClient") != null) {
-
-				return "orderSummary";
+				return loadOrderSummaries(model, request);
 			} else {
-				return "searchUser";
+				return new ModelAndView("searchUser");
 			}
 		} else {
-			return "loginInput";
+			return new ModelAndView("loginInput");
 		}
 	}
 
@@ -76,7 +69,8 @@ public class HomeController {
 				request.getSession().setAttribute("selectedClient", clientBean);
 				System.out.println("settting===?>" + request.getSession().getAttribute("selectedClient"));
 				features = userManagementServiceImpl.getClientFeatureCodes(clientBean.getClientId());
-				return new ModelAndView("orderSummary");
+				return loadOrderSummaries(model, request);
+
 			} else {
 				TraderBean traderBean = userManagementServiceImpl.getTraderDetails(user.getId());
 				if (traderBean == null) {
@@ -143,13 +137,13 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectUser", method = RequestMethod.GET)
-	public String selectUser(ModelMap model, HttpServletRequest request,
+	public ModelAndView selectUser(ModelMap model, HttpServletRequest request,
 			@RequestParam(required = false) String userId) {
 		logger.debug("searchUserBean= " + userId);
 		ClientBean bean = userManagementServiceImpl.getClientDetails(userId);
 		request.getSession().setAttribute("selectedClient", bean);
 		model.addAttribute("userId", userId);
-		return ("orderSummary");
+		return loadOrderSummaries(model, request);
 	}
 
 	/**
@@ -192,7 +186,7 @@ public class HomeController {
 		/* } */
 
 		model.addAttribute("message", " User Added/Updated Successfully");
-		return new ModelAndView("orderSummary");
+		return loadOrderSummaries(model, request);
 	}
 
 	/**
@@ -203,16 +197,30 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/cancelOrder", method = RequestMethod.GET)
-	public String cancelOrder(ModelMap model, @RequestParam(required = false) List<String> orderIds) {
-		logger.debug("searchUserBean= " + orderIds);
-		// Check if user has appropriate role or not if user does not has
-		// CANCEL_ORDER feature access, reject and log user out
+	public ModelAndView cancelOrder(ModelMap model, @RequestParam(required = false) String orderIds,
+			HttpServletRequest request) {
+		logger.debug("searchUserBean= " + orderIds+ " : ");
 
-		model.addAttribute("message", "Congratulations! Payment cancellation was successful");
-		return ("orderSummary");
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
+		try{
+		for (String orderId: orderIds.split(",")) {
+			if(orderId!=null)
+			{
+				userManagementServiceImpl.insertIntoCancel(user, clientBean, orderId);		
+				model.addAttribute("message", "Congratulations! Payment cancellation was successful");
+			}
+		}
+		}catch(MySQLIntegrityConstraintViolationException mse)
+		{
+			mse.printStackTrace();
+			model.addAttribute("message", "Exception occured while deleting, please logout and try again.");	
+		}
+		
+		
+		return loadOrderSummaries(model, request);
 	}
 
-	
 	/**
 	 * This rest API accepts list of Order ids and makes the payment
 	 * 
@@ -222,33 +230,18 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/payment", method = RequestMethod.GET)
 	public String makePayment(ModelMap model, HttpServletRequest request,
-			@RequestParam(required = false) List<String> orderIds) {
+			@RequestParam(required = false) String orderIds) {
 		logger.debug("orderIds= " + orderIds);
-
+		for (String string : orderIds.split(",")) {
+			System.out.println("-->" + string);
+		}
 		request.getSession().setAttribute("orderIds", orderIds);
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
-		model.addAttribute("amountDue", "40000");
-		model.addAttribute("balAmount", "100");
-		PaymentBean paymentBean = new PaymentBean();
-		String payId = UUID.randomUUID().toString();
-		paymentBean.setPaymentId(payId);
-		paymentBean.setClientId((String) request.getSession().getAttribute("clientId"));
-		UserBean user = (UserBean) request.getSession().getAttribute("user");
-		paymentBean.setTraderId(user.getId());
-		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
-		paymentBean.setAmount(Float.parseFloat("40000"));
-		paymentBean.setBalance(Float.parseFloat("100"));
-		paymentDaoImpl.insertPaymentDetails(paymentBean);
-		OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
-		OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
-		for (String ord : orderIds) {
-			orderSummaryBean.setOrderId(ord);
-			orderSummaryBean.setPaymentId(payId);
-			orderDaoImpl.updateOrderDetails(orderSummaryBean);
-		}
-
-		model.addAttribute("message", "Congratulations! Payment  was successful");
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		model.addAttribute("amountDue",
+				(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100 + clientBean.getBalanceAmount()));
+		model.addAttribute("balAmount", clientBean.getBalanceAmount() + "$");
 		return ("payment");
 	}
 
@@ -264,11 +257,35 @@ public class HomeController {
 
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
+		List<String> orderIds = Arrays.asList((String) request.getSession().getAttribute("orderIds"));
+		PaymentBean paymentBean = new PaymentBean();
+		String payId = UUID.randomUUID().toString();
+		paymentBean.setPaymentId(payId);
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
+
+		paymentBean.setClientId(clientBean.getClientId());
+		paymentBean.setTraderId(user.getId());
+		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
+		paymentBean.setAmount((orderSerivceImpl.getTotalAmountToBePaid(orderIds) + clientBean.getBalanceAmount()));
+		System.out.println(paymentBean);
+
+		orderSerivceImpl.insertPaymentDetails(paymentBean);
+
+		for (String orderId : orderIds) {
+			OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+			if (orderId.trim().length() != 0) {
+				orderSummaryBean.setOrderId(orderId);
+				orderSummaryBean.setPaymentId(payId);
+				System.out.println("updating " + orderSummaryBean);
+				orderSerivceImpl.updateOrderDetails(orderSummaryBean);
+			}
+		}
+		model.addAttribute("message", "Congratulations! Payment  was successful");
 
 		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
 		logger.debug("Stripe type= " + request.getSession().getAttribute("stripeTokenType"));
-		model.addAttribute("message", "Congratulations! Payment  was successful");
-		return ("orderSummary");
+		return "redirect:/";
 	}
 
 	/**
@@ -293,8 +310,7 @@ public class HomeController {
 	public ModelAndView logout(ModelMap model) {
 		return new ModelAndView("heading");
 	}
-	
-	
+
 	/**
 	 * This Rest API returns the Top menu jsp
 	 * 
@@ -302,14 +318,24 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/loadOrders", method = RequestMethod.GET)
-	public ModelAndView loadOrders(ModelMap model,HttpServletRequest request) {
-		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
-		List<OrderSummaryBean> orders=orderSerivceImpl.fetchAllOrders(clientBean.getClientId());
-		model.addAttribute("orders", orders);
-		return new ModelAndView("orderSummary.jsp");
+	public ModelAndView loadOrders(ModelMap model, HttpServletRequest request) {
+		return loadOrderSummaries(model, request);
 	}
-	
-	
+
+	/**
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	private ModelAndView loadOrderSummaries(ModelMap model, HttpServletRequest request) {
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		request.getSession().removeAttribute("orderIds");
+		List<OrderSummaryBean> orders = orderSerivceImpl.fetchAllOrders(clientBean.getClientId());
+		System.out.println(orders);
+		model.addAttribute("orders", orders);
+		return new ModelAndView("orderSummary");
+	}
+
 	/**
 	 * This Api will be used for returning the page that displays the empty
 	 * "create new User" form
@@ -327,8 +353,7 @@ public class HomeController {
 		return "createUser";
 
 	}
-	
-	
+
 	@RequestMapping(value = "/createOrder", method = RequestMethod.POST)
 	public String createOrder(ModelMap model) {
 		// Return empty create new user page
@@ -341,7 +366,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
-	public String placeOrder(ModelMap model, HttpServletRequest request,
+	public ModelAndView placeOrder(ModelMap model, HttpServletRequest request,
 			@ModelAttribute PlaceOrderBean placeOrderBean) {
 		logger.debug("order created= " + placeOrderBean);
 		OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
@@ -351,14 +376,24 @@ public class HomeController {
 		orderSummaryBean.setDate(Calendar.getInstance().getTime());
 		orderSummaryBean.setType(placeOrderBean.getType());
 		orderSummaryBean.setQuantity(placeOrderBean.getQuantity());
-		orderSummaryBean.setAmount(Float.parseFloat("100000"));
-		orderSummaryBean.setCommissionindollar(Float.parseFloat("30"));
-		orderSummaryBean.setCommisisioninoil(Float.parseFloat("21"));
+		orderSummaryBean.setCommissionType(placeOrderBean.getCommissionType());
+		orderSummaryBean.setAmount(placeOrderBean.getQuantity() * 50);
 
-		
-		orderDaoImpl.createOrder(orderSummaryBean);
-
-		return "orderSummary";
+		if (placeOrderBean.getCommissionType().equals("Oil")) {
+			orderSummaryBean.setCommisisioninoil((float) orderSummaryBean.getQuantity() * (float) 0.02);
+		} else {
+			orderSummaryBean.setCommissionindollar(orderSummaryBean.getAmount() * (float) 0.02);
+		}
+		orderSerivceImpl.createOrder(orderSummaryBean);
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
+	try{
+		orderSerivceImpl.insertPlacesRecord(user.getId(), clientBean.getClientId(), ordId);
+	}catch(MySQLIntegrityConstraintViolationException mse)
+	{
+		model.addAttribute("message", "Exception occured while deleting, please logout and try again.");	
+	}
+		return loadOrderSummaries(model, request);
 
 	}
 

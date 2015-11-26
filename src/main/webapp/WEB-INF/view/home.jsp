@@ -13,6 +13,16 @@
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script>
+function putOrder() {
+	$.ajax({
+		type : "POST",
+		url : "placeOrder",
+		data : $("#placeOrderForm").serialize(),
+		success : function(data) {
+			$("#container").html(data);
+		}
+	});
+}
 	function populateTopMenu() {
 		$.ajax({
 			type : "GET",
@@ -44,20 +54,9 @@
 			}
 		});
 	}
-	
-	function placeOrder() {
-		$.ajax({
-			type : "POST",
-			url : "placeOrder",
-			data: $("#createOrderForm").serialize(),
-			success : function(data) {
-				$("#container").html(data);
-			}
-		});
-	}
-	
-	
-	
+
+
+
 	function executeSearch() {
 		$.ajax({
 			type : "POST",
@@ -67,7 +66,8 @@
 				$("#searchResults").html(data);
 			}
 		});
-	};
+	}
+	
 	function executeSelectUser(userId) {
 		$.ajax({
 			type : "GET",
@@ -90,11 +90,14 @@
 		});
 	}
 
-	
 	function cancelOrder() {
 		var orderIds = "";
 		$('input[type="Checkbox"]:checked').each(function() {
-			orderIds += this.id + ',';
+			if (orderIds.length === 0) {
+				orderIds += this.id;
+			} else {
+				orderIds += ',' + this.id;
+			}
 		});
 
 		$.ajax({
@@ -117,14 +120,15 @@
 		});
 	}
 
-
-
-
-	
 	function makePayment() {
 		var orderIds = "";
 		$('input[type="Checkbox"]:checked').each(function() {
-			orderIds += this.id + ',';
+			if (orderIds.length === 0) {
+				orderIds += this.id;
+			} else {
+				orderIds += ',' + this.id;
+			}
+
 		});
 		//Read all checked checkboxes
 		$.ajax({

@@ -48,9 +48,9 @@ public class CancelDaoImpl {
 
 		return adminJdbcConnectionTemplate.execute(QUERY_INSERT_TASK, new PreparedStatementCallback<Boolean>() {
 			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-				ps.setString(1, userID );
-				ps.setString(2, clientID);
-				ps.setString(3, orderID);
+				ps.setString(1, userID.trim() );
+				ps.setString(2, clientID.trim());
+				ps.setString(3, orderID.trim());
 
 				return ps.execute();
 			}

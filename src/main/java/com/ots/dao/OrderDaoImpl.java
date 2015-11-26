@@ -4,6 +4,7 @@
 package com.ots.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.ots.common.OrderSummaryBean;
@@ -28,8 +30,8 @@ import com.ots.rowmapper.OrderRowMapper;
 public class OrderDaoImpl {
 
 	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?)";
-	public static final String SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders where order_id IN (SELECT order_id FROM places where client_id= ?) order by date_placed desc";
-	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE order_id in (?)";
+	public static final String SELECT_ORDER_BY_USER_ID = "select o.id as id,o.type as type, o.quantity as quantity,o.commission_fees as commission_fees,o.commission_type as commission_type,o.total_amt as total_amt,o.oil_adjusted_quantity as oil_adjusted_quantity,o.date_placed as date_placed, o.payment_id as payment_id,isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id and o.id IN (SELECT order_id FROM places where client_id=?) order by date_placed desc";
+	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE id =?";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
 
@@ -54,6 +56,46 @@ public class OrderDaoImpl {
 					}
 				}, new OrderRowMapper());
 		return orders;
+	}
+
+	/**
+	 * This method returns Total amount (to_be?) charged for order 
+	 * @param orderIds
+	 * @return
+	 */
+	public Float getTotalAmountByOrderIds(final List<String> orderIds) {
+
+		StringBuilder selectQueries = new StringBuilder();
+		for (String orderId : orderIds) {
+			if(orderId.trim().length()>0){
+			if (selectQueries.toString().length() == 0) {
+				selectQueries.append("Select sum(total_amt) from orders where id in( ?" );
+			} else {
+				selectQueries.append(",?" );
+			}
+			}
+		}
+		selectQueries.append(");");
+		System.out.println(selectQueries.toString());
+		List<Float> orders = adminJdbcConnectionTemplate.query(selectQueries.toString(),
+				new PreparedStatementSetter() {
+					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+
+						int counter=1;
+						for (String orderId : orderIds) {
+							if(orderId.trim().length()!=0){
+								ps.setString(counter,orderId.trim());
+								counter++;
+							}
+						}
+					}
+				}, new RowMapper<Float>() {
+					  public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
+					        return rs.getFloat(1);
+					  }
+
+					});
+		return orders.get(0);
 	}
 
 	/**
@@ -91,7 +133,7 @@ public class OrderDaoImpl {
 				ps.setString(5, orderSummaryBean.getCommissionType());
 				ps.setFloat(6, orderSummaryBean.getAmount());
 				ps.setFloat(7, orderSummaryBean.getCommisisioninoil());
-				ps.setDate(8,new java.sql.Date(orderSummaryBean.getDate().getTime()));
+				ps.setDate(8, new java.sql.Date(orderSummaryBean.getDate().getTime()));
 
 				return ps.execute();
 			}

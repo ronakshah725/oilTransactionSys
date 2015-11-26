@@ -47,6 +47,13 @@ public class PlaceOrderBean {
 	public void setType(String type) {
 		this.type = type;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PlaceOrderBean [commissionType=" + commissionType + ", quantity=" + quantity + ", type=" + type + "]";
+	}
 	
 	
 	

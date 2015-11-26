@@ -32,12 +32,13 @@ public class UserManagementServiceImpl {
 
 	@Autowired
 	private TraderDaoImpl traderDao;
-	
+
 	@Autowired
 	private FeatureDaoImpl featureDao;
 
 	@Autowired
 	private CancelDaoImpl cancelDao;
+
 	/**
 	 * This method validates whether user's credentials are correct or not and
 	 * if not, it returns the null object.
@@ -103,7 +104,6 @@ public class UserManagementServiceImpl {
 	public List<String> getTraderFeatureCodes(String roleID) {
 		List<String> listOfFeatures = featureDao.getTraderFeatureCodes(roleID);
 
-
 		return listOfFeatures;
 	}
 
@@ -144,11 +144,9 @@ public class UserManagementServiceImpl {
 	public List<UserBean> searchUser(final UserBean userBean) {
 		return userDao.searchUser(userBean);
 	}
-	
-	public boolean insertIntoCancel(UserBean ub, ClientBean cb, String orderID) throws MySQLIntegrityConstraintViolationException{
-		cancelDao.insertIntoCancel(ub.getId(), cb.getClientId(), orderID);
-		
-		return false;
-		
+
+	public boolean insertIntoCancel(UserBean ub, ClientBean cb, String orderID)
+			throws MySQLIntegrityConstraintViolationException {
+		return cancelDao.insertIntoCancel(ub.getId(), cb.getClientId(), orderID);
 	}
 }

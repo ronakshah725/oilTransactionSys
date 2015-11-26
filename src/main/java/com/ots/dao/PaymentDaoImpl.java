@@ -25,14 +25,9 @@ public class PaymentDaoImpl {
 
 	public static final String QUERY_INSERT_TASK = "INSERT INTO payments(payment_id,client_id,trader_id,date_accepted,amount ) VALUES (?,?,?,?,?)";
 	private JdbcTemplate adminJdbcConnectionTemplate;
-	private JdbcTemplate traderJdbcConnectionTemplate;
-	private JdbcTemplate clientJdbcConnectionTemplate;
-
 	@Autowired
 	public void setDataSource(DataSource adminDataSource, DataSource traderDataSource, DataSource clientDataSource) {
 		this.adminJdbcConnectionTemplate = new JdbcTemplate(adminDataSource);
-		this.traderJdbcConnectionTemplate = new JdbcTemplate(traderDataSource);
-		this.clientJdbcConnectionTemplate = new JdbcTemplate(clientDataSource);
 	}
 
 	/**

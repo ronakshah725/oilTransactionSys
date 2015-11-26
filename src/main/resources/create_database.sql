@@ -200,3 +200,15 @@ insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be
 --user abc@def
  insert into trader values( 'd7faa6df-93db-11e5-9cc5-000c29893b5c','0be218c5-9394-11e5-b673-5820b1762285' );
   insert into orders (id,type,quantity,commission_type,date_placed) values(uuid(),'BUY',100,'CASH','2015-01-01');
+  insert into places values('7cccef4f-93c0-11e5-b673-5820b1762284','7cccef4f-93c0-11e5-b673-5820b1762284','2855e5e5-93f7-11e5-b673-5820b1762284');
+  
+  
+  
+  
+  insert into orders (id,type,quantity,commission_type,total_amt,date_placed) values('2855e5e5-93f7-11e5-b673-5820b1762282','SELL',200,'OIL',10330,'2015-05-01');
+  insert into places values('7cccef4f-93c0-11e5-b673-5820b1762284','7cccef4f-93c0-11e5-b673-5820b1762284','2855e5e5-93f7-11e5-b673-5820b1762282');
+  insert into cancels values('7cccef4f-93c0-11e5-b673-5820b1762284','7cccef4f-93c0-11e5-b673-5820b1762284','2855e5e5-93f7-11e5-b673-5820b1762282');
+  
+  
+  insert into orders (id,type,quantity,commission_type,total_amt,date_placed) values('2855e5e5-93f7-11e5-b673-5820b1762211','SELL',200,'OIL',10330,'2015-05-01');
+  insert into places values('7cccef4f-93c0-11e5-b673-5820b1762284','7cccef4f-93c0-11e5-b673-5820b1762284','2855e5e5-93f7-11e5-b673-5820b1762211'); 

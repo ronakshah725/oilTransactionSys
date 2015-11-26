@@ -23,35 +23,39 @@
 							<th>Date</th>
 							<th>Type</th>
 							<th>Quantity</th>
-							<th>Status</th>
 							<th>Amount($)</th>
-							<th>Commission($/lb)</th>
+							<th>Commission($)</th>
+							<th>Commission(Lb)</th>
 						</tr>
 					</thead>
 					<tbody>
 
 						<c:forEach items="${orders}" varStatus="loop" var="order">
-							<c:when test="${isCancelled}">
-								<tr style="color: #dd0000">
-							</c:when>
-							<c:otherwise>
-								<c:when test="${order.paymentId!=null}">
-									<tr style="color: #00B050">
+							<c:choose>
+								<c:when test="${order.cancelled}">
+									<tr style="color: #dd0000">
 								</c:when>
 								<c:otherwise>
-									<tr>
+									<c:choose>
+										<c:when test="${order.paymentId!=null}">
+											<tr style="color: #00B050">
+										</c:when>
+										<c:otherwise>
+											<tr>
+										</c:otherwise>
+									</c:choose>
 								</c:otherwise>
-							</c:otherwise>
-							<td><input type="Checkbox" id="${order.id}" /></td>
+							</c:choose>
+							<td><c:if test="${!order.cancelled}">
+									<input type="Checkbox" id="${order.orderId}" />
+								</c:if></td>
 							<td>${loop.index}</td>
 							<td>${order.date}</td>
 							<td>${order.type}</td>
 							<td>${order.quantity}</td>
 							<td>${order.amount}</td>
-							<td>${order.commissionindollar}${order.commisisioninoil}</td>
-
-							<td><input type="button" class="btn btn-warning"
-								onclick="executeSelectUser('${user.emailId}')" value="Select"></td>
+							<td style="text-align:Center">${order.commissionindollar}</td>
+							<td style="text-align:Center">${order.commisisioninoil}</td>
 							</tr>
 						</c:forEach>
 
@@ -59,11 +63,13 @@
 					</tbody>
 				</table>
 		</div>
+		<hr/>
 		<div class="row">
-			<div class="xs-col-3">Outstanding balance</div>
-			<div class="xs-col-3">${outstandingBalance}</div>
-			<div class="xs-col-3">Total Oil owned:</div>
-			<div class="xs-col-3">${totalOilOwned}</div>
+			<div class="col-xs-24"></div>
+			<div class="col-xs-2">Outstanding balance</div>
+			<div class="col-xs-2"><b style="color:#DE7E38;font-size:14pt">${selectedClient.balanceAmount} $</b></div>
+			<div class="col-xs-2">Total Oil owned:</div>
+			<div class="col-xs-2"><b style="color:#DE7E38;font-size:14pt">${selectedClient.totalOilQuantity} Lb</b></div>
 		</div>
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
 			<div class="col-xs-4" style="text-align: center">
@@ -72,8 +78,8 @@
 					type="button" value="Pay" onclick="makePayment()" />
 			</div>
 			<div class="col-xs-4" style="text-align: center">
-				<input id="order" name="order" class="btn btn-info"
-					type="button" value="Place Order" onclick="createOrder()" />
+				<input id="order" name="order" class="btn btn-info" type="button"
+					value="Place Order" onclick="createOrder()" />
 			</div>
 			<div class="col-xs-4" style="text-align: center">
 				<input id="loginBtn" name="loginBtn" class="btn btn-info"

@@ -12,8 +12,8 @@ public class ClientBean {
 
 	private String clientId;
 	private Date dateOfLevelUpgrade;
-	private Double totalOilQuantity;
-	private Double balanceAmount;
+	private float totalOilQuantity;
+	private float balanceAmount;
 	private String level;
 	UserBean userBean ;
 	
@@ -36,7 +36,7 @@ public class ClientBean {
 	/**
 	 * @return the totalOilQuantity
 	 */
-	public Double getTotalOilQuantity() {
+	public float getTotalOilQuantity() {
 		return totalOilQuantity;
 	}
 
@@ -44,14 +44,14 @@ public class ClientBean {
 	 * @param totalOilQuantity
 	 *            the totalOilQuantity to set
 	 */
-	public void setTotalOilQuantity(Double totalOilQuantity) {
+	public void setTotalOilQuantity(float totalOilQuantity) {
 		this.totalOilQuantity = totalOilQuantity;
 	}
 
 	/**
 	 * @return the balanceAmount
 	 */
-	public Double getBalanceAmount() {
+	public float getBalanceAmount() {
 		return balanceAmount;
 	}
 
@@ -59,7 +59,7 @@ public class ClientBean {
 	 * @param balanceAmount
 	 *            the balanceAmount to set
 	 */
-	public void setBalanceAmount(Double balanceAmount) {
+	public void setBalanceAmount(float balanceAmount) {
 		this.balanceAmount = balanceAmount;
 	}
 

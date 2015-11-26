@@ -91,6 +91,14 @@ public class PaymentBean {
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "PaymentBean [paymentId=" + paymentId + ", clientId=" + clientId + ", dateAccepted=" + dateAccepted
+				+ ", traderId=" + traderId + ", amount=" + amount + ", balance=" + balance + "]";
+	}
 	
 	
 	

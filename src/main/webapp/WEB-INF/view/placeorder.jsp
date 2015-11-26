@@ -8,16 +8,15 @@
 	</div>
 
 	<div class="panel-body">
-		<form name="placeOrderForm">
+		<form name="placeOrderForm" id="placeOrderForm">
 			<div class="row" style="padding-top: 10px">
 
 				<div class="col-xs-6 left bottom">Commission Type:</div>
 				<div class="col-xs-6 left bottom">
-					<select name="singleSelect" class="form-control" required
-						id="singleSelect" ng-model="commissionType">
-						<option value="buy">Oil</option>
-						<!-- interpolation -->
-						<option value="sell">Cash</option>
+					<select   class="form-control" required
+						id="commissionType" name="commissionType">
+						<option value="Oil">Oil</option>
+						<option value="Cash">Cash</option>
 					</select>
 				</div>
 			</div>
@@ -27,7 +26,7 @@
 				<div class="col-xs-6 left bottom">Quantity</div>
 				<div class="col-xs-6 left">
 					<input type="number" class="form-control" required
-						ng-model="quantity" />
+					id="quantity"	name="quantity" />
 				</div>
 			</div>
 
@@ -35,10 +34,10 @@
 				<div class="col-xs-6 left bottom">Transaction Type:</div>
 				<div class="col-xs-6 left top">
 					<label> <input type="radio" class="form-control"
-						name="transactionType" checked ng-model="transactionType"
+						name="type" checked id="type"
 						value="buy"> Buy
 					</label> <label> <input type="radio" class="form-control"
-						name="transactionType" required ng-model="transactionType"
+						name="type" required id="type"
 						value="sell"> Sell
 					</label>
 				</div>
@@ -49,7 +48,7 @@
 			<div class="row top" style="padding-top: 10px">
 				<div class="col-xs-12" style="text-align: right">
 					<input id="placeOrder" name="placeOrder" class="btn btn-info"
-					type="button" value="Place Order" onclick="placeOrder()" />
+					type="button" value="Place Order" onclick="putOrder()" />
 				</div>
 			</div>
 		</form>
