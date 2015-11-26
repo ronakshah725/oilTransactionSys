@@ -1,6 +1,7 @@
 package com.ots.controller;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
 import com.ots.common.OrderSummaryBean;
 import com.ots.common.PaymentBean;
+import com.ots.common.PlaceOrderBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.dao.OrderDaoImpl;
@@ -63,10 +65,10 @@ public class HomeController {
 			List<String> features = null;
 			request.getSession().setAttribute("user", user);
 			ClientBean clientBean = userManagementServiceImpl.getClientDetails(user.getId());
-			
+
 			if (clientBean != null) {
 				request.getSession().setAttribute("selectedClient", clientBean);
-				System.out.println("settting===?>"+request.getSession().getAttribute("selectedClient"));
+				System.out.println("settting===?>" + request.getSession().getAttribute("selectedClient"));
 				features = userManagementServiceImpl.getClientFeatureCodes(clientBean.getClientId());
 				return new ModelAndView("orderSummary");
 			} else {
@@ -74,12 +76,12 @@ public class HomeController {
 				if (traderBean == null) {
 					model.addAttribute("message",
 							"User has not been properly set up yet. Please contact administrator");
-					 return new ModelAndView( "loginInput");
+					return new ModelAndView("loginInput");
 				} else {
 					features = userManagementServiceImpl.getTraderFeatureCodes(traderBean.getRoleId());
 				}
 			}
-			System.out.println("-->"+features);
+			System.out.println("-->" + features);
 			if (features != null && features.size() != 0) {
 				for (String feature : features) {
 					request.getSession().setAttribute(feature, "true");
@@ -135,9 +137,10 @@ public class HomeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectUser", method = RequestMethod.GET)
-	public String selectUser(ModelMap model, HttpServletRequest request, @RequestParam(required = false) String userId) {
+	public String selectUser(ModelMap model, HttpServletRequest request,
+			@RequestParam(required = false) String userId) {
 		logger.debug("searchUserBean= " + userId);
-		ClientBean bean =userManagementServiceImpl.getClientDetails(userId);
+		ClientBean bean = userManagementServiceImpl.getClientDetails(userId);
 		request.getSession().setAttribute("selectedClient", bean);
 		model.addAttribute("userId", userId);
 		return ("orderSummary");
@@ -198,8 +201,6 @@ public class HomeController {
 		logger.debug("searchUserBean= " + orderIds);
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
-		
-		
 
 		model.addAttribute("message", "Congratulations! Payment cancellation was successful");
 		return ("orderSummary");
@@ -221,27 +222,24 @@ public class HomeController {
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
 		model.addAttribute("amountDue", "40000");
- 		model.addAttribute("balAmount", "100");
-		PaymentBean paymentBean= new PaymentBean();
-		String payId=UUID.randomUUID().toString();
+		model.addAttribute("balAmount", "100");
+		PaymentBean paymentBean = new PaymentBean();
+		String payId = UUID.randomUUID().toString();
 		paymentBean.setPaymentId(payId);
-		paymentBean.setClientId((String)request.getSession().getAttribute("clientId"));
-		UserBean user=(UserBean)request.getSession().getAttribute("user");
+		paymentBean.setClientId((String) request.getSession().getAttribute("clientId"));
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
 		paymentBean.setTraderId(user.getId());
 		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
 		paymentBean.setAmount(Float.parseFloat("40000"));
 		paymentBean.setBalance(Float.parseFloat("100"));
 		paymentDaoImpl.insertPaymentDetails(paymentBean);
-		OrderDaoImpl orderDaoImpl= new OrderDaoImpl();
-		OrderSummaryBean orderSummaryBean= new OrderSummaryBean();
-	   for(String ord:orderIds)
-	   {
-		   orderSummaryBean.setOrderId(ord);
-		   orderSummaryBean.setPaymentId(payId);
-		   orderDaoImpl.updateOrderDetails(orderSummaryBean);
-	   }
-		
-		
+		OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
+		OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+		for (String ord : orderIds) {
+			orderSummaryBean.setOrderId(ord);
+			orderSummaryBean.setPaymentId(payId);
+			orderDaoImpl.updateOrderDetails(orderSummaryBean);
+		}
 
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 		return ("payment");
@@ -306,17 +304,29 @@ public class HomeController {
 		return "createUser";
 
 	}
+
 	@RequestMapping(value = "/createOrder", method = RequestMethod.POST)
-	public String createOrder(ModelMap model) {
-		// Return empty create new user page
-		// Do request.getsession().getAttribute - getFEATURES and see if the
-		// there is a FEATURE called INSERT_USER, if it is, return the
-		// createUser page
-		// otherwise log user out - call return logUserOut(request);
+	public String createOrder(ModelMap model, HttpServletRequest request,
+			@ModelAttribute PlaceOrderBean placeOrderBean) {
+		logger.debug("order created= " + placeOrderBean);
+		OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
+
+		String ordId = UUID.randomUUID().toString();
+		orderSummaryBean.setOrderId(ordId);
+		orderSummaryBean.setDate(Calendar.getInstance().getTime());
+		orderSummaryBean.setType(placeOrderBean.getType());
+		orderSummaryBean.setQuantity(placeOrderBean.getQuantity());
+		orderSummaryBean.setAmount(Float.parseFloat("100000"));
+		orderSummaryBean.setCommissionindollar(Float.parseFloat("30"));
+		orderSummaryBean.setCommisisioninoil(Float.parseFloat("21"));
+
+		OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
+		//orderDaoImpl.createOrder(orderSummaryBean);
+
 		return "placeorder";
 
 	}
-	
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(ModelMap model, HttpServletRequest request, @ModelAttribute LoginBean loginBean) {
 		return logUserOut(request);

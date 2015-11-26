@@ -66,11 +66,11 @@
 	}
 
 	function cancelOrder() {
-		var orderIds="";
+		var orderIds = "";
 		$('input[type="Checkbox"]:checked').each(function() {
-			orderIds+=this.id+',';
+			orderIds += this.id + ',';
 		});
-		
+
 		$.ajax({
 			type : "GET",
 			url : "cancelOrder",
@@ -80,23 +80,22 @@
 			}
 		});
 	}
-	
+
 	function createOrder() {
-	 
-		
 		$.ajax({
 			type : "POST",
 			url : "createOrder",
+			data: $("#createOrderForm").serialize(),
 			success : function(data) {
 				$("#container").html(data);
 			}
 		});
 	}
-	
+
 	function makePayment() {
-		var orderIds="";
+		var orderIds = "";
 		$('input[type="Checkbox"]:checked').each(function() {
-			orderIds+=this.id+',';
+			orderIds += this.id + ',';
 		});
 		//Read all checked checkboxes
 		$.ajax({
@@ -132,7 +131,7 @@
 			url : "insertOrUpdateUser",
 			data : $("#createUserForm").serialize(),
 			success : function(data) {
-				
+
 				$("#container").html(data);
 			}
 		});

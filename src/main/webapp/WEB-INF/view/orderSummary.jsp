@@ -14,6 +14,7 @@
 
 	<div class="panel-body">
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
+		<form name="createOrderForm" id="createOrderForm">
 			<table class="table table-striped">
 				<thead>
 					<tr>
