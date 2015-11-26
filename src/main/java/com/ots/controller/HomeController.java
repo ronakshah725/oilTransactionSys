@@ -492,6 +492,17 @@ public class HomeController {
 		return logUserOut(request);
 	}
 
+
+	@RequestMapping(value = "/viewReports", method = RequestMethod.GET)
+	public String reports(ModelMap map, HttpServletRequest request) {
+		map.addAttribute("chart1Json", "{}");
+		map.addAttribute("chart2Json", "{}");
+		map.addAttribute("chart3Json", "{}");
+		map.addAttribute("chart4Json", "{    \"cols\": [          {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},          {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}        ],    \"rows\": [          {\"c\":[{\"v\":\"Mushrooms\",\"f\":null},{\"v\":3,\"f\":null}]},          {\"c\":[{\"v\":\"Onions\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Olives\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Zucchini\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Pepperoni\",\"f\":null},{\"v\":2,\"f\":null}]}        ]  }");
+		return "reportsView";
+	}
+
+	
 	/**
 	 * @param request
 	 * @return
@@ -501,4 +512,6 @@ public class HomeController {
 		logger.debug("loggingout");
 		return "redirect:/";
 	}
+
+
 }

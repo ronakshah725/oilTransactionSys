@@ -147,14 +147,14 @@ public class OrderDaoImpl {
 		});
 	}
 	public  ReportOilBean getReportOilQty(){
-		ReportOilBean  rbean = adminJdbcConnectionTemplate.query(new PreparedStatementCreator() {
+		/*ReportOilBean  rbean = adminJdbcConnectionTemplate.query(new PreparedStatementCreator() {
 			
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				// TODO Auto-generated method stub
 				return null;
 			}
-		}, rse)
-		
+		}, null);
+		*/
 		return null;
 	
 		

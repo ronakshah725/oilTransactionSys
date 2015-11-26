@@ -1,4 +1,15 @@
 <%@ include file="include.jsp"%>
+
+<html>
+      <head>
+<script	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<title>Oil Transaction Management System</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" 	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="resources/css/style.css">
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
 
           google.load('visualization', '1.0', {'packages':['corechart']});
@@ -54,9 +65,8 @@
               ['Pepperoni', 2]
             ]);
 
-
             // Set chart options
-            var options = {'title':'How Much Pizza I Ate Last Night',
+            var options = {'title':'${chart4Json}',
                            'width':400,
                            'height':300};
             // Set chart options
@@ -80,15 +90,33 @@
             var chart3 = new google.visualization.BarChart(document.getElementById('chart_div3'));
             chart3.draw(data3, options3);
             var chart4 = new google.visualization.PieChart(document.getElementById('chart_div4'));
-            chart4.draw(data4, options4);
-
+            //chart4.draw(data4, options4);
+            
+            var data22=new google.visualization.DataTable('${chart4Json}');
+            chart4.draw(data22, options4);
           }
         </script>
 
+      </head>
 
-        <!--Divs that will hold the charts-->
-        <table>
+<head>
+<body>
+	<div class="panel panel-info center"
+		style="width: 1000px; text-align: center; margin-top: 50px">
+		<div class="panel-heading" style="text-align: center">
+			<div>
+				<h3>Oil Transaction System</h3>
+			</div>
 
+		</div>
+		<div class="panel-body">
+			<div id="heading" style="text-align: right"></div>
+			<div id="container">
+			  <table>
+${chart1Json}--
+${chart2Json}--
+${chart3Json}--
+${chart4Json}--
 		    <tr>
 		      <td ><div id="chart_div"></div></td>
 		      <td ><div id="chart_div2"></div></td>
@@ -97,9 +125,8 @@
             <td > <div id="chart_div3"></div></td>
             <td > <div id="chart_div4"></div> </td>
           </tr>
-        </table>
-        
-
-
-      </body>
+        </table></div>
+		</div>
+	</div>
+</body>
     </html>
