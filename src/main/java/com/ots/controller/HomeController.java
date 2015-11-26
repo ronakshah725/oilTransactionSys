@@ -40,6 +40,8 @@ public class HomeController {
 	private UserManagementServiceImpl userManagementServiceImpl;
 	@Autowired
 	private PaymentDaoImpl paymentDaoImpl;
+	@Autowired
+	private OrderDaoImpl orderDaoImpl;
 	
 	@Autowired
 	private OrderServiceImpl orderSerivceImpl;
@@ -325,9 +327,21 @@ public class HomeController {
 		return "createUser";
 
 	}
-
+	
+	
 	@RequestMapping(value = "/createOrder", method = RequestMethod.POST)
-	public String createOrder(ModelMap model, HttpServletRequest request,
+	public String createOrder(ModelMap model) {
+		// Return empty create new user page
+		// Do request.getsession().getAttribute - getFEATURES and see if the
+		// there is a FEATURE called INSERT_USER, if it is, return the
+		// createUser page
+		// otherwise log user out - call return logUserOut(request);
+		return "placeorder";
+
+	}
+
+	@RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
+	public String placeOrder(ModelMap model, HttpServletRequest request,
 			@ModelAttribute PlaceOrderBean placeOrderBean) {
 		logger.debug("order created= " + placeOrderBean);
 		OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
@@ -341,10 +355,10 @@ public class HomeController {
 		orderSummaryBean.setCommissionindollar(Float.parseFloat("30"));
 		orderSummaryBean.setCommisisioninoil(Float.parseFloat("21"));
 
-		OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
-		//orderDaoImpl.createOrder(orderSummaryBean);
+		
+		orderDaoImpl.createOrder(orderSummaryBean);
 
-		return "placeorder";
+		return "orderSummary";
 
 	}
 

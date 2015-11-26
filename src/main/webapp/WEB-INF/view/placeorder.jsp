@@ -48,7 +48,8 @@
 
 			<div class="row top" style="padding-top: 10px">
 				<div class="col-xs-12" style="text-align: right">
-					<input type="submit" class="btn btn-info" ng-submit="submit()" />
+					<input id="placeOrder" name="placeOrder" class="btn btn-info"
+					type="button" value="Place Order" onclick="placeOrder()" />
 				</div>
 			</div>
 		</form>

@@ -77,7 +77,7 @@
 					type="button" value="Pay" onclick="makePayment()" />
 			</div>
 			<div class="col-xs-4" style="text-align: center">
-				<input id="loginBtn" name="loginBtn" class="btn btn-info"
+				<input id="order" name="order" class="btn btn-info"
 					type="button" value="Place Order" onclick="createOrder()" />
 			</div>
 			<div class="col-xs-4" style="text-align: center">

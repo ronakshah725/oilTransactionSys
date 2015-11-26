@@ -44,6 +44,20 @@
 			}
 		});
 	}
+	
+	function placeOrder() {
+		$.ajax({
+			type : "POST",
+			url : "placeOrder",
+			data: $("#createOrderForm").serialize(),
+			success : function(data) {
+				$("#container").html(data);
+			}
+		});
+	}
+	
+	
+	
 	function executeSearch() {
 		$.ajax({
 			type : "POST",
@@ -97,13 +111,16 @@
 		$.ajax({
 			type : "POST",
 			url : "createOrder",
-			data: $("#createOrderForm").serialize(),
 			success : function(data) {
 				$("#container").html(data);
 			}
 		});
 	}
 
+
+
+
+	
 	function makePayment() {
 		var orderIds = "";
 		$('input[type="Checkbox"]:checked').each(function() {
