@@ -4,6 +4,7 @@
 <c:if test="${FEATURE_VIEW_REPORTS!=null}">
 		<a href="#" onclick="viewReports()">View Reports</a> |
 </c:if>
+<a href="#" onclick="viewReports()">View Reports</a>
 
 	<c:if test="${FEATURE_INSERT_USER!=null}">
 		<a href="#" onclick="createUser()">Create User</a> |

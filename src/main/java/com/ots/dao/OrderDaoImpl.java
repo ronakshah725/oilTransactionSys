@@ -3,6 +3,7 @@
  */
 package com.ots.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.ots.common.OrderSummaryBean;
+import com.ots.common.ReportOilBean;
 import com.ots.rowmapper.OrderRowMapper;
 
 /**
@@ -32,7 +35,7 @@ public class OrderDaoImpl {
 	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?)";
 	public static final String SELECT_ORDER_BY_USER_ID = "select o.id as id,o.type as type, o.quantity as quantity,o.commission_fees as commission_fees,o.commission_type as commission_type,o.total_amt as total_amt,o.oil_adjusted_quantity as oil_adjusted_quantity,o.date_placed as date_placed, o.payment_id as payment_id,isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id and o.id IN (SELECT order_id FROM places where client_id=?) order by date_placed desc";
 	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE id =?";
-
+	public static final String REPORT_OIL_QTY = "select sum(o.quantity) as sums,isnull(o.payment_id) as payment_avl, isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id group by payment_avl,is_not_cancelled order by sums asc";
 	private JdbcTemplate adminJdbcConnectionTemplate;
 
 	@Autowired
@@ -140,6 +143,20 @@ public class OrderDaoImpl {
 				return ps.execute();
 			}
 		});
+	}
+	
+	public  ReportOilBean getReportOilQty(){
+		ReportOilBean  rbean = adminJdbcConnectionTemplate.query(new PreparedStatementCreator() {
+			
+			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		}, rse)
+		
+		return null;
+	
+		
 	}
 
 }

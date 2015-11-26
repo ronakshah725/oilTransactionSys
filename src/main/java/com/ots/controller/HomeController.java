@@ -452,4 +452,9 @@ public class HomeController {
 		logger.debug("loggingout");
 		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "/reports", method = RequestMethod.GET)
+	public String reports(ModelMap modesetttingl, HttpServletRequest request) {
+		return "reports";
+	}
 }

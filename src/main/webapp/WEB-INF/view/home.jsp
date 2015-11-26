@@ -11,8 +11,10 @@
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	
 <script>
+
 function putOrder() {
 	$.ajax({
 		type : "POST",
@@ -171,6 +173,15 @@ function putOrder() {
 	}
 	function viewReports() {
 		//add code here for displaying reports which managers can see.
+		
+		$.ajax({
+			type : "GET",
+			url : "reports",
+			success : function(data) {
+
+				$("#container").html(data);
+			}
+		});
 	}
 	$(document).ready(function() {
 		home();
