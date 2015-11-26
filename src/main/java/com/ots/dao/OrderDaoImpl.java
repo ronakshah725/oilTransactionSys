@@ -28,7 +28,7 @@ import com.ots.rowmapper.OrderRowMapper;
 public class OrderDaoImpl {
 
 	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?)";
-	public static final String SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders where order_id IN (SELECT order_id FROM places where client_id=?)";
+	public static final String SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders where order_id IN (SELECT order_id FROM places where client_id= ?) order by date_placed desc";
 	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE order_id in (?)";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
@@ -40,7 +40,7 @@ public class OrderDaoImpl {
 	}
 
 	/**
-	 * Method for fetching details based on userName and password
+	 * Method for fetching all orders for a client in Descending order
 	 * 
 	 * @param userName
 	 * @param password
@@ -54,7 +54,6 @@ public class OrderDaoImpl {
 					}
 				}, new OrderRowMapper());
 		return orders;
-
 	}
 
 	/**

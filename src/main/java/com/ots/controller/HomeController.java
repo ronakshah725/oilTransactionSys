@@ -28,6 +28,7 @@ import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.dao.OrderDaoImpl;
 import com.ots.dao.PaymentDaoImpl;
+import com.ots.service.OrderServiceImpl;
 import com.ots.service.UserManagementServiceImpl;
 
 @Controller
@@ -39,6 +40,9 @@ public class HomeController {
 	private UserManagementServiceImpl userManagementServiceImpl;
 	@Autowired
 	private PaymentDaoImpl paymentDaoImpl;
+	
+	@Autowired
+	private OrderServiceImpl orderSerivceImpl;
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest request) {
@@ -206,6 +210,7 @@ public class HomeController {
 		return ("orderSummary");
 	}
 
+	
 	/**
 	 * This rest API accepts list of Order ids and makes the payment
 	 * 
@@ -286,7 +291,23 @@ public class HomeController {
 	public ModelAndView logout(ModelMap model) {
 		return new ModelAndView("heading");
 	}
-
+	
+	
+	/**
+	 * This Rest API returns the Top menu jsp
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/loadOrders", method = RequestMethod.GET)
+	public ModelAndView loadOrders(ModelMap model,HttpServletRequest request) {
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		List<OrderSummaryBean> orders=orderSerivceImpl.fetchAllOrders(clientBean.getClientId());
+		model.addAttribute("orders", orders);
+		return new ModelAndView("orderSummary.jsp");
+	}
+	
+	
 	/**
 	 * This Api will be used for returning the page that displays the empty
 	 * "create new User" form
