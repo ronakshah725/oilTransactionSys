@@ -4,7 +4,12 @@
 		<div>
 			<h3>Login</h3>
 		</div>
-		<div style="color: #ff0000">${message}</div>
+		<c:if test="${message!=null}">
+			<div class="row" style="color: #ff0000; text-align: left">
+				<B> * ${message}</B>
+			</div>
+		</c:if>
+
 	</div>
 	<div class="panel-body">
 		<form name="loginForm" id="loginForm">

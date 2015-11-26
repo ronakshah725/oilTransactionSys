@@ -12,6 +12,8 @@ import com.ots.dao.OrderDaoImpl;
 import com.ots.dao.PaymentDaoImpl;
 import com.ots.dao.PlacesDaoImpl;
 
+import javassist.compiler.ast.Pair;
+
 /**
  * This service will be used for supporting UserManagement and login tasks
  * 
@@ -62,6 +64,41 @@ public class OrderServiceImpl {
 		
 		return val;
 	}
+	
+	
+	/**
+	 * This method returns Quantity of Oil to be adjusted and Amount to be added to the user's account
+	 * 
+	 * @param orderIds
+	 * @return
+	 */
+	public Float[]  getTotalAmountToBePaid(String clientId, List<String> orderIds) {
+		Float[] quantityAndAmount= new Float[2];
+		List<OrderSummaryBean> orders = orderDaoImpl.getOrders(clientId);
+		quantityAndAmount[0]=new Float(0);
+		quantityAndAmount[1]=new Float(0);
+		
+		for (OrderSummaryBean orderSummaryBean : orders) {
+			if(orderIds.contains(orderSummaryBean.getOrderId().trim()))
+			{
+				if (orderSummaryBean.getType().equals("buy")) {
+					quantityAndAmount[0] -= orderSummaryBean.getQuantity();
+				} else {
+					quantityAndAmount[0]+= orderSummaryBean.getQuantity();
+				}
+				if(orderSummaryBean.getPaymentId()!=null && orderSummaryBean.getPaymentId().trim().length()>0)
+				{
+					if (orderSummaryBean.getType().equals("buy")) {
+						quantityAndAmount[1]+= orderSummaryBean.getAmount();
+					} else {
+						quantityAndAmount[1]-= orderSummaryBean.getAmount();
+					}
+				}
+			}
+		}
+		return quantityAndAmount;
+	}
+	
 	
 	/**
 	 * @param paymentBean

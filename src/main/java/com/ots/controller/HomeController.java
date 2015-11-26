@@ -1,33 +1,57 @@
 package com.ots.controller;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Calendar;
+import java.util.List;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.ots.common.ClientBean;
 import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
+import com.ots.common.LoginBean;
+import com.ots.common.OrderSummaryBean;
 import com.ots.common.OrderSummaryBean;
 import com.ots.common.PaymentBean;
+import com.ots.common.PaymentBean;
+import com.ots.common.PlaceOrderBean;
 import com.ots.common.PlaceOrderBean;
 import com.ots.common.TraderBean;
+import com.ots.common.TraderBean;
+import com.ots.common.UserBean;
 import com.ots.common.UserBean;
 import com.ots.service.OrderServiceImpl;
+import com.ots.service.OrderServiceImpl;
+import com.ots.service.UserManagementServiceImpl;
 import com.ots.service.UserManagementServiceImpl;
 
 @Controller
@@ -61,11 +85,10 @@ public class HomeController {
 		UserBean user = userManagementServiceImpl.validateAndFetchUserDetails(loginBean.getUserName(),
 				loginBean.getPassword());
 		logger.debug("userObject found " + user);
-		
-		ResourceBundle bundle= ResourceBundle.getBundle("config");
-		request.getSession().setAttribute("oil_price",Integer.parseInt(bundle.getString("oil_price").trim()));
-		
-		
+
+		ResourceBundle bundle = ResourceBundle.getBundle("config");
+		request.getSession().setAttribute("oil_price", Integer.parseInt(bundle.getString("oil_price").trim()));
+
 		if (user != null) {
 			List<String> features = null;
 			request.getSession().setAttribute("user", user);
@@ -73,8 +96,9 @@ public class HomeController {
 
 			if (clientBean != null) {
 				request.getSession().setAttribute("selectedClient", clientBean);
-				System.out.println("settting===?>" + request.getSession().getAttribute("selectedClient"));
+				logger.debug("settting===?>" + request.getSession().getAttribute("selectedClient"));
 				features = userManagementServiceImpl.getClientFeatureCodes(clientBean.getClientId());
+				setFeaturesInSession(request, features);
 				return loadOrderSummaries(model, request);
 
 			} else {
@@ -85,20 +109,27 @@ public class HomeController {
 					return new ModelAndView("loginInput");
 				} else {
 					features = userManagementServiceImpl.getTraderFeatureCodes(traderBean.getRoleId());
+					setFeaturesInSession(request, features);
+					return new ModelAndView("searchUser");
 				}
 			}
-			System.out.println("-->" + features);
-			if (features != null && features.size() != 0) {
-				for (String feature : features) {
-					request.getSession().setAttribute(feature, "true");
-				}
-			}
-			return new ModelAndView("searchUser");
 		} else {
 			model.addAttribute("message", "Please check username/password");
 			return new ModelAndView("loginInput");
 		}
 
+	}
+
+	/**
+	 * @param request
+	 * @param features
+	 */
+	private void setFeaturesInSession(HttpServletRequest request, List<String> features) {
+		if (features != null && features.size() != 0) {
+			for (String feature : features) {
+				request.getSession().setAttribute(feature, "true");
+			}
+		}
 	}
 
 	/**
@@ -217,10 +248,19 @@ public class HomeController {
 				}
 			}
 
+			Float userAcountOilQty = clientBean.getTotalOilQuantity();
+			Float userBalanceAmount = clientBean.getBalanceAmount();
+			Float[] quants = orderSerivceImpl.getTotalAmountToBePaid(clientBean.getClientId(),
+					Arrays.asList(orderIds.split(",")));
+
 			userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(),
-					(clientBean.getBalanceAmount()
-							+ orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(",")))),
-					clientBean.getTotalOilQuantity());
+					(userBalanceAmount + quants[1]), (userAcountOilQty + quants[0]));
+			/*
+			 * userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.
+			 * getClientId(), (clientBean.getBalanceAmount() +
+			 * orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.
+			 * split(",")))), clientBean.getTotalOilQuantity());
+			 */
 			clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
 			request.getSession().setAttribute("selectedClient", clientBean);
 
@@ -244,22 +284,24 @@ public class HomeController {
 			@RequestParam(required = false) String orderIds) {
 		logger.debug("orderIds= " + orderIds);
 		for (String string : orderIds.split(",")) {
-			System.out.println("-->" + string);
+			logger.debug("-->" + string);
 		}
 		request.getSession().setAttribute("orderIds", orderIds);
-		// Check if user has appropriate role or not if user does not has
-		// CANCEL_ORDER feature access, reject and log user out
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		Long orderCost = new Float(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100
-				+ clientBean.getBalanceAmount()*100).longValue();
+				+ clientBean.getBalanceAmount() * 100).longValue();
 		
-		System.out.println("orders_total_Amout: "+orderCost);
-		
-		model.addAttribute("amountDue", 
-				orderCost);
-		
+		if(orderCost>0L){
+		logger.debug("orders_total_Amout: " + orderCost);
+		model.addAttribute("amountDue", orderCost);
 		model.addAttribute("balAmount", clientBean.getBalanceAmount() + "$");
 		return ("payment");
+		}
+		else
+		{
+			model.addAttribute("message", "There is no amount due for the selected transactions");
+			return "orderSummary";
+		}
 	}
 
 	/**
@@ -285,12 +327,8 @@ public class HomeController {
 		paymentBean.setTraderId(user.getId());
 		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
 		paymentBean.setAmount((orderSerivceImpl.getTotalAmountToBePaid(orderIds) + clientBean.getBalanceAmount()));
-		System.out.println(paymentBean);
+		logger.debug(paymentBean);
 
-		userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(), new Float(0.0),
-				clientBean.getTotalOilQuantity());
-		clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
-		request.getSession().setAttribute("selectedClient", clientBean);
 
 		orderSerivceImpl.insertPaymentDetails(paymentBean);
 
@@ -299,10 +337,20 @@ public class HomeController {
 			if (orderId.trim().length() != 0) {
 				orderSummaryBean.setOrderId(orderId);
 				orderSummaryBean.setPaymentId(payId);
-				System.out.println("updating " + orderSummaryBean);
+				logger.debug("updating " + orderSummaryBean);
 				orderSerivceImpl.updateOrderDetails(orderSummaryBean);
 			}
 		}
+		
+		
+
+		userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(), new Float(0.0),
+				clientBean.getTotalOilQuantity());
+		clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
+		request.getSession().setAttribute("selectedClient", clientBean);
+		
+		
+		
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 
 		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
@@ -353,7 +401,7 @@ public class HomeController {
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		request.getSession().removeAttribute("orderIds");
 		List<OrderSummaryBean> orders = orderSerivceImpl.fetchAllOrders(clientBean.getClientId());
-		System.out.println(orders);
+		logger.debug(orders);
 		model.addAttribute("orders", orders);
 		return new ModelAndView("orderSummary");
 	}
@@ -399,7 +447,8 @@ public class HomeController {
 		orderSummaryBean.setType(placeOrderBean.getType());
 		orderSummaryBean.setQuantity(placeOrderBean.getQuantity());
 		orderSummaryBean.setCommissionType(placeOrderBean.getCommissionType());
-		orderSummaryBean.setAmount(placeOrderBean.getQuantity() * ((Integer)request.getSession().getAttribute("oil_price")));
+		orderSummaryBean
+				.setAmount(placeOrderBean.getQuantity() * ((Integer) request.getSession().getAttribute("oil_price")));
 
 		if (placeOrderBean.getCommissionType().equals("Oil")) {
 			orderSummaryBean.setCommisisioninoil((float) orderSummaryBean.getQuantity() * (float) 0.02);
@@ -412,7 +461,7 @@ public class HomeController {
 		orderSummaryBean.setQuantity((orderSummaryBean.getQuantity() - orderSummaryBean.getCommisisioninoil()));
 		orderSummaryBean.setAmount((orderSummaryBean.getAmount() + orderSummaryBean.getCommissionindollar()));
 
-		System.out.println("after applying commission" + orderSummaryBean);
+		logger.debug("after applying commission" + orderSummaryBean);
 
 		orderSerivceImpl.createOrder(orderSummaryBean);
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
@@ -451,10 +500,5 @@ public class HomeController {
 		request.getSession().invalidate();
 		logger.debug("loggingout");
 		return "redirect:/";
-	}
-	
-	@RequestMapping(value = "/reports", method = RequestMethod.GET)
-	public String reports(ModelMap modesetttingl, HttpServletRequest request) {
-		return "reports";
 	}
 }

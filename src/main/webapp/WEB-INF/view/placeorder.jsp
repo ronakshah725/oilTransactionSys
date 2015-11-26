@@ -11,7 +11,7 @@
 		<form name="placeOrderForm" id="placeOrderForm">
 			<div class="row" style="padding-top: 10px">
 
-				<div class="col-xs-6 left bottom">Commission Type:</div>
+				<div class="col-xs-6 left bottom">Commission Type*:</div>
 				<div class="col-xs-6 left bottom">
 					<select   class="form-control" required
 						id="commissionType" name="commissionType">
@@ -23,7 +23,7 @@
 
 
 			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-6 left bottom">Quantity</div>
+				<div class="col-xs-6 left bottom">Quantity*</div>
 				<div class="col-xs-6 left">
 					<input type="number" class="form-control" required
 					id="quantity"	name="quantity" />(Lbs)
@@ -38,7 +38,7 @@
 			</div>
 
 			<div class="row" style="padding-top: 10px">
-				<div class="col-xs-6 left bottom">Transaction Type:</div>
+				<div class="col-xs-6 left bottom">Transaction Type*:</div>
 				<div class="col-xs-6 left top">
 					<label> <input type="radio" class="form-control"
 						name="type" checked id="type"

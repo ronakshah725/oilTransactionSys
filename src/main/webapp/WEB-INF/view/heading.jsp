@@ -1,4 +1,5 @@
 <%@ include file="include.jsp"%>
+<div>
 <c:if test="${user!=null}">
 		<a href="${pageContext.request.contextPath}">Home</a> |
 <c:if test="${FEATURE_VIEW_REPORTS!=null}">
@@ -15,5 +16,7 @@
 	</c:if>
 
 	<a href="${pageContext.request.contextPath}/logout">Logout</a>
-	<hr />
+</div>
+	<hr /><div style="text-align:right;color:#ff0000">* Symbol on the form Indicates Mandatory input field</div>
+	
 </c:if>

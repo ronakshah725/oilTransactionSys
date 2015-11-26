@@ -1,3 +1,4 @@
+
 /**
  * 
  */
@@ -34,8 +35,9 @@ public class OrderDaoImpl {
 
 	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?)";
 	public static final String SELECT_ORDER_BY_USER_ID = "select o.id as id,o.type as type, o.quantity as quantity,o.commission_fees as commission_fees,o.commission_type as commission_type,o.total_amt as total_amt,o.oil_adjusted_quantity as oil_adjusted_quantity,o.date_placed as date_placed, o.payment_id as payment_id,isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id and o.id IN (SELECT order_id FROM places where client_id=?) order by date_placed desc";
-	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE id =?";
+	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE id =? and payment_id is not null";
 	public static final String REPORT_OIL_QTY = "select sum(o.quantity) as sums,isnull(o.payment_id) as payment_avl, isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id group by payment_avl,is_not_cancelled order by sums asc";
+
 	private JdbcTemplate adminJdbcConnectionTemplate;
 
 	@Autowired
@@ -78,7 +80,7 @@ public class OrderDaoImpl {
 			}
 			}
 		}
-		selectQueries.append(");");
+		selectQueries.append(") and payment_id is null;");
 		System.out.println(selectQueries.toString());
 		List<Float> orders = adminJdbcConnectionTemplate.query(selectQueries.toString(),
 				new PreparedStatementSetter() {
@@ -144,7 +146,6 @@ public class OrderDaoImpl {
 			}
 		});
 	}
-	
 	public  ReportOilBean getReportOilQty(){
 		ReportOilBean  rbean = adminJdbcConnectionTemplate.query(new PreparedStatementCreator() {
 			

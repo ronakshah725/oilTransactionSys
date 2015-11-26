@@ -7,12 +7,13 @@
 		<div>
 			<h3>Transaction Summary</h3>
 		</div>
-		<c:if test="${message!=null}">
-			<div>${message}</div>
-		</c:if>
+		
 	</div>
 
 	<div class="panel-body">
+	<c:if test="${message!=null}">
+			<div class="row" style="color:#ff0000;text-align:left" ><B> * ${message}</B></div>
+		</c:if>
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
 			<form name="createOrderForm" id="createOrderForm">
 				<table class="table table-striped">
@@ -24,8 +25,8 @@
 							<th>Type</th>
 							<th>Quantity</th>
 							<th>Amount($)</th>
-							<th>Commission($)</th>
-							<th>Commission(Lb)</th>
+							<th>2% Commission($)</th>
+							<th>2% Commission(Lb)</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -68,7 +69,7 @@
 			<div class="col-xs-2">Account type: </div>
 			<div class="col-xs-2"><b style="color:#F4813A;font-size:14pt">${selectedClient.level}</b></div>
 
-			<div class="col-xs-2">Outstanding balance</div>
+			<div class="col-xs-2">Account Credit</div>
 			<div class="col-xs-2"><b style="color:#1B0EC2;font-size:14pt">${selectedClient.balanceAmount} $</b></div>
 			<div class="col-xs-2">Total Oil owned:</div>
 			<div class="col-xs-2"><b style="color:#FFCE44;font-size:14pt">${selectedClient.totalOilQuantity} Lb</b></div>
