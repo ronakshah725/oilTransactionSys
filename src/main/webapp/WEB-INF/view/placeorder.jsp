@@ -33,7 +33,7 @@
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-6 left bottom">Rate applicable</div>
 				<div class="col-xs-6 left">
-					50/Lb
+					${oil_price}/Lb
 				</div>
 			</div>
 

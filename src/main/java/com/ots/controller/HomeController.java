@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,11 @@ public class HomeController {
 		UserBean user = userManagementServiceImpl.validateAndFetchUserDetails(loginBean.getUserName(),
 				loginBean.getPassword());
 		logger.debug("userObject found " + user);
+		
+		ResourceBundle bundle= ResourceBundle.getBundle("config");
+		request.getSession().setAttribute("oil_price",Integer.parseInt(bundle.getString("oil_price").trim()));
+		
+		
 		if (user != null) {
 			List<String> features = null;
 			request.getSession().setAttribute("user", user);
@@ -388,7 +394,7 @@ public class HomeController {
 		orderSummaryBean.setType(placeOrderBean.getType());
 		orderSummaryBean.setQuantity(placeOrderBean.getQuantity());
 		orderSummaryBean.setCommissionType(placeOrderBean.getCommissionType());
-		orderSummaryBean.setAmount(placeOrderBean.getQuantity() * 50);
+		orderSummaryBean.setAmount(placeOrderBean.getQuantity() * ((Integer)request.getSession().getAttribute("oil_price")));
 
 		if (placeOrderBean.getCommissionType().equals("Oil")) {
 			orderSummaryBean.setCommisisioninoil((float) orderSummaryBean.getQuantity() * (float) 0.02);
