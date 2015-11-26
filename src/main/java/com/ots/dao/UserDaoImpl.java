@@ -30,7 +30,8 @@ public class UserDaoImpl {
 	public static final String SELECT_USER_BY_CREDS = "SELECT * FROM users WHERE email= ? and aes_decrypt(password,'password')=?";
 
 	public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email= ? ";
-
+	public static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id= ? ";
+	
 	public static final String INSERT_USER = "INSERT INTO users(id,first_name,last_name,apt_no,street,city,state,zip_code,phone_no,cell_no,email,password,company_id)"
 			+ " VALUES (uuid(),?,?,?,?,?,?,?,?,?,?,aes_encrypt(?,'password'),'4fb19e50-9314-11e5-b673-5820b1762284');";
 
@@ -113,6 +114,22 @@ public class UserDaoImpl {
 		}
 	}
 
+	
+	public UserBean getUserDetailsById(final String id) {
+		List<UserBean> userBean = adminJdbcConnectionTemplate.query(SELECT_USER_BY_ID,
+				new PreparedStatementSetter() {
+					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+						ps.setString(1, id);
+					}
+				}, new UserRowMapper());
+
+		System.out.println(userBean);
+		if (userBean != null && userBean.size() != 0) {
+			return userBean.get(0);
+		} else {
+			return null;
+		}
+	}
 	/**
 	 * This method inserts entry into user table.
 	 * 

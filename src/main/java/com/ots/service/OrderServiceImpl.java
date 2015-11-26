@@ -98,5 +98,4 @@ public class OrderServiceImpl {
 	{
 		return placesDaoImpl.insertPlacesRecord(userID, clientID, orderID);
 	}
-	
 }

@@ -26,7 +26,14 @@
 				<div class="col-xs-6 left bottom">Quantity</div>
 				<div class="col-xs-6 left">
 					<input type="number" class="form-control" required
-					id="quantity"	name="quantity" />
+					id="quantity"	name="quantity" />(Lbs)
+				</div>
+			</div>
+			
+			<div class="row" style="padding-top: 10px">
+				<div class="col-xs-6 left bottom">Rate applicable</div>
+				<div class="col-xs-6 left">
+					50/Lb
 				</div>
 			</div>
 

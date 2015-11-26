@@ -62,10 +62,10 @@ public class UserManagementServiceImpl {
 	 * @param email
 	 * @return
 	 */
-	public ClientBean getClientDetails(String email) {
-		ClientBean cbean = clientDao.getClientDetails(email);
+	public ClientBean getClientDetails(String id) {
+		ClientBean cbean = clientDao.getClientDetails(id);
 		if (cbean != null) {
-			cbean.setUserBean(userDao.getUserDetails(email));
+			cbean.setUserBean(userDao.getUserDetailsById(id));
 		}
 		return cbean;
 	}
@@ -148,5 +148,17 @@ public class UserManagementServiceImpl {
 	public boolean insertIntoCancel(UserBean ub, ClientBean cb, String orderID)
 			throws MySQLIntegrityConstraintViolationException {
 		return cancelDao.insertIntoCancel(ub.getId(), cb.getClientId(), orderID);
+	}
+	
+	
+/**
+ * this method updates the account balance of the user.
+ * @param clientId
+ * @param balanceAmount
+ * @param totalOilQuantity
+ * @return
+ */
+	public Boolean updateOilAndBalanceOfClient(final String clientId,final float balanceAmount, final float totalOilQuantity ) {
+	return clientDao.updateOilAndBalanceOfClient(clientId, balanceAmount, totalOilQuantity);
 	}
 }

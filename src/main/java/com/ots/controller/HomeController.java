@@ -199,25 +199,30 @@ public class HomeController {
 	@RequestMapping(value = "/cancelOrder", method = RequestMethod.GET)
 	public ModelAndView cancelOrder(ModelMap model, @RequestParam(required = false) String orderIds,
 			HttpServletRequest request) {
-		logger.debug("searchUserBean= " + orderIds+ " : ");
+		logger.debug("searchUserBean= " + orderIds + " : ");
 
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		UserBean user = (UserBean) request.getSession().getAttribute("user");
-		try{
-		for (String orderId: orderIds.split(",")) {
-			if(orderId!=null)
-			{
-				userManagementServiceImpl.insertIntoCancel(user, clientBean, orderId);		
-				model.addAttribute("message", "Congratulations! Payment cancellation was successful");
+		try {
+			for (String orderId : orderIds.split(",")) {
+				if (orderId != null) {
+					userManagementServiceImpl.insertIntoCancel(user, clientBean, orderId);
+					model.addAttribute("message", "Congratulations! Payment cancellation was successful");
+				}
 			}
-		}
-		}catch(MySQLIntegrityConstraintViolationException mse)
-		{
+
+			userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(),
+					(clientBean.getBalanceAmount()
+							+ orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(",")))),
+					clientBean.getTotalOilQuantity());
+			clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
+			request.getSession().setAttribute("selectedClient", clientBean);
+
+		} catch (MySQLIntegrityConstraintViolationException mse) {
 			mse.printStackTrace();
-			model.addAttribute("message", "Exception occured while deleting, please logout and try again.");	
+			model.addAttribute("message", "Exception occured while deleting, please logout and try again.");
 		}
-		
-		
+
 		return loadOrderSummaries(model, request);
 	}
 
@@ -240,7 +245,8 @@ public class HomeController {
 		// CANCEL_ORDER feature access, reject and log user out
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		model.addAttribute("amountDue",
-				(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100 + clientBean.getBalanceAmount()));
+				(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100
+						+ clientBean.getBalanceAmount()));
 		model.addAttribute("balAmount", clientBean.getBalanceAmount() + "$");
 		return ("payment");
 	}
@@ -269,6 +275,11 @@ public class HomeController {
 		paymentBean.setDateAccepted(Calendar.getInstance().getTime());
 		paymentBean.setAmount((orderSerivceImpl.getTotalAmountToBePaid(orderIds) + clientBean.getBalanceAmount()));
 		System.out.println(paymentBean);
+
+		userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(), new Float(0.0),
+				clientBean.getTotalOilQuantity());
+		clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
+		request.getSession().setAttribute("selectedClient", clientBean);
 
 		orderSerivceImpl.insertPaymentDetails(paymentBean);
 
@@ -381,24 +392,43 @@ public class HomeController {
 
 		if (placeOrderBean.getCommissionType().equals("Oil")) {
 			orderSummaryBean.setCommisisioninoil((float) orderSummaryBean.getQuantity() * (float) 0.02);
+			orderSummaryBean.setCommissionindollar(new Float(0.0));
 		} else {
 			orderSummaryBean.setCommissionindollar(orderSummaryBean.getAmount() * (float) 0.02);
+			orderSummaryBean.setCommisisioninoil(new Float(0.0));
 		}
+
+		orderSummaryBean.setQuantity((orderSummaryBean.getQuantity() - orderSummaryBean.getCommisisioninoil()));
+		orderSummaryBean.setAmount((orderSummaryBean.getAmount() - orderSummaryBean.getCommissionindollar()));
+
+		System.out.println("after applying commission" + orderSummaryBean);
+
 		orderSerivceImpl.createOrder(orderSummaryBean);
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		UserBean user = (UserBean) request.getSession().getAttribute("user");
-	try{
-		orderSerivceImpl.insertPlacesRecord(user.getId(), clientBean.getClientId(), ordId);
-	}catch(MySQLIntegrityConstraintViolationException mse)
-	{
-		model.addAttribute("message", "Exception occured while deleting, please logout and try again.");	
-	}
+		try {
+			orderSerivceImpl.insertPlacesRecord(user.getId(), clientBean.getClientId(), ordId);
+
+			Float userAcountOilQty = clientBean.getTotalOilQuantity();
+			if (placeOrderBean.getType().equals("buy")) {
+				userAcountOilQty += orderSummaryBean.getQuantity();
+			} else {
+				userAcountOilQty -= orderSummaryBean.getQuantity();
+			}
+			userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(),
+					clientBean.getBalanceAmount(), userAcountOilQty);
+			clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
+			request.getSession().setAttribute("selectedClient", clientBean);
+
+		} catch (MySQLIntegrityConstraintViolationException mse) {
+			model.addAttribute("message", "Exception occured while deleting, please logout and try again.");
+		}
 		return loadOrderSummaries(model, request);
 
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(ModelMap model, HttpServletRequest request, @ModelAttribute LoginBean loginBean) {
+	public String logout(ModelMap modesetttingl, HttpServletRequest request, @ModelAttribute LoginBean loginBean) {
 		return logUserOut(request);
 	}
 

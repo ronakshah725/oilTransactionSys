@@ -38,7 +38,7 @@ public class ClientDaoImpl {
 
 	public static final String INSERT_CLIENT = "INSERT INTO client(client_id) VALUES (?)";
 
-	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE id =?";
+	public static final String UPDATE_ORDER = "UPDATE client SET total_oil_quantity= ?, balance_amount=? WHERE client_id =?";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
 	private JdbcTemplate traderJdbcConnectionTemplate;
@@ -66,12 +66,21 @@ public class ClientDaoImpl {
 		}
 	}
 
-	public Boolean updateOrderDetails(final String clientId,final float balanceAmount ) {
+	/**
+	 * This method updates the mentioned parameters for given client.
+	 * @param clientId
+	 * @param balanceAmount
+	 * @param totalOilQuantity
+	 * @return
+	 */
+	public Boolean updateOilAndBalanceOfClient(final String clientId,final float balanceAmount, final float totalOilQuantity ) {
 
 		return adminJdbcConnectionTemplate.execute(UPDATE_ORDER, new PreparedStatementCallback<Boolean>() {
 			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-				ps.setString(1, orderSummaryBean.getPaymentId());
-				ps.setString(2, orderSummaryBean.getOrderId());
+				
+				ps.setFloat(1, totalOilQuantity);
+				ps.setFloat(2, balanceAmount);
+				ps.setString(3, clientId);
 				return ps.execute();
 			}
 		});
