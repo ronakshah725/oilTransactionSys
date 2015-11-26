@@ -95,7 +95,6 @@ FOREIGN KEY(trader_id)	 REFERENCES users(id),
 CREATE TABLE orders (
   id varchar(36) NOT NULL,
   type varchar(5) NOT NULL,
-  trans_fee float NOT NULL,
   quantity float NOT NULL,
   commission_fees float DEFAULT NULL,
   commission_type varchar(5) NOT NULL,
@@ -196,3 +195,8 @@ insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be
 insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762213');
 insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762214');
 insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762215'); 
+
+
+--user abc@def
+ insert into trader values( 'd7faa6df-93db-11e5-9cc5-000c29893b5c','0be218c5-9394-11e5-b673-5820b1762285' );
+  insert into orders (id,type,quantity,commission_type,date_placed) values(uuid(),'BUY',100,'CASH','2015-01-01');
