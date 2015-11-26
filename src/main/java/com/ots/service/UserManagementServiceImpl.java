@@ -9,6 +9,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import com.ots.common.ClientBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
+import com.ots.dao.CancelDaoImpl;
 import com.ots.dao.ClientDaoImpl;
 import com.ots.dao.FeatureDaoImpl;
 import com.ots.dao.TraderDaoImpl;
@@ -35,6 +36,8 @@ public class UserManagementServiceImpl {
 	@Autowired
 	private FeatureDaoImpl featureDao;
 
+	@Autowired
+	private CancelDaoImpl cancelDao;
 	/**
 	 * This method validates whether user's credentials are correct or not and
 	 * if not, it returns the null object.
@@ -93,7 +96,7 @@ public class UserManagementServiceImpl {
 
 	/**
 	 * This function loops through all the feature codes available for Client
-	 * role and returns teh same.
+	 * role and returns the same.
 	 * 
 	 * @return
 	 */
@@ -140,5 +143,12 @@ public class UserManagementServiceImpl {
 	 */
 	public List<UserBean> searchUser(final UserBean userBean) {
 		return userDao.searchUser(userBean);
+	}
+	
+	public boolean insertIntoCancel(UserBean ub, ClientBean cb, String orderID) throws MySQLIntegrityConstraintViolationException{
+		cancelDao.insertIntoCancel(ub.getId(), cb.getClientId(), orderID);
+		
+		return false;
+		
 	}
 }

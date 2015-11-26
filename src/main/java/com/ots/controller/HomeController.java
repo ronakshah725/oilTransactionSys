@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.ClientBean;
 import com.ots.common.LoginBean;
 import com.ots.common.OrderSummaryBean;
@@ -199,10 +200,22 @@ public class HomeController {
 	 * @param model
 	 * @param orderIds
 	 * @return
+	 * @throws MySQLIntegrityConstraintViolationException 
 	 */
 	@RequestMapping(value = "/cancelOrder", method = RequestMethod.GET)
-	public String cancelOrder(ModelMap model, @RequestParam(required = false) List<String> orderIds) {
+	public String cancelOrder(ModelMap model,HttpServletRequest request, @RequestParam(required = false) List<String> orderIds) throws MySQLIntegrityConstraintViolationException {
 		logger.debug("searchUserBean= " + orderIds);
+		
+		logger.debug("OrderIDS : "+ orderIds);
+		
+		UserBean userBean = (UserBean) request.getSession().getAttribute("user");
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		System.out.println("Cancelling: " + userBean.getId()+" , " + clientBean.getClientId() + ""  );
+		for (String orderID : orderIds){
+			userManagementServiceImpl.insertIntoCancel(userBean, clientBean, orderID);
+		}
+		
+		
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
 
