@@ -19,8 +19,10 @@
 					method="POST">
 					<script src="https://checkout.stripe.com/checkout.js"
 						class="stripe-button" data-key="pk_test_6pRNASCoBOKtIshFeQd4XMUh"
-						data-amount="${amountDue}" data-name="Demo Site"
-						data-description="Total Charge" data-image="/128x128.png"
+						data-amount="${amountDue}" data-name="Oil Transaction System"
+						data-email	="${selectedClient.userBean.emailId}"
+						data-description="Total Charge" 
+						data-label="Total Charges for Oil"
 						data-locale="auto">
 					</script>
 				</form>

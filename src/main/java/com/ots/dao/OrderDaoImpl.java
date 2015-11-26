@@ -69,7 +69,7 @@ public class OrderDaoImpl {
 		for (String orderId : orderIds) {
 			if(orderId.trim().length()>0){
 			if (selectQueries.toString().length() == 0) {
-				selectQueries.append("Select sum(total_amt) from orders where id in( ?" );
+				selectQueries.append("Select sum(total_amt) as total from orders where id in( ?" );
 			} else {
 				selectQueries.append(",?" );
 			}
@@ -91,7 +91,7 @@ public class OrderDaoImpl {
 					}
 				}, new RowMapper<Float>() {
 					  public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
-					        return rs.getFloat(1);
+					        return rs.getFloat("total");
 					  }
 
 					});

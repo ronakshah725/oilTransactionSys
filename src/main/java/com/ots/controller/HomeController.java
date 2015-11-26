@@ -399,7 +399,7 @@ public class HomeController {
 		}
 
 		orderSummaryBean.setQuantity((orderSummaryBean.getQuantity() - orderSummaryBean.getCommisisioninoil()));
-		orderSummaryBean.setAmount((orderSummaryBean.getAmount() - orderSummaryBean.getCommissionindollar()));
+		orderSummaryBean.setAmount((orderSummaryBean.getAmount() + orderSummaryBean.getCommissionindollar()));
 
 		System.out.println("after applying commission" + orderSummaryBean);
 
