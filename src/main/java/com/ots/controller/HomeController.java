@@ -341,8 +341,7 @@ public class HomeController {
 		orderSummaryBean.setCommissionindollar(Float.parseFloat("30"));
 		orderSummaryBean.setCommisisioninoil(Float.parseFloat("21"));
 
-		OrderDaoImpl orderDaoImpl = new OrderDaoImpl();
-		//orderDaoImpl.createOrder(orderSummaryBean);
+ 		//orderDaoImpl.createOrder(orderSummaryBean);
 
 		return "placeorder";
 

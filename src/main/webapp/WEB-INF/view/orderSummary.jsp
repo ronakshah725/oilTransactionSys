@@ -14,55 +14,50 @@
 
 	<div class="panel-body">
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
-		<form name="createOrderForm" id="createOrderForm">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Check</th>
-						<th>#</th>
-						<th>Date</th>
-						<th>Type</th>
-						<th>Quantity</th>
-						<th>Status</th>
-						<th>Amount($)</th>
-						<th>Commission($/lb)</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><input type="Checkbox" id="checkbox1"/></td>
-						<td>1</td>
-						<td>11/11/2015 12:11:00</td>
-						<td>Sale</td>
-						<td>100</td>
-						<td>Completed</td>
-						<td>15323.00 $</td>
-						<td>153.00 $</td>
-					</tr>
+			<form name="createOrderForm" id="createOrderForm">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Check</th>
+							<th>#</th>
+							<th>Date</th>
+							<th>Type</th>
+							<th>Quantity</th>
+							<th>Status</th>
+							<th>Amount($)</th>
+							<th>Commission($/lb)</th>
+						</tr>
+					</thead>
+					<tbody>
 
-					<tr style="color: #dd0000">
-						<td><input type="Checkbox" id="checkbox2"/></td>
-						<td>2</td>
-						<td>11/11/2015 12:10:00</td>
-						<td>Sale</td>
-						<td>100</td>
-						<td>Cancelled</td>
-						<td>15323.00 $</td>
-						<td>153.00 $</td>
-					</tr>
-					<tr style="color: #00B050">
-						<td><input type="Checkbox" id="checkbox3"/></td>
-						<td>3</td>
-						<td>11/10/2015 12:11:00</td>
-						<td>Buy</td>
-						<td>100</td>
-						<td>Completed</td>
-						<td>15323.00 $</td>
-						<td>153.00 $</td>
-					</tr>
+						<c:forEach items="${orders}" varStatus="loop" var="order">
+							<c:when test="${isCancelled}">
+								<tr style="color: #dd0000">
+							</c:when>
+							<c:otherwise>
+								<c:when test="${order.paymentId!=null}">
+									<tr style="color: #00B050">
+								</c:when>
+								<c:otherwise>
+									<tr>
+								</c:otherwise>
+							</c:otherwise>
+							<td><input type="Checkbox" id="${order.id}" /></td>
+							<td>${loop.index}</td>
+							<td>${order.date}</td>
+							<td>${order.type}</td>
+							<td>${order.quantity}</td>
+							<td>${order.amount}</td>
+							<td>${order.commissionindollar}${order.commisisioninoil}</td>
 
-				</tbody>
-			</table>
+							<td><input type="button" class="btn btn-warning"
+								onclick="executeSelectUser('${user.emailId}')" value="Select"></td>
+							</tr>
+						</c:forEach>
+
+
+					</tbody>
+				</table>
 		</div>
 		<div class="row">
 			<div class="xs-col-3">Outstanding balance</div>
