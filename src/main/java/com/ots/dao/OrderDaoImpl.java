@@ -91,10 +91,12 @@ public class OrderDaoImpl {
 					}
 				}, new RowMapper<Float>() {
 					  public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
+						  System.out.println("rs.getdfloat"+rs.getFloat("total"));
 					        return rs.getFloat("total");
 					  }
 
 					});
+		System.out.println("-->"+orders);
 		return orders.get(0);
 	}
 

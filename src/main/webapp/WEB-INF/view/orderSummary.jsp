@@ -65,11 +65,13 @@
 		</div>
 		<hr/>
 		<div class="row">
-			<div class="col-xs-24"></div>
+			<div class="col-xs-2">Account type: </div>
+			<div class="col-xs-2"><b style="color:#F4813A;font-size:14pt">${selectedClient.level}</b></div>
+
 			<div class="col-xs-2">Outstanding balance</div>
-			<div class="col-xs-2"><b style="color:#DE7E38;font-size:14pt">${selectedClient.balanceAmount} $</b></div>
+			<div class="col-xs-2"><b style="color:#1B0EC2;font-size:14pt">${selectedClient.balanceAmount} $</b></div>
 			<div class="col-xs-2">Total Oil owned:</div>
-			<div class="col-xs-2"><b style="color:#DE7E38;font-size:14pt">${selectedClient.totalOilQuantity} Lb</b></div>
+			<div class="col-xs-2"><b style="color:#FFCE44;font-size:14pt">${selectedClient.totalOilQuantity} Lb</b></div>
 		</div>
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
 			<div class="col-xs-4" style="text-align: center">

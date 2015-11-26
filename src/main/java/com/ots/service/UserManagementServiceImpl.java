@@ -159,6 +159,8 @@ public class UserManagementServiceImpl {
  * @return
  */
 	public Boolean updateOilAndBalanceOfClient(final String clientId,final float balanceAmount, final float totalOilQuantity ) {
+		
+		System.out.println("User Account to be updated "+ clientId+" : "+balanceAmount+ " : "+totalOilQuantity);
 	return clientDao.updateOilAndBalanceOfClient(clientId, balanceAmount, totalOilQuantity);
 	}
 }

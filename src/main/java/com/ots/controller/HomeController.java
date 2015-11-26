@@ -250,9 +250,14 @@ public class HomeController {
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
-		model.addAttribute("amountDue",
-				(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100
-						+ clientBean.getBalanceAmount()));
+		Long orderCost = new Float(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100
+				+ clientBean.getBalanceAmount()*100).longValue();
+		
+		System.out.println("orders_total_Amout: "+orderCost);
+		
+		model.addAttribute("amountDue", 
+				orderCost);
+		
 		model.addAttribute("balAmount", clientBean.getBalanceAmount() + "$");
 		return ("payment");
 	}

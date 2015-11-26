@@ -57,7 +57,10 @@ public class OrderServiceImpl {
 	 * @return
 	 */
 	public float getTotalAmountToBePaid(List<String> orderIds) {
-		return orderDaoImpl.getTotalAmountByOrderIds(orderIds);
+		float val = orderDaoImpl.getTotalAmountByOrderIds(orderIds);
+		System.out.println("===="+val);
+		
+		return val;
 	}
 	
 	/**
