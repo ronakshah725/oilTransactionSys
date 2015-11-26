@@ -73,7 +73,7 @@ public class HomeController {
 			// @Ronak to implement DAO
 			ClientBean clientBean = userManagementServiceImpl.getClientDetails(user.getId());
 			if (clientBean != null) {
-				features = userManagementServiceImpl.getClientFeatureCodes();
+				features = userManagementServiceImpl.getClientFeatureCodes(clientBean.getClientId());
 			} else {
 				TraderBean traderBean = userManagementServiceImpl.getTraderDetails(user.getId());
 				if (traderBean == null) {

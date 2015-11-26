@@ -10,6 +10,7 @@ import com.ots.common.ClientBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.dao.ClientDaoImpl;
+import com.ots.dao.FeatureDaoImpl;
 import com.ots.dao.TraderDaoImpl;
 import com.ots.dao.UserDaoImpl;
 
@@ -30,6 +31,9 @@ public class UserManagementServiceImpl {
 
 	@Autowired
 	private TraderDaoImpl traderDao;
+	
+	@Autowired
+	private FeatureDaoImpl featureDao;
 
 	/**
 	 * This method validates whether user's credentials are correct or not and
@@ -82,15 +86,8 @@ public class UserManagementServiceImpl {
 	 * 
 	 * @return
 	 */
-	public List<String> getClientFeatureCodes() {
-		List<String> listOfFeatures = null;
-
-		// Following query can be directly written in featureDaoImpl - no need
-		// to create a separate role_daoimpl/role_has_user_daoimpl
-		// select f.feature_code from feature f,role_has_features rhf where
-		// rhf.feature_id=f.id and rhf.role_id= ( select id from role where
-		// role_code='CLIENT');
-
+	public List<String> getClientFeatureCodes(String clientID) {
+		List<String> listOfFeatures = featureDao.getClientFeatureCodes(clientID);
 		return listOfFeatures;
 	}
 
@@ -100,13 +97,10 @@ public class UserManagementServiceImpl {
 	 * 
 	 * @return
 	 */
-	public List<String> getTraderFeatureCodes(String roleId) {
-		List<String> listOfFeatures = null;
+	public List<String> getTraderFeatureCodes(String roleID) {
+		List<String> listOfFeatures = featureDao.getTraderFeatureCodes(roleID);
 
-		// Following query can be directly written in featureDaoImpl - no need
-		// to create a separate role_daoimpl/role_has_user_daoimpl
-		// select f.feature_code from feature f,role_has_features rhf where
-		// rhf.feature_id=f.id and rhf.role_id= ?
+
 		return listOfFeatures;
 	}
 
