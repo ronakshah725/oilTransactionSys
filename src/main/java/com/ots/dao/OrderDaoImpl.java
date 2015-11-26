@@ -27,7 +27,7 @@ import com.ots.rowmapper.OrderRowMapper;
 @Repository
 public class OrderDaoImpl {
 
-	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,trans_fee,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?,?)";
+	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?)";
 	public static final String SELECT_ORDER_BY_USER_ID = "SELECT * FROM orders where order_id IN (SELECT order_id FROM places where client_id=?)";
 	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE order_id in (?)";
 
@@ -53,6 +53,7 @@ public class OrderDaoImpl {
 						ps.setString(1, clientId);
 					}
 				}, new OrderRowMapper());
+		return orders;
 
 	}
 
@@ -72,5 +73,33 @@ public class OrderDaoImpl {
 			}
 		});
 	}
+	
+	
+
+	/**
+	 * This method updates the payment into Order table.
+	 * 
+	 * @param orderBean
+	 * @return
+	 */
+	public Boolean createOrder(final OrderSummaryBean orderSummaryBean) {
+
+		return adminJdbcConnectionTemplate.execute(QUERY_INSERT_TASK, new PreparedStatementCallback<Boolean>() {
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+			 
+				
+				
+				ps.setString(1, orderSummaryBean.getOrderId());
+				ps.setString(2, orderSummaryBean.getType());
+				
+				
+				return ps.execute();
+			}
+		});
+	}
+	
+	
+	
+	
 
 }
