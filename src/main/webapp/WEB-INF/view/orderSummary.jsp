@@ -70,12 +70,16 @@
 			<div class="xs-col-3">${totalOilOwned}</div>
 		</div>
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
-			<div class="col-xs-6" style="text-align: center">
+			<div class="col-xs-4" style="text-align: center">
 
 				<input id="loginBtn" name="loginBtn" class="btn btn-info"
 					type="button" value="Pay" onclick="makePayment()" />
 			</div>
-			<div class="col-xs-6" style="text-align: center">
+			<div class="col-xs-4" style="text-align: center">
+				<input id="loginBtn" name="loginBtn" class="btn btn-info"
+					type="button" value="Place Order" onclick="createOrder()" />
+			</div>
+			<div class="col-xs-4" style="text-align: center">
 				<input id="loginBtn" name="loginBtn" class="btn btn-info"
 					type="button" value="Cancel" onclick="cancelOrder()" />
 			</div>

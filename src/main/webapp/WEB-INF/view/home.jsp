@@ -66,7 +66,11 @@
 	}
 
 	function cancelOrder() {
-		var orderIds; //Read all checked checkboxes
+		var orderIds="";
+		$('input[type="Checkbox"]:checked').each(function() {
+			orderIds+=this.id+',';
+		});
+		
 		$.ajax({
 			type : "GET",
 			url : "cancelOrder",
@@ -76,7 +80,19 @@
 			}
 		});
 	}
-
+	
+	function createOrder() {
+	 
+		
+		$.ajax({
+			type : "POST",
+			url : "createOrder",
+			success : function(data) {
+				$("#container").html(data);
+			}
+		});
+	}
+	
 	function makePayment() {
 		var orderIds="";
 		$('input[type="Checkbox"]:checked').each(function() {

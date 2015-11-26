@@ -13,6 +13,7 @@ public class TraderRowMapper implements RowMapper<TraderBean> {
 
 		TraderBean trader = new TraderBean();
 		trader.setTraderId(rs.getString("trader_id"));
+		trader.setRoleId(rs.getString("role_id"));
 		
 		// set all parameters of users row in the bean
 		return trader;

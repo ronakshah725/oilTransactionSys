@@ -37,7 +37,8 @@ public class HomeController {
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(ModelMap model, HttpServletRequest request) {
 		if (request.getSession().getAttribute("user") != null) {
-			if (request.getSession().getAttribute("isCustomer") != null) {
+			if (request.getSession().getAttribute("selectedClient") != null) {
+
 				return "orderSummary";
 			} else {
 				return "searchUser";
@@ -57,35 +58,24 @@ public class HomeController {
 		if (user != null) {
 			List<String> features = null;
 			request.getSession().setAttribute("user", user);
-
-			// else execute select * from trader = the one we got from userBean
-			// -read role_id
-			// select FEATURE_CODE from role_has_features-joinfeatures where
-			// role_id= the role from trader bean
-			// Loop through feature_codes and execute
-			// request.getSession().setAttribute(FEATURE_CODE,"true");
-			// set List of features in session
-			// request.getSession().setAttribute("features",
-			// List<Feature.name>); -use these features in order to decide what
-			// to display in the top menu on heading.jsp
-
-			request.getSession().setAttribute("FEATURE_INSERT_USER", "true");
-			// @Ronak to implement DAO
 			ClientBean clientBean = userManagementServiceImpl.getClientDetails(user.getId());
+			
 			if (clientBean != null) {
+				request.getSession().setAttribute("selectedClient", clientBean);
+				System.out.println("settting===?>"+request.getSession().getAttribute("selectedClient"));
 				features = userManagementServiceImpl.getClientFeatureCodes(clientBean.getClientId());
+				return new ModelAndView("orderSummary");
 			} else {
 				TraderBean traderBean = userManagementServiceImpl.getTraderDetails(user.getId());
 				if (traderBean == null) {
 					model.addAttribute("message",
 							"User has not been properly set up yet. Please contact administrator");
-					// Needs to be enabled by Ronak after DB is in place and
-					// trader entry has been made for abc@def.com useremail.
-					// return new ModelAndView( "loginInput");
+					 return new ModelAndView( "loginInput");
 				} else {
 					features = userManagementServiceImpl.getTraderFeatureCodes(traderBean.getRoleId());
 				}
 			}
+			System.out.println("-->"+features);
 			if (features != null && features.size() != 0) {
 				for (String feature : features) {
 					request.getSession().setAttribute(feature, "true");
@@ -204,6 +194,8 @@ public class HomeController {
 		logger.debug("searchUserBean= " + orderIds);
 		// Check if user has appropriate role or not if user does not has
 		// CANCEL_ORDER feature access, reject and log user out
+		
+		
 
 		model.addAttribute("message", "Congratulations! Payment cancellation was successful");
 		return ("orderSummary");
@@ -300,7 +292,17 @@ public class HomeController {
 		return "createUser";
 
 	}
+	@RequestMapping(value = "/createOrder", method = RequestMethod.POST)
+	public String createOrder(ModelMap model) {
+		// Return empty create new user page
+		// Do request.getsession().getAttribute - getFEATURES and see if the
+		// there is a FEATURE called INSERT_USER, if it is, return the
+		// createUser page
+		// otherwise log user out - call return logUserOut(request);
+		return "placeorder";
 
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(ModelMap model, HttpServletRequest request, @ModelAttribute LoginBean loginBean) {
 		return logUserOut(request);
