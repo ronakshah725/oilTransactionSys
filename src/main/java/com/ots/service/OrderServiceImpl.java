@@ -140,7 +140,12 @@ public class OrderServiceImpl {
 		return placesDaoImpl.insertPlacesRecord(userID, clientID, orderID);
 	}
 	
-	public List<ReportOilBean> getReportOilQty() {
-		return orderDaoImpl.getReportOilQty();
+	/**
+	 * This method accepts the column name on which data needs to be extracted.
+	 * @param type
+	 * @return
+	 */
+	public List<ReportOilBean> getReportOilQty(String type) {
+		return orderDaoImpl.getReportDataForType(type);
 	}
 }

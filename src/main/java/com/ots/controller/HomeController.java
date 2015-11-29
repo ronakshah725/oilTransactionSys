@@ -293,15 +293,13 @@ public class HomeController {
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		Long orderCost = new Float(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100
 				+ clientBean.getBalanceAmount() * 100).longValue();
-		
-		if(orderCost>0L){
-		logger.debug("orders_total_Amout: " + orderCost);
-		model.addAttribute("amountDue", orderCost);
-		model.addAttribute("balAmount", clientBean.getBalanceAmount() + "$");
-		return ("payment");
-		}
-		else
-		{
+
+		if (orderCost > 0L) {
+			logger.debug("orders_total_Amout: " + orderCost);
+			model.addAttribute("amountDue", orderCost);
+			model.addAttribute("balAmount", clientBean.getBalanceAmount() + "$");
+			return ("payment");
+		} else {
 			model.addAttribute("message", "There is no amount due for the selected transactions");
 			return "orderSummary";
 		}
@@ -332,7 +330,6 @@ public class HomeController {
 		paymentBean.setAmount((orderSerivceImpl.getTotalAmountToBePaid(orderIds) + clientBean.getBalanceAmount()));
 		logger.debug(paymentBean);
 
-
 		orderSerivceImpl.insertPaymentDetails(paymentBean);
 
 		for (String orderId : orderIds) {
@@ -344,16 +341,12 @@ public class HomeController {
 				orderSerivceImpl.updateOrderDetails(orderSummaryBean);
 			}
 		}
-		
-		
 
 		userManagementServiceImpl.updateOilAndBalanceOfClient(clientBean.getClientId(), new Float(0.0),
 				clientBean.getTotalOilQuantity());
 		clientBean = userManagementServiceImpl.getClientDetails(clientBean.getUserBean().getId());
 		request.getSession().setAttribute("selectedClient", clientBean);
-		
-		
-		
+
 		model.addAttribute("message", "Congratulations! Payment  was successful");
 
 		logger.debug("Stripe token= " + request.getSession().getAttribute("stripeToken"));
@@ -495,53 +488,68 @@ public class HomeController {
 		return logUserOut(request);
 	}
 
-
 	@RequestMapping(value = "/viewReports", method = RequestMethod.GET)
 	public String reports(ModelMap map, HttpServletRequest request) {
-		//ronak
-		String[] myJSON = {
-						   "{",
-						   "\"Payment Done\"","",",", //2
-						   "\"Payment Pending\"","",",",//5
-						   "\"Payment Cancelled\"","",",",//8
-							"}"
-						   };
-		
-		List<ReportOilBean> rbean = orderSerivceImpl.getReportOilQty();
-		for (ReportOilBean rb : rbean){
-			//done
-			if(rb.getPayment_avl()&&!rb.getIs_cancelled()){
-				myJSON[2] = rb.getSums() + "";
-			}
-			//pending
-			if(!rb.getPayment_avl()&&!rb.getIs_cancelled()){
-				myJSON[5] = rb.getSums() + "";
-			}
-			//cancelled
-			if(!rb.getPayment_avl()&&rb.getIs_cancelled()){
-				myJSON[8] = rb.getSums() + "";
-				
-			}
-			
-		}
-		
-		StringBuilder json = new StringBuilder("");
-		for (String a : myJSON){
-			json.append(a);
-		}
-		System.out.println("json : " + json );
-		
-		
-		
-		map.addAttribute("chart1Json", "{}");
-		map.addAttribute("chart2Json", "{}");
-		map.addAttribute("chart3Json", "{}");
-//		map.addAttribute("chart4Json", "{    \"cols\": [          {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},          {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}        ],    \"rows\": [          {\"c\":[{\"v\":\"Mushrooms\",\"f\":null},{\"v\":3,\"f\":null}]},          {\"c\":[{\"v\":\"Onions\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Olives\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Zucchini\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Pepperoni\",\"f\":null},{\"v\":2,\"f\":null}]}        ]  }");
-		map.addAttribute("chart4RJson", json);
+
+		map.addAttribute("chart1Json", getChartJson("Quantity", orderSerivceImpl.getReportOilQty("quantity")));
+		map.addAttribute("chart2Json", getChartJson("Total Amount", orderSerivceImpl.getReportOilQty("total_amt")));
+		map.addAttribute("chart3Json",
+				getChartJson("Total Oil Commission", orderSerivceImpl.getReportOilQty("oil_adjusted_quantity")));
+		map.addAttribute("chart4Json",
+				getChartJson("Total Commission Fees", orderSerivceImpl.getReportOilQty("commission_fees")));
 		return "reportsView";
 	}
 
-	
+	/**
+	 * @param paymentDone
+	 * @param paymentCancelledValue
+	 * @param paymentPendingValue
+	 * @param type
+	 * @param rbean
+	 * @return
+	 */
+	public String getChartJson(String type, List<ReportOilBean> rbean) {
+		String chart1Json;
+		double paymentDone = 0;
+		double paymentCancelledValue = 0;
+		double paymentPendingValue = 0;
+		for (ReportOilBean rb : rbean) {
+			// done
+			if (rb.getPayment_avl() && !rb.getIs_cancelled()) {
+				paymentDone += rb.getSums();
+			}
+			// pending
+			if (!rb.getPayment_avl() && !rb.getIs_cancelled()) {
+				paymentPendingValue += rb.getSums();
+			}
+			// cancelled
+			if (rb.getIs_cancelled()) {
+				paymentCancelledValue += rb.getSums();
+			}
+		}
+
+		chart1Json = getJson(paymentDone, paymentCancelledValue, paymentPendingValue, type);
+		return chart1Json;
+	}
+
+	/**
+	 * @param paymentDone
+	 * @param paymentCancelledValue
+	 * @param paymentPendingValue
+	 * @param type
+	 * @return
+	 */
+	public String getJson(double paymentDone, double paymentCancelledValue, double paymentPendingValue, String type) {
+		return "{	\"cols\": [{		\"id\": \"\",		\"label\": \"Payment Info\",		\"pattern\": \"\",		\"type\": \"string\"	}, {		\"id\": \"\",		\"label\": \""
+				+ type
+				+ "\",		\"pattern\": \"\",		\"type\": \"number\"	}],	\"rows\": [{		\"c\": [{			\"v\": \"Payment Done\",			\"f\": null		}, {			\"v\": "
+				+ paymentDone
+				+ ",			\"f\": null		}]	}, {		\"c\": [{			\"v\": \"Payment Pending\",				\"f\": null		}, {			\"v\": "
+				+ paymentPendingValue
+				+ ",			\"f\": null		}]	}, {		\"c\": [{			\"v\": \"Payment Cancelled\",			\"f\": null		}, {			\"v\": "
+				+ paymentCancelledValue + ",			\"f\": null		}]	}]}";
+	}
+
 	/**
 	 * @param request
 	 * @return
@@ -551,6 +559,5 @@ public class HomeController {
 		logger.debug("loggingout");
 		return "redirect:/";
 	}
-
 
 }

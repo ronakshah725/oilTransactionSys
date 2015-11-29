@@ -199,7 +199,10 @@ insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be
 --Indexes defined
 
 create index search_client USING HASH on users (id,last_name,apt_no,street,city,zip_code,phone_no,cell_no,email);
-
+create index quantity_report USING HASH on orders(id, payment_id, quantity);
+create index amount_report USING HASH on orders(id, payment_id, total_amt);
+create index oil_commission_report USING HASH on orders(id, payment_id, oil_adjusted_quantity);
+create index fees_report USING HASH on orders(id, payment_id, commission_fees);
 
 --user abc@def
  insert into trader values( 'd7faa6df-93db-11e5-9cc5-000c29893b5c','0be218c5-9394-11e5-b673-5820b1762285' );

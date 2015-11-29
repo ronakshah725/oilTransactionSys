@@ -2,8 +2,8 @@ package com.ots.common;
 
 public class ReportOilBean{
 	private float sums;
-	private boolean payment_avl;
-	private boolean is_cancelled;
+	private boolean paymentAvl;
+	private boolean isCancelled;
 	public float getSums() {
 		return sums;
 	}
@@ -11,20 +11,20 @@ public class ReportOilBean{
 		this.sums = sums;
 	}
 	public boolean getPayment_avl() {
-		return payment_avl;
+		return paymentAvl;
 	}
 	public void setPayment_avl(boolean payment_avl) {
-		this.payment_avl = payment_avl;
+		this.paymentAvl = payment_avl;
 	}
 	public boolean getIs_cancelled() {
-		return is_cancelled;
+		return isCancelled;
 	}
 	public void setIs_cancelled(boolean is_not_cancelled) {
-		this.is_cancelled = is_not_cancelled;
+		this.isCancelled = is_not_cancelled;
 	}
 	@Override
 	public String toString() {
-		return "ReportOilBean [sums=" + sums + ", payment_avl=" + payment_avl + ", is_cancelled=" + is_cancelled + "]";
+		return "ReportOilBean [sums=" + sums + ", payment_avl=" + paymentAvl + ", is_cancelled=" + isCancelled + "]";
 	}
 	
 	
