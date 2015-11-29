@@ -196,6 +196,10 @@ insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be
 insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762214');
 insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762285','0be218c5-9394-11e5-b673-5820b1762215'); 
 
+--Indexes defined
+
+create index search_client USING HASH on users (id,last_name,apt_no,street,city,zip_code,phone_no,cell_no,email);
+
 
 --user abc@def
  insert into trader values( 'd7faa6df-93db-11e5-9cc5-000c29893b5c','0be218c5-9394-11e5-b673-5820b1762285' );

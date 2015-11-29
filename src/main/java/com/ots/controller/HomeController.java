@@ -510,15 +510,15 @@ public class HomeController {
 		List<ReportOilBean> rbean = orderSerivceImpl.getReportOilQty();
 		for (ReportOilBean rb : rbean){
 			//done
-			if(rb.getPayment_avl()==1&&rb.getIs_cancelled()==0){
+			if(rb.getPayment_avl()&&!rb.getIs_cancelled()){
 				myJSON[2] = rb.getSums() + "";
 			}
 			//pending
-			if(rb.getPayment_avl()==0&&rb.getIs_cancelled()==0){
+			if(!rb.getPayment_avl()&&!rb.getIs_cancelled()){
 				myJSON[5] = rb.getSums() + "";
 			}
 			//cancelled
-			if(rb.getPayment_avl()==0&&rb.getIs_cancelled()==1){
+			if(!rb.getPayment_avl()&&rb.getIs_cancelled()){
 				myJSON[8] = rb.getSums() + "";
 				
 			}

@@ -13,8 +13,8 @@ public class ReportOilMapper implements RowMapper<ReportOilBean> {
 
 		ReportOilBean report = new ReportOilBean();
 		report.setSums(rs.getFloat("sums"));
-		report.setSums(rs.getFloat("payment_avl"));
-		report.setSums(rs.getFloat("is_cancelled"));
+		report.setPayment_avl(rs.getBoolean("payment_avl"));
+		report.setIs_cancelled(rs.getBoolean("is_cancelled"));
 
 		return report;
 	}
