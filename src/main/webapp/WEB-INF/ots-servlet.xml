@@ -33,13 +33,13 @@
 	</bean>
 	<bean id="adminDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
-		p:url="${jdbc.databaseurl}" p:username="${jdbc.adminUsername}" p:password="${jdbc.adminPassword}" />
+		p:url="${jdbc.databaseurl}" p:username="${jdbc.adminUsername}" p:initialSize="3" p:maxIdle="5" p:maxActive="100" p:password="${jdbc.adminPassword}" />
 	
 	<bean id="traderDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
-		p:url="${jdbc.databaseurl}" p:username="${jdbc.traderUsername}" p:password="${jdbc.traderPassword}" />
+		p:url="${jdbc.databaseurl}" p:username="${jdbc.traderUsername}" p:initialSize="3" p:maxIdle="5" p:maxActive="100" p:password="${jdbc.traderPassword}" />
 	
 	<bean id="clientDataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
-		p:url="${jdbc.databaseurl}" p:username="${jdbc.clientUsername}"   p:password="${jdbc.clientPassword}" />
+		p:url="${jdbc.databaseurl}" p:username="${jdbc.clientUsername}" p:initialSize="3" p:maxIdle="5" p:maxActive="100"  p:password="${jdbc.clientPassword}" />
 	</beans>
