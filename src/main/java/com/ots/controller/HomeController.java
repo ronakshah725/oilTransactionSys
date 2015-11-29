@@ -501,9 +501,9 @@ public class HomeController {
 		//ronak
 		String[] myJSON = {
 						   "{",
-						   "Payment Done","",",", //2
-						   "Payment Pending","",",",//5
-						   "Payment Cancelled","",",",//8
+						   "\"Payment Done\"","",",", //2
+						   "\"Payment Pending\"","",",",//5
+						   "\"Payment Cancelled\"","",",",//8
 							"}"
 						   };
 		
