@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.ClientBean;
+import com.ots.common.ReportOilBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
 import com.ots.dao.CancelDaoImpl;
@@ -38,6 +39,8 @@ public class UserManagementServiceImpl {
 
 	@Autowired
 	private CancelDaoImpl cancelDao;
+	
+
 
 	/**
 	 * This method validates whether user's credentials are correct or not and
@@ -163,4 +166,6 @@ public class UserManagementServiceImpl {
 		System.out.println("User Account to be updated "+ clientId+" : "+balanceAmount+ " : "+totalOilQuantity);
 	return clientDao.updateOilAndBalanceOfClient(clientId, balanceAmount, totalOilQuantity);
 	}
+	
+
 }

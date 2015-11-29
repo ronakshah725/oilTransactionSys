@@ -1,6 +1,7 @@
 package com.ots.controller;
 
 import java.util.Arrays;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.hibernate.cfg.JoinedSubclassFkSecondPass;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ import com.ots.common.OrderSummaryBean;
 import com.ots.common.PaymentBean;
 import com.ots.common.PaymentBean;
 import com.ots.common.PlaceOrderBean;
+import com.ots.common.ReportOilBean;
 import com.ots.common.PlaceOrderBean;
 import com.ots.common.TraderBean;
 import com.ots.common.TraderBean;
@@ -495,10 +498,46 @@ public class HomeController {
 
 	@RequestMapping(value = "/viewReports", method = RequestMethod.GET)
 	public String reports(ModelMap map, HttpServletRequest request) {
+		//ronak
+		String[] myJSON = {
+						   "{",
+						   "Payment Done","",",", //2
+						   "Payment Pending","",",",//5
+						   "Payment Cancelled","",",",//8
+							"}"
+						   };
+		
+		List<ReportOilBean> rbean = orderSerivceImpl.getReportOilQty();
+		for (ReportOilBean rb : rbean){
+			//done
+			if(rb.getPayment_avl()==1&&rb.getIs_cancelled()==0){
+				myJSON[2] = rb.getSums() + "";
+			}
+			//pending
+			if(rb.getPayment_avl()==0&&rb.getIs_cancelled()==0){
+				myJSON[5] = rb.getSums() + "";
+			}
+			//cancelled
+			if(rb.getPayment_avl()==0&&rb.getIs_cancelled()==1){
+				myJSON[8] = rb.getSums() + "";
+				
+			}
+			
+		}
+		
+		StringBuilder json = new StringBuilder("");
+		for (String a : myJSON){
+			json.append(a);
+		}
+		System.out.println("json : " + json );
+		
+		
+		
 		map.addAttribute("chart1Json", "{}");
 		map.addAttribute("chart2Json", "{}");
 		map.addAttribute("chart3Json", "{}");
-		map.addAttribute("chart4Json", "{    \"cols\": [          {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},          {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}        ],    \"rows\": [          {\"c\":[{\"v\":\"Mushrooms\",\"f\":null},{\"v\":3,\"f\":null}]},          {\"c\":[{\"v\":\"Onions\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Olives\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Zucchini\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Pepperoni\",\"f\":null},{\"v\":2,\"f\":null}]}        ]  }");
+//		map.addAttribute("chart4Json", "{    \"cols\": [          {\"id\":\"\",\"label\":\"Topping\",\"pattern\":\"\",\"type\":\"string\"},          {\"id\":\"\",\"label\":\"Slices\",\"pattern\":\"\",\"type\":\"number\"}        ],    \"rows\": [          {\"c\":[{\"v\":\"Mushrooms\",\"f\":null},{\"v\":3,\"f\":null}]},          {\"c\":[{\"v\":\"Onions\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Olives\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Zucchini\",\"f\":null},{\"v\":1,\"f\":null}]},          {\"c\":[{\"v\":\"Pepperoni\",\"f\":null},{\"v\":2,\"f\":null}]}        ]  }");
+		map.addAttribute("chart4RJson", json);
 		return "reportsView";
 	}
 

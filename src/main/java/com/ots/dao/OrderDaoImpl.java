@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 import com.ots.common.OrderSummaryBean;
 import com.ots.common.ReportOilBean;
 import com.ots.rowmapper.OrderRowMapper;
+import com.ots.rowmapper.ReportOilMapper;
 
 /**
  * @author madhuri
@@ -36,7 +37,7 @@ public class OrderDaoImpl {
 	public static final String QUERY_INSERT_TASK = "INSERT INTO orders(id,type,quantity,commission_fees,commission_type,total_amt,oil_adjusted_quantity,date_placed ) VALUES (?,?,?,?,?,?,?,?)";
 	public static final String SELECT_ORDER_BY_USER_ID = "select o.id as id,o.type as type, o.quantity as quantity,o.commission_fees as commission_fees,o.commission_type as commission_type,o.total_amt as total_amt,o.oil_adjusted_quantity as oil_adjusted_quantity,o.date_placed as date_placed, o.payment_id as payment_id,isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id and o.id IN (SELECT order_id FROM places where client_id=?) order by date_placed desc";
 	public static final String UPDATE_ORDER = "UPDATE orders SET payment_id = ? WHERE id =? and payment_id is not null";
-	public static final String REPORT_OIL_QTY = "select sum(o.quantity) as sums,isnull(o.payment_id) as payment_avl, isnull(c.client_id) as is_not_cancelled from orders o left join cancels c on o.id=c.order_id group by payment_avl,is_not_cancelled order by sums asc";
+	public static final String REPORT_OIL_QT = "select sum(o.quantity) as sums,isnull(o.payment_id) as payment_avl, (isnull(c.client_id)!=true) as is_cancelled from orders o left join cancels c on o.id=c.order_id group by payment_avl,is_cancelled order by sums asc";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
 
@@ -64,7 +65,8 @@ public class OrderDaoImpl {
 	}
 
 	/**
-	 * This method returns Total amount (to_be?) charged for order 
+	 * This method returns Total amount (to_be?) charged for order
+	 * 
 	 * @param orderIds
 	 * @return
 	 */
@@ -72,36 +74,35 @@ public class OrderDaoImpl {
 
 		StringBuilder selectQueries = new StringBuilder();
 		for (String orderId : orderIds) {
-			if(orderId.trim().length()>0){
-			if (selectQueries.toString().length() == 0) {
-				selectQueries.append("Select sum(total_amt) as total from orders where id in( ?" );
-			} else {
-				selectQueries.append(",?" );
-			}
+			if (orderId.trim().length() > 0) {
+				if (selectQueries.toString().length() == 0) {
+					selectQueries.append("Select sum(total_amt) as total from orders where id in( ?");
+				} else {
+					selectQueries.append(",?");
+				}
 			}
 		}
 		selectQueries.append(") and payment_id is null;");
 		System.out.println(selectQueries.toString());
-		List<Float> orders = adminJdbcConnectionTemplate.query(selectQueries.toString(),
-				new PreparedStatementSetter() {
-					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+		List<Float> orders = adminJdbcConnectionTemplate.query(selectQueries.toString(), new PreparedStatementSetter() {
+			public void setValues(java.sql.PreparedStatement ps) throws SQLException {
 
-						int counter=1;
-						for (String orderId : orderIds) {
-							if(orderId.trim().length()!=0){
-								ps.setString(counter,orderId.trim());
-								counter++;
-							}
-						}
+				int counter = 1;
+				for (String orderId : orderIds) {
+					if (orderId.trim().length() != 0) {
+						ps.setString(counter, orderId.trim());
+						counter++;
 					}
-				}, new RowMapper<Float>() {
-					  public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
-						  System.out.println("rs.getdfloat"+rs.getFloat("total"));
-					        return rs.getFloat("total");
-					  }
+				}
+			}
+		}, new RowMapper<Float>() {
+			public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
+				System.out.println("rs.getdfloat" + rs.getFloat("total"));
+				return rs.getFloat("total");
+			}
 
-					});
-		System.out.println("-->"+orders);
+		});
+		System.out.println("-->" + orders);
 		return orders.get(0);
 	}
 
@@ -146,18 +147,18 @@ public class OrderDaoImpl {
 			}
 		});
 	}
-	public  ReportOilBean getReportOilQty(){
-		/*ReportOilBean  rbean = adminJdbcConnectionTemplate.query(new PreparedStatementCreator() {
-			
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		}, null);
-		*/
-		return null;
-	
-		
+
+
+
+	public List<ReportOilBean> getReportOilQty() {
+		List<ReportOilBean> rbean = adminJdbcConnectionTemplate.query(REPORT_OIL_QT,
+				new PreparedStatementSetter() {
+					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+
+					}
+				}, new ReportOilMapper());
+		System.out.println(rbean);
+		return rbean;
 	}
 
 }

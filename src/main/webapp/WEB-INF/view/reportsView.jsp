@@ -55,8 +55,8 @@
 
             // Create the data table.
             var data4 = new google.visualization.DataTable();
-            data4.addColumn('string', 'Topping');    
-            data4.addColumn('number', 'Slices');
+            data4.addColumn('string', 'Payment Status');    
+            data4.addColumn('number', 'Amount');
             data4.addRows([
               ['Mushrooms', 3],
               ['Onions', 1],

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.ots.common.OrderSummaryBean;
 import com.ots.common.PaymentBean;
+import com.ots.common.ReportOilBean;
 import com.ots.dao.OrderDaoImpl;
 import com.ots.dao.PaymentDaoImpl;
 import com.ots.dao.PlacesDaoImpl;
@@ -137,5 +138,9 @@ public class OrderServiceImpl {
 	public Boolean insertPlacesRecord(String userID,String  clientID,String  orderID) throws MySQLIntegrityConstraintViolationException
 	{
 		return placesDaoImpl.insertPlacesRecord(userID, clientID, orderID);
+	}
+	
+	public List<ReportOilBean> getReportOilQty() {
+		return orderDaoImpl.getReportOilQty();
 	}
 }
