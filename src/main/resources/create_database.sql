@@ -164,6 +164,9 @@ GRANT select,update,insert ON ots.payments to 'trader@localhost' identified by '
 GRANT select,INSERT,UPDATE ON ots.orders to 'trader@localhost' identified by 'trader@123';
 GRANT select,INSERT,UPDATE ON ots.places to 'trader@localhost' identified by 'trader@123';
 GRANT select,INSERT,UPDATE ON ots.cancels to 'trader@localhost' identified by 'trader@123';
+GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
+GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
+
 GRANT SELECT  ON ots.oil_prices TO 'client'@'localhost' ;
 GRANT select ON ots.role to 'client@localhost' identified by 'client@123';
 GRANT select ON ots.feature to 'client@localhost' identified by 'client@123';
@@ -173,8 +176,6 @@ GRANT SELECT,INSERT ON ots.orders to 'client@localhost' identified by 'client@12
 GRANT select,INSERT ON ots.places to 'client@localhost' identified by 'client@123';
 GRANT select,update ON ots.users to 'client@localhost' identified by 'client@123';
 GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
-GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
-GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
 insert into company values('4fb19e50-9314-11e5-b673-5820b1762284',0.015,0.02);
 insert into users values('25a582a5-93c0-11e5-b673-5820b1762284','John','doe','1','Gandhiji Boulevard','new york','NY','15252','98989898','98989898','admin@ots.com',aes_encrypt('123','password'),'4fb19e50-9314-11e5-b673-5820b1762284');
