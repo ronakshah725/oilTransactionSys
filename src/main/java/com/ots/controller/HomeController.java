@@ -199,13 +199,6 @@ public class HomeController {
 			@ModelAttribute UserBean userToBeInsertedOrUpdated) {
 		logger.debug("userToBeInsertedOrUpdated= " + userToBeInsertedOrUpdated);
 
-		UserBean userToBeEdited = (UserBean) request.getSession().getAttribute("user");
-		/*
-		 * if (userToBeEdited.getEmailId().trim().equalsIgnoreCase(
-		 * userToBeInsertedOrUpdated.getEmailId())) { // this means its an
-		 * 
-		 * --> Edit profile to be implemented later. update case } else {
-		 */
 		model.addAttribute("userToBeEdited", userToBeInsertedOrUpdated);
 		if (!userToBeInsertedOrUpdated.getPassword1().equals(userToBeInsertedOrUpdated.getPassword2())) {
 			model.addAttribute("message", " Please make sure both the passwords match");

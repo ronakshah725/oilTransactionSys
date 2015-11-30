@@ -1,3 +1,4 @@
+<%@ include file="include.jsp"%>
 <div class="panel panel-info center"
 	style="width: 400px; text-align: center; margin-top: 50px">
 	<div class="panel-heading">
@@ -6,7 +7,7 @@
 		</div>
 		<c:if test="${message!=null}">
 			<div class="row" style="color: #ff0000; text-align: left">
-				<B> * ${message}</B>
+				<B>* ${message}</B>
 			</div>
 		</c:if>
 
