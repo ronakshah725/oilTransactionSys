@@ -1,7 +1,6 @@
 package com.ots.controller;
 
 import java.util.Arrays;
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Calendar;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.hibernate.cfg.JoinedSubclassFkSecondPass;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +44,8 @@ import com.ots.common.OrderSummaryBean;
 import com.ots.common.PaymentBean;
 import com.ots.common.PaymentBean;
 import com.ots.common.PlaceOrderBean;
-import com.ots.common.ReportOilBean;
 import com.ots.common.PlaceOrderBean;
+import com.ots.common.ReportOilBean;
 import com.ots.common.TraderBean;
 import com.ots.common.TraderBean;
 import com.ots.common.UserBean;
@@ -180,7 +178,8 @@ public class HomeController {
 	public ModelAndView selectUser(ModelMap model, HttpServletRequest request,
 			@RequestParam(required = false) String userId) {
 		logger.debug("searchUserBean= " + userId);
-		ClientBean bean = userManagementServiceImpl.getClientDetails(userId);
+		ClientBean bean = userManagementServiceImpl
+				.getClientDetails(userManagementServiceImpl.getUserDetails(userId).getId());
 		request.getSession().setAttribute("selectedClient", bean);
 		model.addAttribute("userId", userId);
 		return loadOrderSummaries(model, request);
@@ -244,11 +243,18 @@ public class HomeController {
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		UserBean user = (UserBean) request.getSession().getAttribute("user");
 		try {
+			int count = 0;
 			for (String orderId : orderIds.split(",")) {
 				if (orderId != null) {
+					count++;
 					userManagementServiceImpl.insertIntoCancel(user, clientBean, orderId);
 					model.addAttribute("message", "Congratulations! Payment cancellation was successful");
 				}
+			}
+			if (count == 0) {
+				model.addAttribute("message", "Please select orders you want to Cancel");
+				return new ModelAndView("orderSummary");
+
 			}
 
 			Float userAcountOilQty = clientBean.getTotalOilQuantity();
@@ -286,9 +292,19 @@ public class HomeController {
 	public String makePayment(ModelMap model, HttpServletRequest request,
 			@RequestParam(required = false) String orderIds) {
 		logger.debug("orderIds= " + orderIds);
+		int count = 0;
 		for (String string : orderIds.split(",")) {
 			logger.debug("-->" + string);
+			if (string.trim().length() != 0) {
+				count++;
+			}
 		}
+		if (count == 0) {
+			model.addAttribute("message", "Please select orders you want to Cancel");
+			return "orderSummary";
+
+		}
+
 		request.getSession().setAttribute("orderIds", orderIds);
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		Long orderCost = new Float(orderSerivceImpl.getTotalAmountToBePaid(Arrays.asList(orderIds.split(","))) * 100
@@ -395,6 +411,11 @@ public class HomeController {
 	 */
 	private ModelAndView loadOrderSummaries(ModelMap model, HttpServletRequest request) {
 		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
+		System.out.println(clientBean);
+
+		float commission = userManagementServiceImpl.getCommission(clientBean);
+		System.out.println("commission"+commission);
+		request.getSession().setAttribute("commission", commission*100);
 		request.getSession().removeAttribute("orderIds");
 		List<OrderSummaryBean> orders = orderSerivceImpl.fetchAllOrders(clientBean.getClientId());
 		logger.debug(orders);
@@ -435,6 +456,8 @@ public class HomeController {
 	public ModelAndView placeOrder(ModelMap model, HttpServletRequest request,
 			@ModelAttribute PlaceOrderBean placeOrderBean) {
 		logger.debug("order created= " + placeOrderBean);
+
+		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		OrderSummaryBean orderSummaryBean = new OrderSummaryBean();
 
 		String ordId = UUID.randomUUID().toString();
@@ -443,14 +466,16 @@ public class HomeController {
 		orderSummaryBean.setType(placeOrderBean.getType());
 		orderSummaryBean.setQuantity(placeOrderBean.getQuantity());
 		orderSummaryBean.setCommissionType(placeOrderBean.getCommissionType());
+		float commission = userManagementServiceImpl.getCommission(clientBean);
+		System.out.println("commission"+commission);
 		orderSummaryBean
 				.setAmount(placeOrderBean.getQuantity() * ((Integer) request.getSession().getAttribute("oil_price")));
 
 		if (placeOrderBean.getCommissionType().equals("Oil")) {
-			orderSummaryBean.setCommisisioninoil((float) orderSummaryBean.getQuantity() * (float) 0.02);
+			orderSummaryBean.setCommisisioninoil((float) orderSummaryBean.getQuantity() * (float) commission);
 			orderSummaryBean.setCommissionindollar(new Float(0.0));
 		} else {
-			orderSummaryBean.setCommissionindollar(orderSummaryBean.getAmount() * (float) 0.02);
+			orderSummaryBean.setCommissionindollar(orderSummaryBean.getAmount() * (float) commission);
 			orderSummaryBean.setCommisisioninoil(new Float(0.0));
 		}
 
@@ -458,9 +483,8 @@ public class HomeController {
 		orderSummaryBean.setAmount((orderSummaryBean.getAmount() + orderSummaryBean.getCommissionindollar()));
 
 		logger.debug("after applying commission" + orderSummaryBean);
-
+		request.getSession().setAttribute("commission", 100*commission);
 		orderSerivceImpl.createOrder(orderSummaryBean);
-		ClientBean clientBean = (ClientBean) request.getSession().getAttribute("selectedClient");
 		UserBean user = (UserBean) request.getSession().getAttribute("user");
 		try {
 			orderSerivceImpl.insertPlacesRecord(user.getId(), clientBean.getClientId(), ordId);

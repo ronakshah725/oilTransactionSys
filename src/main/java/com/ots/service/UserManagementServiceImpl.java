@@ -42,6 +42,11 @@ public class UserManagementServiceImpl {
 	
 
 
+	public UserBean getUserDetails(final String email) {
+
+		return userDao.getUserDetails(email);
+	}
+
 	/**
 	 * This method validates whether user's credentials are correct or not and
 	 * if not, it returns the null object.
@@ -110,6 +115,17 @@ public class UserManagementServiceImpl {
 		return listOfFeatures;
 	}
 
+	public Float getCommission(ClientBean client)
+	{
+		if(client.getLevel().equalsIgnoreCase("Silver"))
+		{
+			return userDao.getCommissionDetailsById("level2_comm", client.getUserBean().getCompanyId());	
+		}
+		else
+		{
+			return userDao.getCommissionDetailsById("level1_comm", client.getUserBean().getCompanyId());
+		}
+	}
 	/**
 	 * This method accepts UserBean and creates corresponding users in database.
 	 * 

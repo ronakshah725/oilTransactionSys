@@ -4,8 +4,8 @@ use ots;
 
 CREATE TABLE company (
   id varchar(36) NOT NULL,
-  level1_comm varchar(30) NOT NULL,
-  level2_comm varchar(30) NOT NULL,
+  level1_comm float NOT NULL,
+  level2_comm float NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -102,7 +102,7 @@ CREATE TABLE orders (
   oil_adjusted_quantity float DEFAULT NULL,
   date_placed date NOT NULL,
   date_fulfilled date DEFAULT NULL,
-  shipping_status bit(1) DEFAULT b'0',
+  shipping_status bit(1) DEFAULT '0',
   payment_id varchar(36) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY payment_id (payment_id),
@@ -113,7 +113,7 @@ CREATE TABLE orders (
  CREATE TABLE places (
   user_id varchar(36) NOT NULL DEFAULT '',
   client_id varchar(36) NOT NULL DEFAULT '',
-  order_id varchar(36) NOT NULL DEFAULT '',
+  order_id varchar(36) NOT NULL DEFAULT '' UNIQUE,
   PRIMARY KEY (user_id,client_id,order_id),
   KEY client_id (client_id),
   KEY order_id (order_id),
@@ -176,9 +176,9 @@ GRANT select ON ots.client to 'client@localhost' identified by 'client@123';
 GRANT select,update ON ots.client to 'trader@localhost' identified by 'trader@123';
 GRANT select,update ON ots.trader to 'trader@localhost' identified by 'trader@123';
 
-insert into company values('4fb19e50-9314-11e5-b673-5820b1762284',100,120);
-insert into users values(uuid(),'John','doe','1','Gandhiji Boulevard','new york','NY','15252','98989898','98989898','abc@def.com',aes_encrypt('123','password'),'4fb19e50-9314-11e5-b673-5820b1762284');
-
+insert into company values('4fb19e50-9314-11e5-b673-5820b1762284',0.015,0.02);
+insert into users values('25a582a5-93c0-11e5-b673-5820b1762284','John','doe','1','Gandhiji Boulevard','new york','NY','15252','98989898','98989898','admin@ots.com',aes_encrypt('123','password'),'4fb19e50-9314-11e5-b673-5820b1762284');
+insert into trader values('25a582a5-93c0-11e5-b673-5820b1762284','0be218c5-9394-11e5-b673-5820b1762285');
 
 --//Trader and client and edit profiles
 insert into role_has_features values('0be218c5-9394-11e5-b673-5820b1762284','0be218c5-9394-11e5-b673-5820b1762212');

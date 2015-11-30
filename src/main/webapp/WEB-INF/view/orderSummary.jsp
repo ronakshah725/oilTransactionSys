@@ -25,8 +25,8 @@
 							<th>Type</th>
 							<th>Quantity</th>
 							<th>Amount($)</th>
-							<th>2% Commission($)</th>
-							<th>2% Commission(Lb)</th>
+							<th>${commission}% Commission($)</th>
+							<th>${commission}% Commission(Barrel)</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -72,21 +72,26 @@
 			<div class="col-xs-2">Account Credit</div>
 			<div class="col-xs-2"><b style="color:#1B0EC2;font-size:14pt">${selectedClient.balanceAmount} $</b></div>
 			<div class="col-xs-2">Total Oil owned:</div>
-			<div class="col-xs-2"><b style="color:#FFCE44;font-size:14pt">${selectedClient.totalOilQuantity} Lb</b></div>
+			<div class="col-xs-2"><b style="color:#FFCE44;font-size:14pt">${selectedClient.totalOilQuantity} Barrel</b></div>
 		</div>
 		<div class="row" style="padidng-bottom: 10px; padding-top: 10px">
 			<div class="col-xs-4" style="text-align: center">
 
+	<c:if test="${FEATURE_ACCEPT_PAYMENT!=null}">
 				<input id="loginBtn" name="loginBtn" class="btn btn-info"
 					type="button" value="Pay" onclick="makePayment()" />
+					</c:if>`
 			</div>
 			<div class="col-xs-4" style="text-align: center">
 				<input id="order" name="order" class="btn btn-info" type="button"
 					value="Place Order" onclick="createOrder()" />
 			</div>
 			<div class="col-xs-4" style="text-align: center">
+			
+	<c:if test="${FEATURE_CANCEL_ORDER!=null}">
 				<input id="loginBtn" name="loginBtn" class="btn btn-info"
 					type="button" value="Cancel" onclick="cancelOrder()" />
+					</c:if>
 			</div>
 		</div>
 	</div>

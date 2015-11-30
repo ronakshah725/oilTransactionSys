@@ -4,6 +4,7 @@
 package com.ots.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
@@ -28,13 +30,10 @@ import com.ots.rowmapper.UserRowMapper;
 public class UserDaoImpl {
 
 	public static final String SELECT_USER_BY_CREDS = "SELECT * FROM users WHERE email= ? and aes_decrypt(password,'password')=?";
-
 	public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email= ? ";
 	public static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id= ? ";
-	
 	public static final String INSERT_USER = "INSERT INTO users(id,first_name,last_name,apt_no,street,city,state,zip_code,phone_no,cell_no,email,password,company_id)"
 			+ " VALUES (uuid(),?,?,?,?,?,?,?,?,?,?,aes_encrypt(?,'password'),'4fb19e50-9314-11e5-b673-5820b1762284');";
-
 	public static final String SEARCH_USER = "SELECT * FROM users WHERE (last_name=? OR apt_no=? OR street=? OR city=? OR zip_code=? OR phone_no=? OR cell_no=? OR email= ?) and id in(select client_id from client) order by email asc";
 
 	private JdbcTemplate adminJdbcConnectionTemplate;
@@ -114,6 +113,33 @@ public class UserDaoImpl {
 		}
 	}
 
+	/**
+	 * This function returns the comission column for selected company.
+	 * @param column
+	 * @param id
+	 * @return
+	 */
+	public Float getCommissionDetailsById(final String column,final String id) {
+		
+		 String SELECT_Commission_BY_User_ID = "SELECT "+column+" FROM  company where id= ? ";
+		List<Float> commissionList = adminJdbcConnectionTemplate.query(SELECT_Commission_BY_User_ID,
+				new PreparedStatementSetter() {
+					public void setValues(java.sql.PreparedStatement ps) throws SQLException {
+						ps.setString(1, id);
+					}
+				},  new RowMapper<Float>() {
+					public Float mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getFloat(column);
+					}
+				});
+
+		System.out.println(commissionList);
+		if (commissionList != null && commissionList.size() != 0) {
+			return commissionList.get(0);
+		} else {
+			return null;
+		}
+	}
 	
 	public UserBean getUserDetailsById(final String id) {
 		List<UserBean> userBean = adminJdbcConnectionTemplate.query(SELECT_USER_BY_ID,

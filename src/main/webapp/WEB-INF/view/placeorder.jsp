@@ -26,7 +26,7 @@
 				<div class="col-xs-6 left bottom">Quantity*</div>
 				<div class="col-xs-6 left">
 					<input type="number" class="form-control" required
-					id="quantity"	name="quantity" />(Lbs)
+					id="quantity"	name="quantity" />(Barrel)
 				</div>
 			</div>
 			

@@ -17,14 +17,14 @@
 				<div class="col-xs-6">Email</div>
 				<div class="col-xs-6">
 					<input type="text" required class="form-control" name="userName"
-						id="userName" value="ww.kanchan@gmail.com" />
+						id="userName" value="" />
 				</div>
 			</div>
 			<div class="row" style="padding-top: 10px">
 				<div class="col-xs-6">Password</div>
 				<div class="col-xs-6">
 					<input type="password" class="form-control" required id="password"
-						name="password" value="Test123" />
+						name="password" value="" />
 				</div>
 			</div>
 			<div class="row" style="padding: 10px">

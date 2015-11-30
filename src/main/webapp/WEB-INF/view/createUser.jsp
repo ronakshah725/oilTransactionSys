@@ -8,14 +8,16 @@
 	</div>
 
 	<div class="panel-body">
-		<div style="text-color:#ff0000">${message}</div>
+		<c:if test="${message!=null}">
+			<div class="row" style="color:#ff0000;text-align:left" ><B> * ${message}</B></div>
+		</c:if>
 		<form name="createUserForm" id="createUserForm">
 			<div class="row" style="padding-top: 10px">
 
 				<div class="col-xs-3 left bottom">User Type:</div>
 				<div class="col-xs-5 left bottom">
 					<select  class="form-control" required	name="userType" 	id="userType" >
-						<option value="ADMIN">Administrator</option>
+						<option value="ADMIN">Administrator(Manager)</option>
 						<option value="TRADER">Trader</option>
 						<option value="CLIENT">customer</option>
 					</select>

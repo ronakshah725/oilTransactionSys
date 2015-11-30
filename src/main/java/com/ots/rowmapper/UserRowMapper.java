@@ -31,6 +31,7 @@ public class UserRowMapper implements RowMapper<UserBean> {
 		user.setCellPhoneNumber(rs.getInt("cell_no"));
 		user.setId(rs.getString("id"));
 		user.setEmailId(rs.getString("email"));
+		user.setCompanyId(rs.getString("company_id"));
 		return user;
 	}
 }

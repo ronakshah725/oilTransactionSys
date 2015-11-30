@@ -12,7 +12,7 @@ import org.hibernate.id.UUIDGenerator;
  */
 public class UserBean {
 
- 	private String id;
+	private String id;
 	private String firstName;
 	private String lastName;
 	private String apartmentNumber;
@@ -26,8 +26,23 @@ public class UserBean {
 	private String password;
 	private String password1;
 	private String password2;
+	private String companyId;
+	private UserType userType;
 
-	private UserType  userType;
+	/**
+	 * @return the companyId
+	 */
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	/**
+	 * @param companyId
+	 *            the companyId to set
+	 */
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
 
 	/**
 	 * @return the password1
@@ -37,7 +52,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param password1 the password1 to set
+	 * @param password1
+	 *            the password1 to set
 	 */
 	public void setPassword1(String password1) {
 		this.password1 = password1;
@@ -51,7 +67,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param password2 the password2 to set
+	 * @param password2
+	 *            the password2 to set
 	 */
 	public void setPassword2(String password2) {
 		this.password2 = password2;
@@ -68,7 +85,7 @@ public class UserBean {
 	 * @param userType
 	 *            the userType to set
 	 */
-	public void setUserType(UserType  userType) {
+	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
 
@@ -245,13 +262,16 @@ public class UserBean {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
